@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recollection Extreme — Scholar Timeline</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 20px;
+    line-height: 1.4;
+  }
+  h1 { font-size: 1.5rem; color: #fbbf24; margin-bottom: 0.3rem; }
+  .subtitle { color: #94a3b8; font-size: 0.85rem; margin-bottom: 20px; }
+  .fight-container { max-width: 900px; margin: 0 auto; }
+  
+  /* Phase headers */
+  .phase {
+    margin-bottom: 24px;
+    border-left: 3px solid #334155;
+    padding-left: 16px;
+  }
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    cursor: pointer;
+  }
+  .phase-header:hover { opacity: 0.8; }
+  .phase-toggle {
+    width: 20px; height: 20px;
+    border-radius: 4px;
+    background: #334155;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; color: #fbbf24;
+  }
+  .phase-name { font-size: 1.1rem; font-weight: 600; color: #fbbf24; }
+  .phase-time { color: #64748b; font-size: 0.8rem; }
+  
+  /* Timeline */
+  .timeline {
+    position: relative;
+    padding-left: 30px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px; top: 0; bottom: 0;
+    width: 2px;
+    background: #334155;
+  }
+  
+  /* Mechanic entry */
+  .mechanic {
+    position: relative;
+    margin-bottom: 8px;
+    padding: 10px 12px;
+    background: #1e293b;
+    border-radius: 6px;
+    border: 1px solid #334155;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .mechanic:hover {
+    border-color: #fbbf24;
+    background: #252f47;
+  }
+  .mechanic::before {
+    content: '';
+    position: absolute;
+    left: -26px; top: 50%;
+    transform: translateY(-50%);
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #475569;
+    border: 2px solid #0f172a;
+  }
+  
+  /* Damage type colors */
+  .mechanic.raidwide { border-left: 3px solid #ef4444; }
+  .mechanic.raidwide::before { background: #ef4444; }
+  .mechanic.tankbuster { border-left: 3px solid #f97316; }
+  .mechanic.tankbuster::before { background: #f97316; }
+  .mechanic.movement { border-left: 3px solid #3b82f6; }
+  .mechanic.movement::before { background: #3b82f6; }
+  .mechanic.adds { border-left: 3px solid #a855f7; }
+  .mechanic.adds::before { background: #a855f7; }
+  .mechanic.positioning { border-left: 3px solid #22c55e; }
+  .mechanic.positioning::before { background: #22c55e; }
+  .mechanic.enrage { border-left: 3px solid #dc2626; background: #371a1a; }
+  .mechanic.enrage::before { background: #dc2626; }
+  
+  .mech-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  .mech-name { font-weight: 600; font-size: 0.95rem; }
+  .mech-tag {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .tag-raidwide { background: #451a1a; color: #fca5a5; }
+  .tag-tankbuster { background: #451a03; color: #fdba74; }
+  .tag-movement { background: #1e3a5f; color: #93c5fd; }
+  .tag-adds { background: #3b1765; color: #d8b4fe; }
+  .tag-positioning { background: #14522d; color: #86efac; }
+  .tag-enrage { background: #450a0a; color: #fecaca; }
+  
+  .mech-desc {
+    color: #94a3b8;
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+  
+  /* Scholar plan panel */
+  .scholar-plan {
+    margin-top: 8px;
+    padding: 8px 10px;
+    background: #0f172a;
+    border-radius: 4px;
+    border-left: 2px solid #fbbf24;
+    font-size: 0.8rem;
+  }
+  .scholar-plan-header {
+    color: #fbbf24;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .scholar-plan-body { color: #cbd5e1; }
+  .combo-name { color: #4ade80; font-weight: 600; }
+  .cost-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-left: 4px;
+  }
+  .cost-free { background: #166534; color: #86efac; }
+  .cost-af { background: #854d0e; color: #fde047; }
+  .cost-gcd { background: #991b1b; color: #fca5a5; }
+  
+  /* Legend */
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding: 12px;
+    background: #1e293b;
+    border-radius: 8px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+  
+  /* Responsive */
+  @media (max-width: 600px) {
+    .mech-header { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .timeline { padding-left: 20px; }
+    .mechanic::before { left: -18px; }
+  }
+</style>
+</head>
+<body>
+<div class="fight-container">
+  <h1>⚔️ Recollection Extreme</h1>
+  <div class="subtitle">Zelenia — Scholar Healing Timeline & Mitigation Plan</div>
+  
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div> Raidwide</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f97316"></div> Tankbuster</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div> Movement</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#a855f7"></div> Adds/Phase</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div> Positioning</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#dc2626"></div> Enrage</div>
+  </div>
+
+  <!-- PHASE 1: Opening -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-toggle">−</div>
+      <div class="phase-name">Phase 1: Opening</div>
+      <div class="phase-time">0:00 — 1:40</div>
+    </div>
+    <div class="timeline">
+      <div class="mechanic raidwide">
+        <div class="mech-header">
+          <span class="mech-name">Thorned Catharsis</span>
+          <span class="mech-tag tag-raidwide">Raidwide</span>
+        </div>
+        <div class="mech-desc">Moderate raid-wide damage on pull. No pre-pull shield needed.</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Fairy Heal</span><span class="cost-badge cost-free">FREE</span> — Let fairy handle it. Save AF for next mechanics.
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic movement">
+        <div class="mech-header">
+          <span class="mech-name">Shock</span>
+          <span class="mech-tag tag-movement">Movement</span>
+        </div>
+        <div class="mech-desc">Multi-hit AoE or donut AoE on all players. Supports get one type, DPS get the other.</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Blessed Ground</span><span class="cost-badge cost-af">1 AF</span> — Movement heal for spread. Position near center for coverage.
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic positioning">
+        <div class="mech-header">
+          <span class="mech-name">Alexandrian Holy</span>
+          <span class="mech-tag tag-positioning">Positioning</span>
+        </div>
+        <div class="mech-desc">4 towers spawn. Soaking applies Lightning Resistance Down II (2s). Plan tower assignments.</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Soak tower if needed</span> — You can soak with <span class="combo-name">Sacred Soil</span><span class="cost-badge cost-af">1 AF</span> on yourself. Otherwise focus on healing soakers.
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic tankbuster">
+        <div class="mech-header">
+          <span class="mech-name">Specter of the Lost</span>
+          <span class="mech-tag tag-tankbuster">Tankbuster</span>
+        </div>
+        <div class="mech-desc">2 random players get interceptible tethers. Tankbuster cleave on tethered players.</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Sacred Soil + Sacred Soil</span><span class="cost-badge cost-af">2 AF</span> — Shield the tethered players. If you're tethered, pop Sacred Soil on yourself + Sacred Soil on co-tethered.
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic movement">
+        <div class="mech-header">
+          <span class="mech-name">Escelons' Fall</span>
+          <span class="mech-tag tag-movement">Movement</span>
+        </div>
+        <div class="mech-desc">4 cone AoEs baited on closest or furthest players (pink = close, purple = far). Applies Slashing Resistance Down (5s).</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Blessed Ground</span><span class="cost-badge cost-af">1 AF</span> — Position for stack/heal after baiting. Be ready to move!
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic raidwide">
+        <div class="mech-header">
+          <span class="mech-name">Stock Break</span>
+          <span class="mech-tag tag-raidwide">Raidwide</span>
+        </div>
+        <div class="mech-desc">4-hit circle stack. Stack with party for shared damage.</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Sanctuary</span><span class="cost-badge cost-af">1 AF</span> — Stack heal for 4-hit. If tank is vuln-up, <span class="combo-name">Spread-Lo</span><span class="cost-badge cost-gcd">1 GCD</span> on them.
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic adds">
+        <div class="mech-header">
+          <span class="mech-name">Blessed Barricade</span>
+          <span class="mech-tag tag-adds">Adds</span>
+        </div>
+        <div class="mech-desc">Boss becomes untargetable. Spawns 4 Roseblood Drops + 2 Zelenia's Shades. Also spawns 2 multi-player towers (3 players each).</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Dissipate</span><span class="cost-badge cost-free">FREE</span> — Pop Dissipate NOW for 3 AF stacks. Use <span class="combo-name">Sacred Soil</span><span class="cost-badge cost-af">1 AF</span> on towers. <span class="combo-name">Broil IV</span> spam on adds. Re-summon fairy after.
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic tankbuster">
+        <div class="mech-header">
+          <span class="mech-name">Spearpoint Push</span>
+          <span class="mech-tag tag-tankbuster">Tankbuster</span>
+        </div>
+        <div class="mech-desc">Shade tethers to player, dashes with half-room cleave. Side = sword direction. (3-4 times depending on add kill speed)</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Sacred Soil</span><span class="cost-badge cost-af">1 AF</span> — Shield tethered player. Watch sword direction to avoid cleave yourself.
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic raidwide">
+        <div class="mech-header">
+          <span class="mech-name">Perfumed Quietus</span>
+          <span class="mech-tag tag-raidwide">Raidwide</span>
+        </div>
+        <div class="mech-desc">High raid-wide damage based on Zelenia's Aether gauge (adds left alive = more damage). Boss becomes targetable.</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Soil Run + Sanctuary</span><span class="cost-badge cost-af">2 AF</span> — Big damage incoming. Use remaining AF before phase transition. If gauge is high, <span class="combo-name">Spread-Lo</span><span class="cost-badge cost-gcd">1 GCD</span> on tank.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 2: Roseblood Bloom 1-2 -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-toggle">−</div>
+      <div class="phase-name">Phase 2: Bloom 1 & 2</div>
+      <div class="phase-time">~1:40 — 3:30</div>
+    </div>
+    <div class="timeline">
+      <div class="mechanic adds">
+        <div class="mech-header">
+          <span class="mech-name">Roseblood Bloom</span>
+          <span class="mech-tag tag-adds">Phase Change</span>
+        </div>
+        <div class="mech-desc">Arena changes. Center puddle = Bleeding. Rose tiles = avoid Thunder/Thunder Slash.</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Re-summon Fairy</span><span class="cost-badge cost-free">FREE</span> — If you Dissipated during adds, re-summon now. Position safely, avoid center puddle.
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic movement">
+        <div class="mech-header">
+          <span class="mech-name">Alexandrian Thunder II</span>
+          <span class="mech-tag tag-movement">Movement</span>
+        </div>
+        <div class="mech-desc">3 rotating conal cleaves. Move with rotation to avoid.</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Blessed Ground</span><span class="cost-badge cost-af">1 AF</span> — Movement heal. Keep casting Broil while moving (instant GCDs = 2 oGCD slots).
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic positioning">
+        <div class="mech-header">
+          <span class="mech-name">Alexandrian Thunder III</span>
+          <span class="mech-tag tag-positioning">Positioning</span>
+        </div>
+        <div class="mech-desc">Point-blank AoE on all players. Lightning Resistance Down II (2s). Spread out!</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Sacred Soil</span><span class="cost-badge cost-af">1 AF</span> — Self-shield before spread. Heal others after — 2s vuln window means no double-dipping.
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic raidwide">
+        <div class="mech-header">
+          <span class="mech-name">Thorned Catharsis</span>
+          <span class="mech-tag tag-raidwide">Raidwide</span>
+        </div>
+        <div class="mech-desc">Moderate raid-wide damage.</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Fairy Heal + Sacred Soil</span><span class="cost-badge cost-af">1 AF</span> — Build shield during cast for next mechanic. Start recovering AF.
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic adds">
+        <div class="mech-header">
+          <span class="mech-name">Roseblood: 2nd Bloom</span>
+          <span class="mech-tag tag-adds">Phase Change</span>
+        </div>
+        <div class="mech-desc">Arena changes again. Same center puddle + rose tiles. New: Thunder Slash + Alexandrian Thunder IV.</div>
+      </div>
+      
+      <div class="mechanic movement">
+        <div class="mech-header">
+          <span class="mech-name">Thunder Slash</span>
+          <span class="mech-tag tag-movement">Movement</span>
+        </div>
+        <div class="mech-desc">3 sets of 2 directional cone AoEs in sequence. Move between safe zones.</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Blessed Ground</span><span class="cost-badge cost-af">1 AF</span> — Heavy movement phase. Position between cones for healing coverage.
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic positioning">
+        <div class="mech-header">
+          <span class="mech-name">Alexandrian Thunder IV</span>
+          <span class="mech-tag tag-positioning">Positioning</span>
+        </div>
+        <div class="mech-desc">Point blank AoE OR donut AoE (roses on outside = donut, inside = point blank). Then swaps to opposite.</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Soil Run</span><span class="cost-badge cost-af">1 AF</span> — Pre-shield before movement. Watch rose pattern to predict donut vs PB.
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic tankbuster">
+        <div class="mech-header">
+          <span class="mech-name">Specter of the Lost</span>
+          <span class="mech-tag tag-tankbuster">Tankbuster</span>
+        </div>
+        <div class="mech-desc">2 tethers again. Tankbuster cleave.</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Sacred Soil + Sacred Soil</span><span class="cost-badge cost-af">2 AF</span> — Shield both tethered players. If low on AF, prioritize the tank.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 3: Bloom 3-4 (Complex) -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-toggle">−</div>
+      <div class="phase-name">Phase 3: Bloom 3 & 4 (Complex)</div>
+      <div class="phase-time">~3:30 — 5:30</div>
+    </div>
+    <div class="timeline">
+      <div class="mechanic adds">
+        <div class="mech-header">
+          <span class="mech-name">Roseblood: 3rd Bloom</span>
+          <span class="mech-tag tag-adds">Phase Change</span>
+        </div>
+        <div class="mech-desc">New rose pattern. Towers on rose tiles = connected tiles become part of tower. Connected towers = party damage!</div>
+      </div>
+      
+      <div class="mechanic adds">
+        <div class="mech-header">
+          <span class="mech-name">Bud of Valor</span>
+          <span class="mech-tag tag-adds">Adds</span>
+        </div>
+        <div class="mech-desc">1-2 Zelenia's Shades spawn. Cast: Alexandrian Holy, Alexandrian Banish II, Power Break, or Shock.</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Broil IV</span> — DPS the adds. Let co-healer handle party healing. Keep AF for next mechanics.
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic positioning">
+        <div class="mech-header">
+          <span class="mech-name">Alexandrian Holy</span>
+          <span class="mech-tag tag-positioning">Positioning</span>
+        </div>
+        <div class="mech-desc">4 towers. Watch rose pattern — connected towers = bad!</div>
+      </div>
+      
+      <div class="mechanic positioning">
+        <div class="mech-header">
+          <span class="mech-name">Emblazon</span>
+          <span class="mech-tag tag-positioning">Positioning</span>
+        </div>
+        <div class="mech-desc">Rose marking on 4 players (all supports or all DPS). After 7s, tile becomes rose + Magic Vulnerability Up (9s).</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Spread-Lo</span><span class="cost-badge cost-gcd">1 GCD</span> — If you're marked, shield yourself. Move to edge so your rose tile doesn't interfere with towers.
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic raidwide">
+        <div class="mech-header">
+          <span class="mech-name">Thorned Catharsis</span>
+          <span class="mech-tag tag-raidwide">Raidwide</span>
+        </div>
+        <div class="mech-desc">Raid-wide during emblazon resolve.</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Sanctuary</span><span class="cost-badge cost-af">1 AF</span> — Stack heal for raidwide. Watch your emblazon position!
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic adds">
+        <div class="mech-header">
+          <span class="mech-name">Bud of Valor (2nd)</span>
+          <span class="mech-tag tag-adds">Adds</span>
+        </div>
+        <div class="mech-desc">More shades. Same cast pool.</div>
+      </div>
+      
+      <div class="mechanic movement">
+        <div class="mech-header">
+          <span class="mech-name">Shock</span>
+          <span class="mech-tag tag-movement">Movement</span>
+        </div>
+        <div class="mech-desc">Multi-hit/donut AoEs. Supports vs DPS split.</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Blessed Ground</span><span class="cost-badge cost-af">1 AF</span> — Movement heal. Position for next mechanic (Banish II).
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic raidwide">
+        <div class="mech-header">
+          <span class="mech-name">Alexandrian Banish II</span>
+          <span class="mech-tag tag-raidwide">Raidwide</span>
+        </div>
+        <div class="mech-desc">Circle stack on 2 players who didn't get Shock. Stack and share!</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Sanctuary</span><span class="cost-badge cost-af">1 AF</span> — Stack heal. If you got Shock, you don't stack — heal from outside.
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic movement">
+        <div class="mech-header">
+          <span class="mech-name">Escelons' Fall</span>
+          <span class="mech-tag tag-movement">Movement</span>
+        </div>
+        <div class="mech-desc">Cone AoEs again. Close/far bait.</div>
+      </div>
+      
+      <div class="mechanic raidwide">
+        <div class="mech-header">
+          <span class="mech-name">Stock Break</span>
+          <span class="mech-tag tag-raidwide">Raidwide</span>
+        </div>
+        <div class="mech-desc">4-hit stack. Vuln-up from Escelons means extra damage.</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Soil Run + Sanctuary</span><span class="cost-badge cost-af">2 AF</span> — Vuln-up players need extra shielding. <span class="combo-name">Spread-Lo</span><span class="cost-badge cost-gcd">1 GCD</span> on most vuln-up target.
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic adds">
+        <div class="mech-header">
+          <span class="mech-name">Roseblood: 4th Bloom</span>
+          <span class="mech-tag tag-adds">Phase Change</span>
+        </div>
+        <div class="mech-desc">New arena. Same center puddle + rose tiles. Encircling Thorns + Banish III added.</div>
+      </div>
+      
+      <div class="mechanic positioning">
+        <div class="mech-header">
+          <span class="mech-name">Emblazon</span>
+          <span class="mech-tag tag-positioning">Positioning</span>
+        </div>
+        <div class="mech-desc">Another rose marking round. Plan positions carefully.</div>
+      </div>
+      
+      <div class="mechanic positioning">
+        <div class="mech-header">
+          <span class="mech-name">Alexandrian Thunder III</span>
+          <span class="mech-tag tag-positioning">Positioning</span>
+        </div>
+        <div class="mech-desc">Point-blank AoE on all. Spread!</div>
+      </div>
+      
+      <div class="mechanic movement">
+        <div class="mech-header">
+          <span class="mech-name">Encircling Thorns</span>
+          <span class="mech-tag tag-movement">Movement</span>
+        </div>
+        <div class="mech-desc">Thorny Vine on all players. Each support tethered to a DPS. Break tethers by moving apart!</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Blessed Ground</span><span class="cost-badge cost-af">1 AF</span> — Heal during tether breaks. Position to break your tether quickly. If tethered to a DPS, coordinate.
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic tankbuster">
+        <div class="mech-header">
+          <span class="mech-name">Alexandrian Banish III</span>
+          <span class="mech-tag tag-tankbuster">Tankbuster</span>
+        </div>
+        <div class="mech-desc">Heavy circle stack on player (prioritizes healers). If it hits rose tile, damage shared across all connected rose tiles.</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Sacred Soil + Spread-Lo</span><span class="cost-badge cost-gcd">1 GCD</span> — If YOU are targeted: Sacred Soil yourself, run to non-rose tile. <span class="combo-name">Spread-Lo</span> if you need extra. If tank targeted: <span class="combo-name">Sacred Soil</span><span class="cost-badge cost-af">1 AF</span> on them.
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic raidwide">
+        <div class="mech-header">
+          <span class="mech-name">Thorned Catharsis</span>
+          <span class="mech-tag tag-raidwide">Raidwide</span>
+        </div>
+      </div>
+      
+      <div class="mechanic adds">
+        <div class="mech-header">
+          <span class="mech-name">Bud of Valor</span>
+          <span class="mech-tag tag-adds">Adds</span>
+        </div>
+        <div class="mech-desc">More shades. Power Break (half-room cleave) added to cast pool.</div>
+      </div>
+      
+      <div class="mechanic movement">
+        <div class="mech-header">
+          <span class="mech-name">Power Break</span>
+          <span class="mech-tag tag-movement">Movement</span>
+        </div>
+        <div class="mech-desc">Half-room cleave. Side = sword direction. 2nd cast can be same or opposite.</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Blessed Ground</span><span class="cost-badge cost-af">1 AF</span> — Movement heal. Watch sword direction, avoid cleave.
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic movement">
+        <div class="mech-header">
+          <span class="mech-name">Escelons' Fall</span>
+          <span class="mech-tag tag-movement">Movement</span>
+        </div>
+      </div>
+      
+      <div class="mechanic movement">
+        <div class="mech-header">
+          <span class="mech-name">Power Break (2nd)</span>
+          <span class="mech-tag tag-movement">Movement</span>
+        </div>
+      </div>
+      
+      <div class="mechanic raidwide">
+        <div class="mech-header">
+          <span class="mech-name">Stock Break</span>
+          <span class="mech-tag tag-raidwide">Raidwide</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 4: Bloom 5-6 (Late) -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-toggle">−</div>
+      <div class="phase-name">Phase 4: Bloom 5 & 6 (Late)</div>
+      <div class="phase-time">~5:30 — 7:30</div>
+    </div>
+    <div class="timeline">
+      <div class="mechanic adds">
+        <div class="mech-header">
+          <span class="mech-name">Roseblood: 5th Bloom</span>
+          <span class="mech-tag tag-adds">Phase Change</span>
+        </div>
+        <div class="mech-desc">Arena changes. Same puddle + rose tiles. Valorous Ascension + Thunder Slash + Thunder IV.</div>
+      </div>
+      
+      <div class="mechanic raidwide">
+        <div class="mech-header">
+          <span class="mech-name">Valorous Ascension</span>
+          <span class="mech-tag tag-raidwide">Raidwide</span>
+        </div>
+        <div class="mech-desc">2 raid-wide hits. Each spawns 2 Briar Thorns outside arena. Thorns cast line AoEs across arena.</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Soil Run + Sanctuary</span><span class="cost-badge cost-af">2 AF</span> — 2 big raidwides back-to-back. This is your "2+1" Energy Drain moment — drain twice, save 1 AF for next Sacred Soil. <span class="combo-name">Spread-Lo</span><span class="cost-badge cost-gcd">1 GCD</span> on tank if they need it.
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic movement">
+        <div class="mech-header">
+          <span class="mech-name">Thunder Slash</span>
+          <span class="mech-tag tag-movement">Movement</span>
+        </div>
+      </div>
+      
+      <div class="mechanic positioning">
+        <div class="mech-header">
+          <span class="mech-name">Alexandrian Thunder IV</span>
+          <span class="mech-tag tag-positioning">Positioning</span>
+        </div>
+      </div>
+      
+      <div class="mechanic tankbuster">
+        <div class="mech-header">
+          <span class="mech-name">Specter of the Lost</span>
+          <span class="mech-tag tag-tankbuster">Tankbuster</span>
+        </div>
+      </div>
+      
+      <div class="mechanic adds">
+        <div class="mech-header">
+          <span class="mech-name">Roseblood: 6th Bloom</span>
+          <span class="mech-tag tag-adds">Phase Change</span>
+        </div>
+        <div class="mech-desc">Final bloom phase. Same 3rd bloom rules (towers + connected tiles). Holy Hazard added.</div>
+      </div>
+      
+      <div class="mechanic adds">
+        <div class="mech-header">
+          <span class="mech-name">Bud of Valor</span>
+          <span class="mech-tag tag-adds">Adds</span>
+        </div>
+      </div>
+      
+      <div class="mechanic positioning">
+        <div class="mech-header">
+          <span class="mech-name">Alexandrian Holy</span>
+          <span class="mech-tag tag-positioning">Positioning</span>
+        </div>
+      </div>
+      
+      <div class="mechanic positioning">
+        <div class="mech-header">
+          <span class="mech-name">Emblazon</span>
+          <span class="mech-tag tag-positioning">Positioning</span>
+        </div>
+      </div>
+      
+      <div class="mechanic movement">
+        <div class="mech-header">
+          <span class="mech-name">Holy Hazard</span>
+          <span class="mech-tag tag-movement">Movement</span>
+        </div>
+        <div class="mech-desc">2 sets of opposing 120° cone AoEs. Dodge between safe zones.</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Blessed Ground</span><span class="cost-badge cost-af">1 AF</span> — Movement heal. Find safe zone between cones. Position for healing range.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL PHASE -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-toggle">−</div>
+      <div class="phase-name">Final Phase</div>
+      <div class="phase-time">~7:30 — Enrage</div>
+    </div>
+    <div class="timeline">
+      <div class="mechanic adds">
+        <div class="mech-header">
+          <span class="mech-name">Roseblood Bloom</span>
+          <span class="mech-tag tag-adds">Phase Change</span>
+        </div>
+        <div class="mech-desc">Back to original arena pattern. Thunder II + III.</div>
+      </div>
+      
+      <div class="mechanic movement">
+        <div class="mech-header">
+          <span class="mech-name">Alexandrian Thunder II</span>
+          <span class="mech-tag tag-movement">Movement</span>
+        </div>
+      </div>
+      
+      <div class="mechanic positioning">
+        <div class="mech-header">
+          <span class="mech-name">Alexandrian Thunder III</span>
+          <span class="mech-tag tag-positioning">Positioning</span>
+        </div>
+      </div>
+      
+      <div class="mechanic raidwide">
+        <div class="mech-header">
+          <span class="mech-name">Thorned Catharsis</span>
+          <span class="mech-tag tag-raidwide">Raidwide</span>
+        </div>
+      </div>
+      
+      <div class="mechanic tankbuster">
+        <div class="mech-header">
+          <span class="mech-name">Specter of the Lost</span>
+          <span class="mech-tag tag-tankbuster">Tankbuster</span>
+        </div>
+      </div>
+      
+      <div class="mechanic raidwide">
+        <div class="mech-header">
+          <span class="mech-name">Stock Break</span>
+          <span class="mech-tag tag-raidwide">Raidwide</span>
+        </div>
+      </div>
+      
+      <div class="mechanic adds">
+        <div class="mech-header">
+          <span class="mech-name">Roseblood Withering</span>
+          <span class="mech-tag tag-adds">Phase Change</span>
+        </div>
+        <div class="mech-desc">All rose tiles become lethal. Arena = center puddle + ALL rose tiles = death. Very small safe zones.</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Soil Run + Sanctuary</span><span class="cost-badge cost-af">2 AF</span> — Pre-shield before Withering. <span class="combo-name">Spread-Lo</span><span class="cost-badge cost-gcd">1 GCD</span> on everyone you can. This is burn phase — DPS hard, heal harder.
+          </div>
+        </div>
+      </div>
+      
+      <div class="mechanic enrage">
+        <div class="mech-header">
+          <span class="mech-name">Rose Red</span>
+          <span class="mech-tag tag-enrage">ENRA</span>
+        </div>
+        <div class="mech-desc">Raid-wide enrage. Kill boss before this casts or wipe.</div>
+        <div class="scholar-plan">
+          <div class="scholar-plan-header">Scholar Plan</div>
+          <div class="scholar-plan-body">
+            <span class="combo-name">Everything</span> — All AF on shields. All GCDs on Broil IV. LB3 if needed. <span class="combo-name">Nuclear</span><span class="cost-badge cost-gcd">1 GCD</span> if you must GCD heal. This is the end — leave nothing.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 30px; padding: 15px; background: #1e293b; border-radius: 8px; border: 1px solid #334155;">
+    <h3 style="color: #fbbf24; font-size: 1rem; margin-bottom: 10px;">💡 Key Scholar Insights</h3>
+    <ul style="color: #94a3b8; font-size: 0.85rem; line-height: 1.6; padding-left: 20px;">
+      <li><strong>Dissipate window:</strong> Blessed Barricade (adds phase) is your best Dissipate moment. 30s fairy lockout = no issue, adds are untargetable anyway.</li>
+      <li><strong>AF economy:</strong> Save 2 AF going into Stock Break + tankbuster combos. Use "2+1" drain pattern (2 drains, 1 AF saved for Soil).</li>
+      <li><strong>Pre-shield timing:</strong> Stock Break and Valorous Ascension are your biggest pre-shield moments. Cast Sacred Soil during previous mechanic.</li>
+      <li><strong>Movement heals:</strong> Blessed Ground is your best friend during Escelons' Fall, Thunder Slash, and Holy Hazard. Position center-ish for coverage.</li>
+      <li><strong>Emblazon:</strong> If you're marked, shield yourself (Spread-Lo) and move to edge. Don't let your rose tile ruin tower soaks.</li>
+      <li><strong>Burn phase:</strong> After Withering, it's all DPS. Shield what you can, Broil everything else. Don't GCD heal unless someone will die.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  // Simple toggle for phases
+  document.querySelectorAll('.phase-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const timeline = header.nextElementSibling;
+      const toggle = header.querySelector('.phase-toggle');
+      if (timeline.style.display === 'none') {
+        timeline.style.display = 'block';
+        toggle.textContent = '−';
+      } else {
+        timeline.style.display = 'none';
+        toggle.textContent = '+';
+      }
+    });
+  });
+</script>
+</body>
+</html>

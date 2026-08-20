@@ -1,0 +1,1392 @@
+{
+  "userProfile": {
+    "name": "Kane",
+    "gender": "Male",
+    "age": 32,
+    "heightInches": 70,
+    "startDate": "2026-06-11",
+    "activityLevel": "active",
+    "bodyFatPercent": 29,
+    "goalBodyFatPercent": 10,
+    "currentWeight": 167,
+    "goalWeight": 150
+  },
+  "settings": {
+    "unit": "lb",
+    "calorieTarget": 2130,
+    "proteinTarget": 160,
+    "carbTarget": 180,
+    "waterTarget": 83.9,
+    "fatTarget": 70
+  },
+  "entries": [
+    {
+      "calories": 1275,
+      "protein": 109,
+      "carbs": 96,
+      "fat": 43,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Crab Rangoon Wraps",
+          "calories": 280,
+          "protein": 12,
+          "carbs": 28,
+          "fat": 12
+        },
+        {
+          "name": "Esquites",
+          "calories": 250,
+          "protein": 5,
+          "carbs": 22,
+          "fat": 9
+        },
+        {
+          "name": "ISO100 Protein Shake (2 scoops)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 2,
+          "fat": 1
+        },
+        {
+          "name": "Atlantic Salmon Filet",
+          "calories": 320,
+          "protein": 37,
+          "carbs": 0,
+          "fat": 20
+        },
+        {
+          "name": "Cooked White Rice (1 cup)",
+          "calories": 205,
+          "protein": 5,
+          "carbs": 44,
+          "fat": 1
+        }
+      ],
+      "notes": "No breakfast. Lunch: Crab Rangoon wraps + esquites. Afternoon: 2 scoops ISO100 protein shake. Dinner: Atlantic salmon + white rice.",
+      "date": "2026-06-11",
+      "weight": 164
+    },
+    {
+      "date": "2026-06-12",
+      "weight": 165,
+      "calories": 1550,
+      "protein": 145,
+      "carbs": 141,
+      "fat": 62,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Croquettes (2)",
+          "calories": 300,
+          "protein": 18,
+          "carbs": 26,
+          "fat": 18
+        },
+        {
+          "name": "Tuna Rice Bowl",
+          "calories": 530,
+          "protein": 47,
+          "carbs": 46,
+          "fat": 13
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        },
+        {
+          "name": "Sushi",
+          "calories": 500,
+          "protein": 30,
+          "carbs": 65,
+          "fat": 30
+        }
+      ],
+      "notes": "Morning weigh-in. Tower Garden maintenance (replaced cabbage with kale)."
+    },
+    {
+      "date": "2026-06-13",
+      "weight": 165,
+      "calories": 1500,
+      "protein": 70,
+      "carbs": 130,
+      "fat": 70,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Buffet (post-yardwork)",
+          "calories": 1500,
+          "protein": 70,
+          "carbs": 130,
+          "fat": 70
+        }
+      ],
+      "notes": "Yardwork day. Buffet after yardwork — only meal of the day. Did not feel hungry after buffet."
+    },
+    {
+      "date": "2026-06-14",
+      "weight": 165,
+      "calories": 1355,
+      "protein": 51,
+      "carbs": 106,
+      "fat": 56,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Hokkaido Milk Bread (85C Bakery)",
+          "calories": 280,
+          "protein": 5,
+          "carbs": 32,
+          "fat": 13
+        },
+        {
+          "name": "Hot Dog Bread (85C Bakery)",
+          "calories": 175,
+          "protein": 6,
+          "carbs": 14,
+          "fat": 3
+        },
+        {
+          "name": "Homemade Ramen",
+          "calories": 900,
+          "protein": 40,
+          "carbs": 60,
+          "fat": 40
+        }
+      ],
+      "notes": "Morning weigh-in 165 lbs. Breakfast at 85C Bakery. Lunch: homemade ramen."
+    },
+    {
+      "date": "2026-06-15",
+      "weight": 165,
+      "calories": 1405,
+      "protein": 104,
+      "carbs": 93,
+      "fat": 71,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Dinner - 2 Small Burgers + Fries",
+          "calories": 960,
+          "protein": 67,
+          "carbs": 46,
+          "fat": 58
+        }
+      ],
+      "notes": "Morning weigh-in 165 lbs. Morning smoothie. Tonal workout (300 cal burned). Dinner: 2 small homemade burgers with fries."
+    },
+    {
+      "date": "2026-06-16",
+      "weight": 165,
+      "calories": 1310,
+      "protein": 162,
+      "carbs": 102,
+      "fat": 23,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Tuna Rice Bowl",
+          "calories": 530,
+          "protein": 47,
+          "carbs": 46,
+          "fat": 13
+        },
+        {
+          "name": "Slow Cook Chicken Alfredo Pasta",
+          "calories": 560,
+          "protein": 65,
+          "carbs": 52,
+          "fat": 9
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        }
+      ],
+      "notes": "Morning weigh-in 165 lbs. No breakfast. Lunch: tuna rice bowl + double protein shake. Dinner: slow cook chicken Alfredo pasta."
+    },
+    {
+      "date": "2026-06-17",
+      "weight": 164,
+      "calories": 1339,
+      "protein": 109,
+      "carbs": 160,
+      "fat": 27,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Chipotle Chicken Rice Bowl",
+          "calories": 894,
+          "protein": 72,
+          "carbs": 113,
+          "fat": 14
+        }
+      ],
+      "notes": "Morning weigh-in 164 lbs. Tonal workout completed."
+    },
+    {
+      "date": "2026-06-18",
+      "weight": 163,
+      "calories": null,
+      "protein": null,
+      "carbs": null,
+      "fat": null,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        }
+      ],
+      "notes": "Morning weigh-in 163 lbs. Another pound down! Having morning smoothie."
+    },
+    {
+      "date": "2026-06-22",
+      "weight": 166,
+      "calories": 1070,
+      "protein": 68,
+      "carbs": 119,
+      "fat": 31.5,
+      "waterOz": 30.1,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Lunch - White Rice + Karaage",
+          "calories": 625,
+          "protein": 31,
+          "carbs": 72,
+          "fat": 18.5
+        }
+      ],
+      "notes": "Morning weigh-in 166 lbs. Having morning smoothie. Weekend at parents' house — irregular eating, likely sodium bloat. Lunch: 210g white rice + 3 pieces karaage."
+    },
+    {
+      "date": "2026-06-29",
+      "weight": 165,
+      "calories": 1515,
+      "protein": 95,
+      "carbs": 156,
+      "fat": 59,
+      "waterOz": 0,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Hayashi Rice",
+          "calories": 560,
+          "protein": 19,
+          "carbs": 77,
+          "fat": 19
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        },
+        {
+          "name": "Costco Ribs (4)",
+          "calories": 310,
+          "protein": 22,
+          "carbs": 2,
+          "fat": 23
+        },
+        {
+          "name": "Cotton Candy Grapes (310g)",
+          "calories": 215,
+          "protein": 2,
+          "carbs": 56,
+          "fat": 0
+        },
+        {
+          "name": "85C Bakery Egg Tart",
+          "calories": 210,
+          "protein": 2,
+          "carbs": 17,
+          "fat": 16
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Rowing",
+            "caloriesBurned": 170,
+            "notes": "30 min rowing session"
+          },
+          {
+            "name": "Walking",
+            "caloriesBurned": 133,
+            "notes": "30 min afternoon walk"
+          }
+        ],
+        "notes": "Rowing (170 cal) + Walking (133 cal). Total: 303 cal burned."
+      },
+      "notes": "Morning weigh-in 165 lbs. Dentist appointment — no cavities! Fasted before appointment, starved after. Lunch: homemade Hayashi Rice. Dinner: 4 Costco ribs, cotton candy grapes, egg tart."
+    },
+    {
+      "date": "2026-06-30",
+      "weight": 166,
+      "calories": 1985,
+      "protein": 158,
+      "carbs": 212,
+      "fat": 52,
+      "waterOz": 0,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Tuna Rice Bowl",
+          "calories": 530,
+          "protein": 47,
+          "carbs": 46,
+          "fat": 13
+        },
+        {
+          "name": "Hayashi Rice",
+          "calories": 560,
+          "protein": 19,
+          "carbs": 77,
+          "fat": 19
+        },
+        {
+          "name": "85C Bakery Chocolate Bun",
+          "calories": 230,
+          "protein": 5,
+          "carbs": 38,
+          "fat": 6
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "FitXR Boxing",
+            "caloriesBurned": 117,
+            "notes": "Morning boxing session"
+          },
+          {
+            "name": "Tonal Strength Training",
+            "notes": "Aria Special Day 1 — Push & Legs",
+            "caloriesBurned": 229
+          }
+        ],
+        "notes": "FitXR boxing (117 cal) + Tonal Strength Training (229 cal, Aria Special Day 1). Total: 346 cal burned."
+      },
+      "notes": "Morning weigh-in 166 lbs. FitXR boxing (117 cal burned). Tonal workout: Aria Special Day 1 (Push & Legs). Lunch: tuna rice bowl. Dinner: hayashi rice. Dessert: 85C Bakery Chocolate Bun."
+    },
+    {
+      "date": "2026-07-01",
+      "weight": 164,
+      "calories": 1005,
+      "protein": 56,
+      "carbs": 124,
+      "fat": 32,
+      "waterOz": 0,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Hayashi Rice",
+          "calories": 560,
+          "protein": 19,
+          "carbs": 77,
+          "fat": 19
+        }
+      ],
+      "notes": "Morning weigh-in 164 lbs. Morning smoothie. Lunch: Hayashi Rice."
+    },
+    {
+      "date": "2026-07-06",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 1555,
+      "protein": 111,
+      "carbs": 186,
+      "fat": 46,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Ramyun Chef Braised Beef Ramen",
+          "calories": 650,
+          "protein": 34,
+          "carbs": 80,
+          "fat": 24
+        },
+        {
+          "name": "Cheesy Chicken Chipotle Pasta",
+          "calories": 460,
+          "protein": 40,
+          "carbs": 59,
+          "fat": 9
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Tonal Strength Training",
+            "notes": "Aria Special Day 1 - Push & Legs",
+            "caloriesBurned": 160
+          },
+          {
+            "name": "Treadmill Walking",
+            "notes": "30 min at 12% incline, 2mph",
+            "caloriesBurned": 215
+          }
+        ],
+        "notes": "Aria Special Day 1 (Push & Legs) + Treadmill walking. Total: 375 cal burned."
+      },
+      "notes": "Morning weigh-in 166 lbs. Post-4th of July weekend. Back on track! Tonal: Aria Special Day 1 (160 cal). Treadmill: 30 min at 12% incline, 2mph (215 cal). Morning smoothie + Ramyun Chef ramen for lunch + Cheesy Chicken Chipotle Pasta for dinner."
+    },
+    {
+      "date": "2026-07-07",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 1140,
+      "protein": 69,
+      "carbs": 71,
+      "fat": 63,
+      "meals": [
+        {
+          "name": "English Muffins (2) + Ground Beef Burger",
+          "calories": 840,
+          "protein": 49,
+          "carbs": 51,
+          "fat": 48
+        },
+        {
+          "name": "Steak Quesadilla (1/2)",
+          "calories": 300,
+          "protein": 20,
+          "carbs": 20,
+          "fat": 15
+        }
+      ],
+      "notes": "Morning weigh-in 166 lbs. Terrible morning with misdelivered mail/post office. Nap in afternoon. Evening: settled fraud case, completed Chinese visa application, FFXIV crafting."
+    },
+    {
+      "date": "2026-07-13",
+      "weight": 164,
+      "calories": 445,
+      "protein": 37,
+      "carbs": 47,
+      "fat": 13,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Curry Bun",
+          "calories": 330,
+          "protein": 20,
+          "carbs": 45,
+          "fat": 15
+        }
+      ],
+      "notes": "Morning weigh-in 164 lbs. Morning smoothie. Monday — new week, excited to tackle it. Lunch: Curry bun while studying Chinese."
+    },
+    {
+      "date": "2026-07-14",
+      "weight": 163,
+      "calories": 745,
+      "protein": 59,
+      "carbs": 47,
+      "fat": 38,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Brisket",
+          "calories": 300,
+          "protein": 22,
+          "carbs": 0,
+          "fat": 25
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Rowing",
+            "caloriesBurned": 145,
+            "notes": "Morning rowing session"
+          }
+        ],
+        "notes": "Morning rowing workout — 145 cal burned. Beat the 164 plateau!"
+      },
+      "notes": "Morning weigh-in 163 lbs! Beat the plateau! Morning smoothie + rowing (145 cal) + brisket lunch."
+    },
+    {
+      "date": "2026-07-27",
+      "weight": 165,
+      "bfPercent": 29,
+      "calories": 1845,
+      "protein": 147,
+      "carbs": 164,
+      "fat": 67,
+      "waterOz": 0,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Yakisoba Noodles",
+          "calories": 620,
+          "protein": 20,
+          "carbs": 73,
+          "fat": 31
+        },
+        {
+          "name": "Homemade Cabbage Rolls",
+          "calories": 560,
+          "protein": 40,
+          "carbs": 40,
+          "fat": 22
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 91,
+            "notes": "12 min walk"
+          },
+          {
+            "name": "Tonal Strength Training",
+            "caloriesBurned": 193,
+            "notes": "20-in-20: Shred and Sweat Workout 1"
+          },
+          {
+            "name": "Rowing",
+            "caloriesBurned": 81,
+            "notes": "15 min rowing"
+          }
+        ],
+        "notes": "Walk (91 cal) + Tonal Shred and Sweat Workout 1 (193 cal) + Rowing (81 cal). Total: 365 cal burned."
+      },
+      "notes": "Morning weigh-in 165 lbs. Breakfast: Morning Smoothie. Lunch: yakisoba noodles. Dinner: homemade cabbage rolls. Post-workout: Double ISO100 Protein Shake. Afternoon workout: 12 min walk + 20-in-20 Shred and Sweat Workout 1 + 15 min rowing."
+    },
+    {
+      "date": "2026-07-28",
+      "weight": 165,
+      "bfPercent": 29,
+      "calories": 1845,
+      "protein": 169,
+      "carbs": 182,
+      "fat": 42,
+      "waterOz": 72,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Tuna Rice Bowl",
+          "calories": 530,
+          "protein": 47,
+          "carbs": 46,
+          "fat": 13
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        },
+        {
+          "name": "Japanese Chicken Curry with 1 cup Cooked White Rice",
+          "calories": 650,
+          "protein": 35,
+          "carbs": 85,
+          "fat": 15
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 164,
+            "notes": "20 min morning walk"
+          },
+          {
+            "name": "Tonal Strength Training",
+            "caloriesBurned": 136,
+            "notes": "Tonal workout"
+          },
+          {
+            "name": "Rowing",
+            "caloriesBurned": 113,
+            "notes": "20 min rowing"
+          }
+        ],
+        "notes": "Morning 20 min treadmill walk (164 cal) + Tonal workout (136 cal) + 20 min rowing (113 cal). Total: 413 cal burned."
+      },
+      "notes": "Morning weigh-in 165 lbs. Started new workout plan yesterday — legs sore from DOMS. Morning smoothie. Lunch: tuna rice bowl. Dinner: Japanese chicken curry with white rice. Post-workout: Double ISO100 Protein Shake. 20 min treadmill walk (164 cal) + Tonal workout (136 cal) + 20 min rowing (113 cal)."
+    },
+    {
+      "date": "2026-07-29",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 445,
+      "protein": 37,
+      "carbs": 47,
+      "fat": 13,
+      "waterOz": 0,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 110,
+            "notes": "Morning walk"
+          }
+        ],
+        "notes": "Morning treadmill walk: 110 cal burned."
+      },
+      "notes": "Morning weigh-in 166 lbs. Slept poorly, woke up sore, took Advil and went back to sleep. Morning treadmill walk (110 cal). Morning smoothie."
+    },
+    {
+      "date": "2026-08-03",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 1696,
+      "protein": 164,
+      "carbs": 151,
+      "fat": 44,
+      "waterOz": 0,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Tuna Rice Bowl",
+          "calories": 530,
+          "protein": 47,
+          "carbs": 46,
+          "fat": 13
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        },
+        {
+          "name": "Turkey Burgers with Homemade Air Fryer French Fries",
+          "calories": 501,
+          "protein": 30,
+          "carbs": 54,
+          "fat": 17
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 90,
+            "notes": "10 min warm-up walk"
+          },
+          {
+            "name": "Tonal HIIT",
+            "caloriesBurned": 442,
+            "notes": "45 min HIIT workout"
+          },
+          {
+            "name": "Rowing",
+            "caloriesBurned": 98,
+            "notes": "20 min rowing"
+          },
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 88,
+            "notes": "10 min cool-down walk"
+          }
+        ],
+        "notes": "10 min warm-up walk (90 cal) + 45 min Tonal HIIT (442 cal) + 20 min rowing (98 cal) + 10 min cool-down walk (88 cal). Total: 718 cal burned."
+      },
+      "notes": "Morning weigh-in 166 lbs. Morning smoothie. Lunch: tuna rice bowl. Afternoon workout: 10 min warm-up walk (90 cal) + 45 min Tonal HIIT (442 cal) + 20 min rowing (98 cal) + 10 min cool-down walk (88 cal). Total: 718 cal burned. Post-workout: Double ISO100 Protein Shake. Dinner: turkey burgers with homemade air fryer french fries."
+    },
+    {
+      "date": "2026-08-04",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 1488,
+      "protein": 133,
+      "carbs": 132,
+      "fat": 49,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Turkey Burgers with Homemade Air Fryer French Fries",
+          "calories": 501,
+          "protein": 30,
+          "carbs": 54,
+          "fat": 17
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        },
+        {
+          "name": "Sausages and Veggies",
+          "calories": 182,
+          "protein": 12,
+          "carbs": 2,
+          "fat": 16
+        },
+        {
+          "name": "85C Hokkaido Milk Bread",
+          "calories": 140,
+          "protein": 4,
+          "carbs": 25,
+          "fat": 2
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 64,
+            "notes": "Warmup walk"
+          },
+          {
+            "name": "Tonal HIIT",
+            "caloriesBurned": 311,
+            "notes": "Four Weeks to Fat Loss HIIT workout"
+          },
+          {
+            "name": "Rowing",
+            "caloriesBurned": 102,
+            "notes": "20 minute rowing machine"
+          },
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 84,
+            "notes": "Cooldown walk"
+          }
+        ],
+        "notes": "Warmup walk (64 cal) + Tonal Four Weeks to Fat Loss HIIT (311 cal) + 20 min rowing (102 cal) + Cooldown walk (84 cal). Total: 561 cal burned."
+      },
+      "notes": "Morning weigh-in 166 lbs. Morning smoothie. Early workout: 5am warmup walk (64 cal) + Tonal Four Weeks to Fat Loss HIIT (311 cal) + 20 min rowing (102 cal) + cooldown walk (84 cal). Total: 561 cal burned. Lunch: turkey burger with homemade air fryer french fries (same as previous night). Post-nap: Double ISO100 Protein Shake. Dinner: sausages and veggies. Dessert: 85C Hokkaido Milk Bread."
+    },
+    {
+      "date": "2026-08-05",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 1615,
+      "protein": 127,
+      "carbs": 110,
+      "fat": 78.5,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Cooked White Rice (1 cup)",
+          "calories": 205,
+          "protein": 4,
+          "carbs": 45,
+          "fat": 0.5
+        },
+        {
+          "name": "Lil Beef Smokies (2 servings)",
+          "calories": 360,
+          "protein": 12,
+          "carbs": 12,
+          "fat": 30
+        },
+        {
+          "name": "Sausage Links (1.5)",
+          "calories": 385,
+          "protein": 24,
+          "carbs": 2,
+          "fat": 34
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        }
+      ],
+      "notes": "Morning weigh-in 166 lbs. Rest day — sore from rowing, foam rolled. Used compact charger and universal adapter in mental repack. Business class Air China upgrade confirmed. Afternoon: Double ISO100 Protein Shake."
+    },
+    {
+      "date": "2026-08-06",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 1895,
+      "protein": 172,
+      "carbs": 156,
+      "fat": 63,
+      "waterOz": 0,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Tuna Rice Bowl",
+          "calories": 530,
+          "protein": 47,
+          "carbs": 46,
+          "fat": 13
+        },
+        {
+          "name": "Lil Smokies Sausages (1 serving)",
+          "calories": 180,
+          "protein": 6,
+          "carbs": 6,
+          "fat": 15
+        },
+        {
+          "name": "Simply Fuel Protein Balls (1 serving)",
+          "calories": 190,
+          "protein": 8,
+          "carbs": 24,
+          "fat": 9
+        },
+        {
+          "name": "General Tso's Chicken - Air Fried (1/6 recipe)",
+          "calories": 330,
+          "protein": 24,
+          "carbs": 29,
+          "fat": 12
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 63,
+            "notes": "10 min warm-up walk"
+          },
+          {
+            "name": "Tonal HIIT",
+            "caloriesBurned": 314,
+            "notes": "Four Weeks to Fat Loss HIIT workout"
+          },
+          {
+            "name": "Rowing",
+            "caloriesBurned": 170,
+            "notes": "30 min rowing session"
+          },
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 91,
+            "notes": "10 min cool-down walk"
+          }
+        ],
+        "notes": "10 min warm-up walk (63 cal) + Tonal Four Weeks to Fat Loss HIIT (314 cal) + 30 min rowing (170 cal) + 10 min cool-down walk (91 cal). Total: 638 cal burned."
+      },
+      "notes": "Morning weigh-in 166 lbs. Morning smoothie. Lunch/snacks: tuna rice bowl, lil smokies sausages, simply fuel protein balls. Dinner: General Tso's Chicken - air fried (1/6 recipe, ~330 cal). Post-dinner: Double ISO100 Protein Shake. 5am workout: 10 min warm-up treadmill walk (63 cal) + Tonal Four Weeks to Fat Loss HIIT (314 cal) + 30 min rowing (170 cal) + 10 min cool-down treadmill walk (91 cal). Total: 638 cal burned."
+    },
+    {
+      "date": "2026-08-10",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 2075,
+      "protein": 164,
+      "carbs": 249,
+      "fat": 59,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Tuna Rice Bowl",
+          "calories": 530,
+          "protein": 47,
+          "carbs": 46,
+          "fat": 13
+        },
+        {
+          "name": "85C Hokkaido Custard Bread",
+          "calories": 280,
+          "protein": 5,
+          "carbs": 32,
+          "fat": 14
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        },
+        {
+          "name": "Sushi Dinner",
+          "calories": 600,
+          "protein": 25,
+          "carbs": 120,
+          "fat": 18
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 57,
+            "notes": "10 min warm-up walk"
+          },
+          {
+            "name": "Tonal HIIT",
+            "caloriesBurned": 344,
+            "notes": "Four Weeks to Fat Loss HIIT workout"
+          },
+          {
+            "name": "Rowing",
+            "caloriesBurned": 102,
+            "notes": "20 min rowing session"
+          },
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 67,
+            "notes": "10 min cool-down walk"
+          }
+        ],
+        "notes": "10 min warm-up treadmill walk (57 cal) + Tonal Four Weeks to Fat Loss HIIT (344 cal) + 20 min rowing (102 cal) + 10 min cool-down treadmill walk (67 cal). Total: 570 cal burned."
+      },
+      "notes": "Morning smoothie, tuna rice bowl lunch, 85C Hokkaido bread, double ISO100 shake, and sushi dinner. 570 cal burned in workout."
+    },
+    {
+      "date": "2026-08-12",
+      "bfPercent": 29,
+      "calories": 1810,
+      "protein": 192,
+      "carbs": 140,
+      "fat": 53.5,
+      "waterOz": null,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Leftover Beef Pad Thai",
+          "calories": 315,
+          "protein": 16,
+          "carbs": 29,
+          "fat": 15
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        },
+        {
+          "name": "Turkey Burgers with Homemade Air Fryer French Fries",
+          "calories": 501,
+          "protein": 30,
+          "carbs": 54,
+          "fat": 17
+        },
+        {
+          "name": "Single Protein Shake (ISO100)",
+          "calories": 110,
+          "protein": 25,
+          "carbs": 2,
+          "fat": 0.5
+        },
+        {
+          "name": "Egg White Omelette with Mozzarella",
+          "calories": 219,
+          "protein": 34,
+          "carbs": 4,
+          "fat": 7
+        }
+      ],
+      "notes": "Morning weigh-in 166 lbs. Rest day. Morning smoothie, leftover beef pad thai, double protein shake, turkey burgers with air fryer fries for dinner, single protein shake, and egg white omelette with 46g reduced fat mozzarella. Rest day targets: ~1900 cal, 160P / 140C / 70F."
+    },
+    {
+      "date": "2026-08-13",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 2076,
+      "protein": 180,
+      "carbs": 199,
+      "fat": 62,
+      "waterOz": null,
+      "meals": [],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Workout",
+            "caloriesBurned": 522,
+            "notes": "522 cal burned"
+          }
+        ],
+        "notes": "522 cal burned."
+      },
+      "notes": "Morning weigh-in 166 lbs. Calories: 2,076 / 2,130. Protein: 180g / 160g (+20). Carbs: 199g / 180g (+19). Fat: 62g / 70g."
+    },
+    {
+      "date": "2026-08-14",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 1265,
+      "protein": 117,
+      "carbs": 111,
+      "fat": 44,
+      "waterOz": null,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        },
+        {
+          "name": "Gyro Entree with Fries",
+          "calories": 600,
+          "protein": 30,
+          "carbs": 60,
+          "fat": 30
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 35,
+            "notes": "10 min warm-up walk"
+          },
+          {
+            "name": "Tonal HIIT",
+            "caloriesBurned": 313,
+            "notes": "Four Weeks to Fat Loss HIIT workout"
+          }
+        ],
+        "notes": "10 min warm-up treadmill walk (35 cal) + Tonal Four Weeks to Fat Loss HIIT (313 cal). Total: 348 cal burned."
+      },
+      "notes": "Morning weigh-in 166 lbs. Morning smoothie. 10 min warm-up treadmill walk (35 cal) + Tonal Four Weeks to Fat Loss HIIT (313 cal). Total: 348 cal burned. Post-workout: Double ISO100 Protein Shake. Dinner: Gyro entree with fries."
+    },
+    {
+      "date": "2026-08-15",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 1730,
+      "protein": 135,
+      "carbs": 142,
+      "fat": 76.5,
+      "waterOz": null,
+      "meals": [
+        {
+          "name": "Metamucil Fiber Thins",
+          "calories": 200,
+          "protein": 2,
+          "carbs": 30,
+          "fat": 7
+        },
+        {
+          "name": "Costco Ribs (3)",
+          "calories": 310,
+          "protein": 21,
+          "carbs": 5,
+          "fat": 26
+        },
+        {
+          "name": "Plantain Chips",
+          "calories": 130,
+          "protein": 1,
+          "carbs": 17,
+          "fat": 8
+        },
+        {
+          "name": "Starbucks Iced Caramel Protein Matcha",
+          "calories": 270,
+          "protein": 31,
+          "carbs": 26,
+          "fat": 4.5
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        },
+        {
+          "name": "Gyro Entree with Fries",
+          "calories": 600,
+          "protein": 30,
+          "carbs": 60,
+          "fat": 30
+        }
+      ],
+      "notes": "Fiber focus day. Metamucil Fiber Thins for fiber intake. Lunch: 3 Costco ribs + plantain chips. Afternoon: Starbucks Iced Caramel Protein Matcha. Late night: Double ISO100 Protein Shake + Gyro entree with fries (same as 8/14)."
+    },
+    {
+      "date": "2026-08-16",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 1929,
+      "protein": 68,
+      "carbs": 177,
+      "fat": 98,
+      "waterOz": null,
+      "meals": [
+        {
+          "name": "Curry Bread (2)",
+          "calories": 584,
+          "protein": 14,
+          "carbs": 68,
+          "fat": 22
+        },
+        {
+          "name": "Johnsonville Jalapeno Cheddar Smoked Sausages (3) + 1 cup Rice",
+          "calories": 845,
+          "protein": 31,
+          "carbs": 52,
+          "fat": 58
+        },
+        {
+          "name": "85C Hokkaido Custard Bread",
+          "calories": 280,
+          "protein": 5,
+          "carbs": 32,
+          "fat": 13
+        },
+        {
+          "name": "Oikos Mixed Berry Triple Zero Yogurt with Ancient Grain Granola",
+          "calories": 220,
+          "protein": 18,
+          "carbs": 25,
+          "fat": 5
+        }
+      ],
+      "notes": "Rest day. Breakfast: 2 curry breads. Lunch: 3 Johnsonville Jalapeno Cheddar smoked sausages with 1 cup rice. Dessert: 85C Hokkaido Custard Bread. Snack: Oikos Mixed Berry yogurt with ancient grain granola."
+    },
+    {
+      "date": "2026-08-17",
+      "weight": 167,
+      "calories": 1845,
+      "protein": 168,
+      "carbs": 192,
+      "fat": 44,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        },
+        {
+          "name": "Ground Pork and Cabbage with White Rice",
+          "calories": 680,
+          "protein": 31,
+          "carbs": 85,
+          "fat": 26
+        },
+        {
+          "name": "Costco Ahi Tuna Spicy Poke with White Rice",
+          "calories": 500,
+          "protein": 50,
+          "carbs": 56,
+          "fat": 4
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Treadmill Warmup",
+            "caloriesBurned": 53,
+            "notes": "10 min warmup walk"
+          },
+          {
+            "name": "Tonal 4 Weeks to Fat Loss - Day 9 HIIT",
+            "caloriesBurned": 376,
+            "notes": "HIIT workout"
+          },
+          {
+            "name": "Rowing Machine",
+            "caloriesBurned": 99,
+            "notes": "20 min rowing session"
+          },
+          {
+            "name": "Treadmill Cooldown",
+            "caloriesBurned": 77,
+            "notes": "10 min cooldown walk"
+          }
+        ],
+        "notes": "Treadmill Warmup (53 cal) + Tonal HIIT (376 cal) + Rowing (99 cal) + Treadmill Cooldown (77 cal). Total: 605 cal burned."
+      },
+      "notes": "Morning weigh-in: 167 lbs. 5 AM workout session. Total workout calories burned: 605. Morning smoothie before workout, double protein shake after. Lunch: ground pork and cabbage with 210g white rice. Dinner: Costco ahi tuna spicy poke with 1 cup white rice."
+    }
+  ],
+  "tdeeHistory": [
+    {
+      "date": "2026-06-11",
+      "tdee": 2342,
+      "weight": 164,
+      "bfPercent": 29,
+      "activityMultiplier": 1.55,
+      "bmr": 1511,
+      "targetCalories": 1842
+    },
+    {
+      "date": "2026-08-10",
+      "tdee": 2630,
+      "weight": 166,
+      "bfPercent": 29,
+      "activityMultiplier": 1.725,
+      "bmr": 1525,
+      "targetCalories": 2130
+    }
+  ]
+}

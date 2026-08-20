@@ -1,0 +1,26 @@
+# macOS
+.DS_Store
+
+# OpenClaw runtime files
+.openclaw/
+workspace-state.json
+openclaw-workspace-state.json
+lancedb-config.json
+
+# Backup dirs
+AriaV5-backup/
+_pre-restore-backup/
+RECOVERY.md
+
+# Credentials and secrets
+credentials/
+*.key
+*.pem
+.env
+
+# Node modules (if any)
+node_modules/
+
+# Logs
+*.log
+logs/

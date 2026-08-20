@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recollection EX — Compact Scholar Timeline</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 8px 12px;
+    line-height: 1.2;
+    height: 100vh;
+    overflow: hidden;
+  }
+  h1 { font-size: 1.2rem; color: #fbbf24; margin-bottom: 2px; }
+  .subtitle { color: #94a3b8; font-size: 0.75rem; margin-bottom: 6px; }
+  
+  .container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    height: calc(100vh - 80px);
+  }
+  
+  .phase-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow: hidden;
+  }
+  
+  .phase-block {
+    background: #1e293b;
+    border-radius: 4px;
+    border: 1px solid #334155;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  
+  .phase-header {
+    padding: 3px 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fbbf24;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #334155;
+  }
+  
+  .mechanic-row {
+    display: flex;
+    align-items: baseline;
+    padding: 1px 6px;
+    font-size: 0.78rem;
+    border-bottom: 1px solid #1e293b;
+    gap: 6px;
+  }
+  .mechanic-row:last-child { border-bottom: none; }
+  
+  .timestamp {
+    font-family: 'SF Mono', 'Courier New', monospace;
+    color: #64748b;
+    font-size: 0.72rem;
+    min-width: 32px;
+    flex-shrink: 0;
+  }
+  
+  .mech-name {
+    font-weight: 600;
+    color: #e2e8f0;
+    flex-shrink: 0;
+  }
+  
+  .tag {
+    font-size: 0.6rem;
+    padding: 1px 4px;
+    border-radius: 2px;
+    font-weight: 600;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  
+  .tag-rw { background: #450a0a; color: #fca5a5; }
+  .tag-tb { background: #451a03; color: #fdba74; }
+  .tag-mov { background: #1e3a5f; color: #93c5fd; }
+  .tag-adds { background: #3b1765; color: #d8b4fe; }
+  .tag-pos { background: #14522d; color: #86efac; }
+  .tag-enrage { background: #7f1d1d; color: #fecaca; }
+  
+  .combo-line {
+    color: #94a3b8;
+    font-size: 0.72rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .combo-line .combo { color: #4ade80; font-weight: 600; }
+  .combo-line .cost { color: #fbbf24; font-size: 0.65rem; }
+  
+  .legend {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.7rem;
+    color: #94a3b8;
+  }
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 1px;
+  }
+  
+  .insights {
+    position: fixed;
+    bottom: 8px; left: 12px; right: 12px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+  .insights strong { color: #fbbf24; }
+  .insight-item { white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<h1>⚔️ Recollection EX — Scholar Plan</h1>
+<div class="subtitle">Zelenia | One-page reference — no scrolling</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div>Raid</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f97316"></div>TB</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div>Move</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#a855f7"></div>Phase</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div>Pos</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#dc2626"></div>Enrage</div>
+</div>
+
+<div class="container">
+
+  <!-- LEFT COLUMN: Opening + Bloom 1 + Bloom 2 -->
+  <div class="phase-col">
+    
+    <div class="phase-block">
+      <div class="phase-header">Opening (0:00-1:45)</div>
+      <div class="mechanic-row">
+        <span class="timestamp">0:00</span>
+        <span class="mech-name">Thorned Catharsis</span>
+        <span class="tag tag-rw">Raid</span>
+        <span class="combo-line"><span class="combo">Fairy Heal</span> <span class="cost">(FREE)</span> = Whispering Dawn + Fey Blessing</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">0:15</span>
+        <span class="mech-name">Shock</span>
+        <span class="tag tag-mov">Move</span>
+        <span class="combo-line"><span class="combo">Blessed Ground</span> <span class="cost">(1 AF)</span> = Fey Illumination + Sacred Soil</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">0:30</span>
+        <span class="mech-name">Alex. Holy</span>
+        <span class="tag tag-pos">Pos</span>
+        <span class="combo-line"><span class="combo">Sacred Soil</span> <span class="cost">(1 AF)</span> — Self-shield if soaking</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">0:50</span>
+        <span class="mech-name">Specter</span>
+        <span class="tag tag-tb">TB</span>
+        <span class="combo-line"><span class="combo">Adloquium + Adloquium</span> <span class="cost">(2 GCD)</span> — Shield both tethered</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">1:08</span>
+        <span class="mech-name">Escelons' Fall</span>
+        <span class="tag tag-mov">Move</span>
+        <span class="combo-line"><span class="combo">Blessed Ground</span> <span class="cost">(1 AF)</span> = Fey Illumination + Sacred Soil</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">1:25</span>
+        <span class="mech-name">Stock Break</span>
+        <span class="tag tag-rw">Raid</span>
+        <span class="combo-line"><span class="combo">Sanctuary</span> <span class="cost">(1 AF)</span> = Fey Illum + Concitation + Sacred Soil</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">1:35</span>
+        <span class="mech-name">Barricade</span>
+        <span class="tag tag-adds">Adds</span>
+        <span class="combo-line"><span class="combo">DISSIPATE</span> <span class="cost">(FREE)</span> → 3 AF → Broil IV</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">1:42</span>
+        <span class="mech-name">Quietus</span>
+        <span class="tag tag-rw">Raid</span>
+        <span class="combo-line"><span class="combo">Soil Run + Sanctuary</span> <span class="cost">(2 AF)</span> — Burn all AF</span>
+      </div>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-header">Bloom 1 (1:45-2:55)</div>
+      <div class="mechanic-row">
+        <span class="timestamp">1:45</span>
+        <span class="mech-name">Roseblood Bloom</span>
+        <span class="tag tag-adds">Phase</span>
+        <span class="combo-line">Re-summon Fairy — avoid center puddle</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">2:05</span>
+        <span class="mech-name">Thunder II</span>
+        <span class="tag tag-mov">Move</span>
+        <span class="combo-line"><span class="combo">Blessed Ground</span> <span class="cost">(1 AF)</span> = Fey Illumination + Sacred Soil</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">2:20</span>
+        <span class="mech-name">Thunder III</span>
+        <span class="tag tag-pos">Pos</span>
+        <span class="combo-line"><span class="combo">Sacred Soil</span> <span class="cost">(1 AF)</span> — Self-shield, spread</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">2:35</span>
+        <span class="mech-name">Catharsis</span>
+        <span class="tag tag-rw">Raid</span>
+        <span class="combo-line"><span class="combo">Fairy + Sacred Soil</span> <span class="cost">(1 AF)</span> = Whispering Dawn + Fey Blessing + Fey Illumination + Sacred Soil</span>
+      </div>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-header">Bloom 2 (2:55-3:45)</div>
+      <div class="mechanic-row">
+        <span class="timestamp">2:55</span>
+        <span class="mech-name">2nd Bloom</span>
+        <span class="tag tag-adds">Phase</span>
+        <span class="combo-line">New arena — Thunder Slash + Thunder IV</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">3:10</span>
+        <span class="mech-name">Thunder Slash</span>
+        <span class="tag tag-mov">Move</span>
+        <span class="combo-line"><span class="combo">Blessed Ground</span> <span class="cost">(1 AF)</span> = Fey Illumination + Sacred Soil</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">3:25</span>
+        <span class="mech-name">Thunder IV</span>
+        <span class="tag tag-pos">Pos</span>
+        <span class="combo-line"><span class="combo">Soil Run</span> <span class="cost">(1 AF)</span> = Concitation + Sacred Soil + Expedient</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">3:40</span>
+        <span class="mech-name">Specter</span>
+        <span class="tag tag-tb">TB</span>
+        <span class="combo-line"><span class="combo">Adloquium + Adloquium</span> <span class="cost">(2 GCD)</span> — Tethers</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT COLUMN: Bloom 3 + Bloom 4 + Bloom 5/6/Final -->
+  <div class="phase-col">
+
+    <div class="phase-block">
+      <div class="phase-header">Bloom 3 (3:45-5:30)</div>
+      <div class="mechanic-row">
+        <span class="timestamp">3:45</span>
+        <span class="mech-name">3rd Bloom</span>
+        <span class="tag tag-adds">Phase</span>
+        <span class="combo-line">Towers on connected rose tiles = BAD</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">4:00</span>
+        <span class="mech-name">Bud of Valor</span>
+        <span class="tag tag-adds">Adds</span>
+        <span class="combo-line"><span class="combo">Broil IV</span> — DPS adds, co-heal heals</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">4:30</span>
+        <span class="mech-name">Emblazon</span>
+        <span class="tag tag-pos">Pos</span>
+        <span class="combo-line"><span class="combo">Spread-Lo</span> <span class="cost">(1 GCD)</span> = Recitation + Protraction + Adloquium + DT</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">4:45</span>
+        <span class="mech-name">Catharsis</span>
+        <span class="tag tag-rw">Raid</span>
+        <span class="combo-line"><span class="combo">Sanctuary</span> <span class="cost">(1 AF)</span> = Fey Illum + Concitation + Sacred Soil</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">5:15</span>
+        <span class="mech-name">Shock</span>
+        <span class="tag tag-mov">Move</span>
+        <span class="combo-line"><span class="combo">Blessed Ground</span> <span class="cost">(1 AF)</span> = Fey Illumination + Sacred Soil</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">5:30</span>
+        <span class="mech-name">Banish II</span>
+        <span class="tag tag-rw">Raid</span>
+        <span class="combo-line"><span class="combo">Sanctuary</span> <span class="cost">(1 AF)</span> = Fey Illumination + Concitation + Sacred Soil — Stack if not shocked</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">5:45</span>
+        <span class="mech-name">Escelons</span>
+        <span class="tag tag-mov">Move</span>
+        <span class="combo-line"><span class="combo">Blessed Ground</span> <span class="cost">(1 AF)</span> = Fey Illumination + Sacred Soil — Bait cones</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">6:00</span>
+        <span class="mech-name">Stock Break</span>
+        <span class="tag tag-rw">Raid</span>
+        <span class="combo-line"><span class="combo">Soil Run + Sanctuary</span> <span class="cost">(2 AF)</span> — Vuln-up = extra shield</span>
+      </div>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-header">Bloom 4 (6:00-7:30)</div>
+      <div class="mechanic-row">
+        <span class="timestamp">6:15</span>
+        <span class="mech-name">4th Bloom</span>
+        <span class="tag tag-adds">Phase</span>
+        <span class="combo-line">New arena — Encircling Thorns + Banish III</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">6:30</span>
+        <span class="mech-name">Emblazon</span>
+        <span class="tag tag-pos">Pos</span>
+        <span class="combo-line">Round 2 — plan positions, edge if marked</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">6:45</span>
+        <span class="mech-name">Thunder III</span>
+        <span class="tag tag-pos">Pos</span>
+        <span class="combo-line">Spread after emblazon resolves</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">7:00</span>
+        <span class="mech-name">Encircling Thorns</span>
+        <span class="tag tag-mov">Move</span>
+        <span class="combo-line"><span class="combo">Blessed Ground</span> <span class="cost">(1 AF)</span> = Fey Illumination + Sacred Soil</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">7:15</span>
+        <span class="mech-name">Banish III</span>
+        <span class="tag tag-tb">TB</span>
+        <span class="combo-line"><span class="combo">Sacred Soil + Spread-Lo</span> <span class="cost">(1 GCD)</span> = Sacred Soil + Recitation + Protraction + Adloquium + DT — Heavy stack</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">7:45</span>
+        <span class="mech-name">Power Break</span>
+        <span class="tag tag-mov">Move</span>
+        <span class="combo-line"><span class="combo">Blessed Ground</span> <span class="cost">(1 AF)</span> = Fey Illumination + Sacred Soil — Watch sword direction</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">8:15</span>
+        <span class="mech-name">Stock Break</span>
+        <span class="tag tag-rw">Raid</span>
+        <span class="combo-line"><span class="combo">Sanctuary</span> <span class="cost">(1 AF)</span> = Fey Illumination + Concitation + Sacred Soil — Final stack</span>
+      </div>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-header">Bloom 5/6 + Final (8:30+)</div>
+      <div class="mechanic-row">
+        <span class="timestamp">~8:30</span>
+        <span class="mech-name">5th Bloom</span>
+        <span class="tag tag-adds">Phase</span>
+        <span class="combo-line">Valorous + Thunder Slash + Thunder IV</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">~9:00</span>
+        <span class="mech-name">Valorous Ascension</span>
+        <span class="tag tag-rw">Raid</span>
+        <span class="combo-line"><span class="combo">Soil Run + Sanctuary</span> <span class="cost">(2 AF)</span> — 2 hits, "2+1" drain</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">~9:30</span>
+        <span class="mech-name">Holy Hazard</span>
+        <span class="tag tag-mov">Move</span>
+        <span class="combo-line"><span class="combo">Blessed Ground</span> <span class="cost">(1 AF)</span> = Fey Illumination + Sacred Soil — 120° cones</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">~10:30</span>
+        <span class="mech-name">Withering</span>
+        <span class="tag tag-adds">Phase</span>
+        <span class="combo-line"><span class="combo">Soil Run + Sanctuary</span> <span class="cost">(2 AF)</span> = Concitation + Sacred Soil + Expedient + Fey Illumination + Concitation + Sacred Soil — All roses lethal</span>
+      </div>
+      <div class="mechanic-row">
+        <span class="timestamp">~11:00</span>
+        <span class="mech-name">Rose Red</span>
+        <span class="tag tag-enrage">End</span>
+        <span class="combo-line"><span class="combo">Nuclear</span> = Sacred Soil + Spread-Lo — Everything. LB3.</span>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="insights">
+  <span class="insight-item"><strong>Key:</strong></span>
+  <span class="insight-item">Dissipate @ <strong>1:35</strong></span>
+  <span class="insight-item">"2+1" before <strong>Valorous</strong></span>
+  <span class="insight-item">Emblazon → <strong>edge</strong></span>
+  <span class="insight-item">Burn after <strong>Withering</strong></span>
+</div>
+
+</body>
+</html>

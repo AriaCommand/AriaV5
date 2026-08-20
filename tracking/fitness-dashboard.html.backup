@@ -1,0 +1,2344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kane's Fitness Tracker</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 10px;
+    line-height: 1.4;
+    height: 100vh;
+    overflow: hidden;
+  }
+  h1 { font-size: 1.2rem; margin-bottom: 0.3rem; color: #fbbf24; }
+  .subtitle { color: #94a3b8; font-size: 0.8rem; margin-bottom: 10px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto 1fr;
+    gap: 10px;
+    height: calc(100vh - 70px);
+  }
+  .grid-log {
+    grid-column: span 3;
+    min-height: 0;
+  }
+  .card {
+    background: #1e293b;
+    border-radius: 8px;
+    padding: 12px;
+    border: 1px solid #334155;
+    overflow: hidden;
+  }
+  .card h2 { font-size: 0.95rem; color: #fbbf24; margin-bottom: 8px; }
+  .stat-row { display: flex; justify-content: space-between; margin-bottom: 4px; padding-bottom: 4px; border-bottom: 1px solid #334155; font-size: 0.85rem; }
+  .stat-row:last-child { border-bottom: none; margin-bottom: 0; }
+  .stat-label { color: #94a3b8; }
+  .stat-value { font-weight: 600; color: #e2e8f0; }
+  .stat-value.highlight { color: #4ade80; }
+  .stat-value.warning { color: #fb923c; }
+  .chart-container {
+    width: 100%;
+    min-height: 205px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #0f172a;
+    border-radius: 6px;
+    padding: 4px;
+  }
+  .chart-container canvas {
+    max-width: 100%;
+    height: auto;
+  }
+  .macro-pie-container {
+    width: 100%;
+    min-height: 285px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 4px;
+  }
+  .macro-pie-container canvas {
+    max-width: 100%;
+    height: auto;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+  th, td { padding: 6px 6px; text-align: left; border-bottom: 1px solid #334155; }
+  th { color: #fbbf24; font-weight: 600; }
+  td { color: #e2e8f0; }
+  td.macro { font-family: monospace; }
+  .empty { color: #64748b; text-align: center; padding: 15px; font-size: 0.85rem; }
+  .refresh {
+    background: #fbbf24; color: #0f172a; border: none; padding: 6px 14px;
+    border-radius: 6px; font-weight: 600; cursor: pointer; margin-bottom: 10px;
+    font-size: 0.85rem;
+  }
+  .refresh:hover { background: #f59e0b; }
+  .tabs { display: flex; gap: 8px; margin-bottom: 10px; }
+  .tab-btn {
+    background: #1e293b; color: #94a3b8; border: 1px solid #334155;
+    padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;
+  }
+  .tab-btn:hover { background: #334155; color: #e2e8f0; }
+  .tab-btn.active { background: #fbbf24; color: #0f172a; border-color: #fbbf24; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .recipe-card {
+    background: #1e293b; border: 1px solid #334155; border-radius: 8px;
+    padding: 12px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s;
+  }
+  .recipe-card:hover { border-color: #fbbf24; background: #252f47; }
+  .recipe-name { font-weight: 600; color: #fbbf24; font-size: 0.95rem; }
+  .recipe-macros { color: #94a3b8; font-size: 0.8rem; margin-top: 4px; }
+  .recipe-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 10px; overflow-y: auto; max-height: calc(100vh - 150px);
+  }
+  .date-header { color: #64748b; font-size: 0.7rem; text-transform: uppercase; }
+  .log-scroll {
+    max-height: 200px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #475569 #1e293b;
+  }
+  .log-scroll::-webkit-scrollbar { width: 6px; }
+  .log-scroll::-webkit-scrollbar-track { background: #1e293b; }
+  .log-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+</style>
+</head>
+<body>
+<h1>💪 Kane's Fitness Tracker</h1>
+<div class="subtitle">Data is stored locally in fitness-data.json</div>
+
+<button class="refresh" onclick="loadData()">↻ Refresh Data</button>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('dashboard')" id="tab-dashboard">Dashboard</button>
+  <button class="tab-btn" onclick="showTab('log')" id="tab-log">Daily Log</button>
+  <button class="tab-btn" onclick="showTab('workout')" id="tab-workout">Workout Log</button>
+  <button class="tab-btn" onclick="showTab('recipes')" id="tab-recipes">Recipes</button>
+</div>
+
+<div id="dashboard-tab" class="tab-content active">
+<div class="grid">
+  <div class="card">
+    <h2>📊 Latest Stats</h2>
+    <div id="latest-stats">
+      <div class="empty">No data yet</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎯 Goals & Progress</h2>
+    <div id="goals-stats">
+      <div class="stat-row">
+        <span class="stat-label">Goal Weight</span>
+        <span class="stat-value" id="goal-weight">--</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Current Weight</span>
+        <span class="stat-value" id="current-weight">--</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Pounds to Lose</span>
+        <span class="stat-value warning" id="pounds-to-lose">--</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Goal Body Fat</span>
+        <span class="stat-value" id="goal-bf">--</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Current Body Fat</span>
+        <span class="stat-value" id="current-bf">--</span>
+      </div>
+    <div class="stat-row">
+        <span class="stat-label">Water Target</span>
+        <span class="stat-value" id="water-target">--</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Water Today</span>
+        <span class="stat-value" id="water-today">--</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Est. Weeks to Goal</span>
+        <span class="stat-value highlight" id="weeks-to-goal">--</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎯 TDEE & Targets</h2>
+    <div id="tdee-stats">
+      <div class="stat-row">
+        <span class="stat-label">Current Weight</span>
+        <span class="stat-value" id="tdee-weight">--</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Body Fat %</span>
+        <span class="stat-value" id="tdee-bf">--</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Lean Body Mass</span>
+        <span class="stat-value" id="tdee-lbm">--</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">BMR (Katch-McArdle)</span>
+        <span class="stat-value" id="tdee-bmr">--</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Activity Multiplier</span>
+        <span class="stat-value" id="tdee-multiplier">--</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">TDEE (Maintenance)</span>
+        <span class="stat-value highlight" id="tdee-tdee">--</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Target Deficit</span>
+        <span class="stat-value warning" id="tdee-deficit">--</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Daily Target Calories</span>
+        <span class="stat-value highlight" id="tdee-target">--</span>
+      </div>
+      <div class="stat-row" style="margin-top:10px; border-top: 2px solid #334155; padding-top: 10px;">
+        <span class="stat-label">Protein Target</span>
+        <span class="stat-value" id="macro-protein">--</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Carb Target</span>
+        <span class="stat-value" id="macro-carbs">--</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Fat Target</span>
+        <span class="stat-value" id="macro-fat">--</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="grid-column: span 3;">
+    <h2>📈 Trends</h2>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; justify-items: center;">
+      <div style="max-width: 100%; width: 100%;">
+        <h3 style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 8px; text-align: center;">Last 7 Days - Calories Burned</h3>
+        <div id="workout-bar-chart" class="chart-container"></div>
+      </div>
+      <div style="max-width: 100%; width: 100%;">
+        <h3 style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 8px; text-align: center;">Today's Macros</h3>
+        <div id="macro-pie-chart" class="macro-pie-container"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="log-tab" class="tab-content">
+  <div class="card" style="margin-top: 10px;">
+    <h2>📝 Daily Log</h2>
+    <div class="log-scroll" id="daily-log" style="max-height: calc(100vh - 180px); overflow-y: auto;">
+      <div class="empty">No data yet</div>
+    </div>
+  </div>
+</div>
+
+<div id="workout-tab" class="tab-content">
+  <div class="card" style="margin-top: 10px;">
+    <h2>💪 Daily Workout Log</h2>
+    <div class="log-scroll" id="workout-log" style="max-height: calc(100vh - 180px); overflow-y: auto;">
+      <div class="empty">No workout data yet</div>
+    </div>
+  </div>
+</div>
+
+<div id="recipes-tab" class="tab-content">
+  <h2 style="color: #fbbf24; margin-bottom: 10px;">🍳 Recipes</h2>
+  <div class="recipe-grid" id="recipes-list">
+    <!-- Recipes loaded by JS -->
+  </div>
+</div>
+
+<script>
+// Embedded fitness data (updated from fitness-data.json)
+const fitnessData = {
+
+  "userProfile": {
+    "name": "Kane",
+    "gender": "Male",
+    "age": 32,
+    "heightInches": 70,
+    "startDate": "2026-06-11",
+    "activityLevel": "active",
+    "bodyFatPercent": 29,
+    "goalBodyFatPercent": 10,
+    "currentWeight": 167,
+    "goalWeight": 150
+  },
+  "settings": {
+    "unit": "lb",
+    "calorieTarget": 2130,
+    "proteinTarget": 160,
+    "carbTarget": 180,
+    "waterTarget": 83.9,
+    "fatTarget": 70
+  },
+  "entries": [
+    {
+      "calories": 1275,
+      "protein": 109,
+      "carbs": 96,
+      "fat": 43,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Crab Rangoon Wraps",
+          "calories": 280,
+          "protein": 12,
+          "carbs": 28,
+          "fat": 12
+        },
+        {
+          "name": "Esquites",
+          "calories": 250,
+          "protein": 5,
+          "carbs": 22,
+          "fat": 9
+        },
+        {
+          "name": "ISO100 Protein Shake (2 scoops)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 2,
+          "fat": 1
+        },
+        {
+          "name": "Atlantic Salmon Filet",
+          "calories": 320,
+          "protein": 37,
+          "carbs": 0,
+          "fat": 20
+        },
+        {
+          "name": "Cooked White Rice (1 cup)",
+          "calories": 205,
+          "protein": 5,
+          "carbs": 44,
+          "fat": 1
+        }
+      ],
+      "notes": "No breakfast. Lunch: Crab Rangoon wraps + esquites. Afternoon: 2 scoops ISO100 protein shake. Dinner: Atlantic salmon + white rice.",
+      "date": "2026-06-11",
+      "weight": 164
+    },
+    {
+      "date": "2026-06-12",
+      "weight": 165,
+      "calories": 1550,
+      "protein": 145,
+      "carbs": 141,
+      "fat": 62,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Croquettes (2)",
+          "calories": 300,
+          "protein": 18,
+          "carbs": 26,
+          "fat": 18
+        },
+        {
+          "name": "Tuna Rice Bowl",
+          "calories": 530,
+          "protein": 47,
+          "carbs": 46,
+          "fat": 13
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        },
+        {
+          "name": "Sushi",
+          "calories": 500,
+          "protein": 30,
+          "carbs": 65,
+          "fat": 30
+        }
+      ],
+      "notes": "Morning weigh-in. Tower Garden maintenance (replaced cabbage with kale)."
+    },
+    {
+      "date": "2026-06-13",
+      "weight": 165,
+      "calories": 1500,
+      "protein": 70,
+      "carbs": 130,
+      "fat": 70,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Buffet (post-yardwork)",
+          "calories": 1500,
+          "protein": 70,
+          "carbs": 130,
+          "fat": 70
+        }
+      ],
+      "notes": "Yardwork day. Buffet after yardwork — only meal of the day. Did not feel hungry after buffet."
+    },
+    {
+      "date": "2026-06-14",
+      "weight": 165,
+      "calories": 1355,
+      "protein": 51,
+      "carbs": 106,
+      "fat": 56,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Hokkaido Milk Bread (85C Bakery)",
+          "calories": 280,
+          "protein": 5,
+          "carbs": 32,
+          "fat": 13
+        },
+        {
+          "name": "Hot Dog Bread (85C Bakery)",
+          "calories": 175,
+          "protein": 6,
+          "carbs": 14,
+          "fat": 3
+        },
+        {
+          "name": "Homemade Ramen",
+          "calories": 900,
+          "protein": 40,
+          "carbs": 60,
+          "fat": 40
+        }
+      ],
+      "notes": "Morning weigh-in 165 lbs. Breakfast at 85C Bakery. Lunch: homemade ramen."
+    },
+    {
+      "date": "2026-06-15",
+      "weight": 165,
+      "calories": 1405,
+      "protein": 104,
+      "carbs": 93,
+      "fat": 71,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Dinner - 2 Small Burgers + Fries",
+          "calories": 960,
+          "protein": 67,
+          "carbs": 46,
+          "fat": 58
+        }
+      ],
+      "notes": "Morning weigh-in 165 lbs. Morning smoothie. Tonal workout (300 cal burned). Dinner: 2 small homemade burgers with fries."
+    },
+    {
+      "date": "2026-06-16",
+      "weight": 165,
+      "calories": 1310,
+      "protein": 162,
+      "carbs": 102,
+      "fat": 23,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Tuna Rice Bowl",
+          "calories": 530,
+          "protein": 47,
+          "carbs": 46,
+          "fat": 13
+        },
+        {
+          "name": "Slow Cook Chicken Alfredo Pasta",
+          "calories": 560,
+          "protein": 65,
+          "carbs": 52,
+          "fat": 9
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        }
+      ],
+      "notes": "Morning weigh-in 165 lbs. No breakfast. Lunch: tuna rice bowl + double protein shake. Dinner: slow cook chicken Alfredo pasta."
+    },
+    {
+      "date": "2026-06-17",
+      "weight": 164,
+      "calories": 1339,
+      "protein": 109,
+      "carbs": 160,
+      "fat": 27,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Chipotle Chicken Rice Bowl",
+          "calories": 894,
+          "protein": 72,
+          "carbs": 113,
+          "fat": 14
+        }
+      ],
+      "notes": "Morning weigh-in 164 lbs. Tonal workout completed."
+    },
+    {
+      "date": "2026-06-18",
+      "weight": 163,
+      "calories": null,
+      "protein": null,
+      "carbs": null,
+      "fat": null,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        }
+      ],
+      "notes": "Morning weigh-in 163 lbs. Another pound down! Having morning smoothie."
+    },
+    {
+      "date": "2026-06-22",
+      "weight": 166,
+      "calories": 1070,
+      "protein": 68,
+      "carbs": 119,
+      "fat": 31.5,
+      "waterOz": 30.1,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Lunch - White Rice + Karaage",
+          "calories": 625,
+          "protein": 31,
+          "carbs": 72,
+          "fat": 18.5
+        }
+      ],
+      "notes": "Morning weigh-in 166 lbs. Having morning smoothie. Weekend at parents' house — irregular eating, likely sodium bloat. Lunch: 210g white rice + 3 pieces karaage."
+    },
+    {
+      "date": "2026-06-29",
+      "weight": 165,
+      "calories": 1515,
+      "protein": 95,
+      "carbs": 156,
+      "fat": 59,
+      "waterOz": 0,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Hayashi Rice",
+          "calories": 560,
+          "protein": 19,
+          "carbs": 77,
+          "fat": 19
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        },
+        {
+          "name": "Costco Ribs (4)",
+          "calories": 310,
+          "protein": 22,
+          "carbs": 2,
+          "fat": 23
+        },
+        {
+          "name": "Cotton Candy Grapes (310g)",
+          "calories": 215,
+          "protein": 2,
+          "carbs": 56,
+          "fat": 0
+        },
+        {
+          "name": "85C Bakery Egg Tart",
+          "calories": 210,
+          "protein": 2,
+          "carbs": 17,
+          "fat": 16
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Rowing",
+            "caloriesBurned": 170,
+            "notes": "30 min rowing session"
+          },
+          {
+            "name": "Walking",
+            "caloriesBurned": 133,
+            "notes": "30 min afternoon walk"
+          }
+        ],
+        "notes": "Rowing (170 cal) + Walking (133 cal). Total: 303 cal burned."
+      },
+      "notes": "Morning weigh-in 165 lbs. Dentist appointment — no cavities! Fasted before appointment, starved after. Lunch: homemade Hayashi Rice. Dinner: 4 Costco ribs, cotton candy grapes, egg tart."
+    },
+    {
+      "date": "2026-06-30",
+      "weight": 166,
+      "calories": 1985,
+      "protein": 158,
+      "carbs": 212,
+      "fat": 52,
+      "waterOz": 0,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Tuna Rice Bowl",
+          "calories": 530,
+          "protein": 47,
+          "carbs": 46,
+          "fat": 13
+        },
+        {
+          "name": "Hayashi Rice",
+          "calories": 560,
+          "protein": 19,
+          "carbs": 77,
+          "fat": 19
+        },
+        {
+          "name": "85C Bakery Chocolate Bun",
+          "calories": 230,
+          "protein": 5,
+          "carbs": 38,
+          "fat": 6
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "FitXR Boxing",
+            "caloriesBurned": 117,
+            "notes": "Morning boxing session"
+          },
+          {
+            "name": "Tonal Strength Training",
+            "notes": "Aria Special Day 1 — Push & Legs",
+            "caloriesBurned": 229
+          }
+        ],
+        "notes": "FitXR boxing (117 cal) + Tonal Strength Training (229 cal, Aria Special Day 1). Total: 346 cal burned."
+      },
+      "notes": "Morning weigh-in 166 lbs. FitXR boxing (117 cal burned). Tonal workout: Aria Special Day 1 (Push & Legs). Lunch: tuna rice bowl. Dinner: hayashi rice. Dessert: 85C Bakery Chocolate Bun."
+    },
+    {
+      "date": "2026-07-01",
+      "weight": 164,
+      "calories": 1005,
+      "protein": 56,
+      "carbs": 124,
+      "fat": 32,
+      "waterOz": 0,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Hayashi Rice",
+          "calories": 560,
+          "protein": 19,
+          "carbs": 77,
+          "fat": 19
+        }
+      ],
+      "notes": "Morning weigh-in 164 lbs. Morning smoothie. Lunch: Hayashi Rice."
+    },
+    {
+      "date": "2026-07-06",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 1555,
+      "protein": 111,
+      "carbs": 186,
+      "fat": 46,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Ramyun Chef Braised Beef Ramen",
+          "calories": 650,
+          "protein": 34,
+          "carbs": 80,
+          "fat": 24
+        },
+        {
+          "name": "Cheesy Chicken Chipotle Pasta",
+          "calories": 460,
+          "protein": 40,
+          "carbs": 59,
+          "fat": 9
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Tonal Strength Training",
+            "notes": "Aria Special Day 1 - Push & Legs",
+            "caloriesBurned": 160
+          },
+          {
+            "name": "Treadmill Walking",
+            "notes": "30 min at 12% incline, 2mph",
+            "caloriesBurned": 215
+          }
+        ],
+        "notes": "Aria Special Day 1 (Push & Legs) + Treadmill walking. Total: 375 cal burned."
+      },
+      "notes": "Morning weigh-in 166 lbs. Post-4th of July weekend. Back on track! Tonal: Aria Special Day 1 (160 cal). Treadmill: 30 min at 12% incline, 2mph (215 cal). Morning smoothie + Ramyun Chef ramen for lunch + Cheesy Chicken Chipotle Pasta for dinner."
+    },
+    {
+      "date": "2026-07-07",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 1140,
+      "protein": 69,
+      "carbs": 71,
+      "fat": 63,
+      "meals": [
+        {
+          "name": "English Muffins (2) + Ground Beef Burger",
+          "calories": 840,
+          "protein": 49,
+          "carbs": 51,
+          "fat": 48
+        },
+        {
+          "name": "Steak Quesadilla (1/2)",
+          "calories": 300,
+          "protein": 20,
+          "carbs": 20,
+          "fat": 15
+        }
+      ],
+      "notes": "Morning weigh-in 166 lbs. Terrible morning with misdelivered mail/post office. Nap in afternoon. Evening: settled fraud case, completed Chinese visa application, FFXIV crafting."
+    },
+    {
+      "date": "2026-07-13",
+      "weight": 164,
+      "calories": 445,
+      "protein": 37,
+      "carbs": 47,
+      "fat": 13,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Curry Bun",
+          "calories": 330,
+          "protein": 20,
+          "carbs": 45,
+          "fat": 15
+        }
+      ],
+      "notes": "Morning weigh-in 164 lbs. Morning smoothie. Monday — new week, excited to tackle it. Lunch: Curry bun while studying Chinese."
+    },
+    {
+      "date": "2026-07-14",
+      "weight": 163,
+      "calories": 745,
+      "protein": 59,
+      "carbs": 47,
+      "fat": 38,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Brisket",
+          "calories": 300,
+          "protein": 22,
+          "carbs": 0,
+          "fat": 25
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Rowing",
+            "caloriesBurned": 145,
+            "notes": "Morning rowing session"
+          }
+        ],
+        "notes": "Morning rowing workout — 145 cal burned. Beat the 164 plateau!"
+      },
+      "notes": "Morning weigh-in 163 lbs! Beat the plateau! Morning smoothie + rowing (145 cal) + brisket lunch."
+    },
+    {
+      "date": "2026-07-27",
+      "weight": 165,
+      "bfPercent": 29,
+      "calories": 1845,
+      "protein": 147,
+      "carbs": 164,
+      "fat": 67,
+      "waterOz": 0,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Yakisoba Noodles",
+          "calories": 620,
+          "protein": 20,
+          "carbs": 73,
+          "fat": 31
+        },
+        {
+          "name": "Homemade Cabbage Rolls",
+          "calories": 560,
+          "protein": 40,
+          "carbs": 40,
+          "fat": 22
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 91,
+            "notes": "12 min walk"
+          },
+          {
+            "name": "Tonal Strength Training",
+            "caloriesBurned": 193,
+            "notes": "20-in-20: Shred and Sweat Workout 1"
+          },
+          {
+            "name": "Rowing",
+            "caloriesBurned": 81,
+            "notes": "15 min rowing"
+          }
+        ],
+        "notes": "Walk (91 cal) + Tonal Shred and Sweat Workout 1 (193 cal) + Rowing (81 cal). Total: 365 cal burned."
+      },
+      "notes": "Morning weigh-in 165 lbs. Breakfast: Morning Smoothie. Lunch: yakisoba noodles. Dinner: homemade cabbage rolls. Post-workout: Double ISO100 Protein Shake. Afternoon workout: 12 min walk + 20-in-20 Shred and Sweat Workout 1 + 15 min rowing."
+    },
+    {
+      "date": "2026-07-28",
+      "weight": 165,
+      "bfPercent": 29,
+      "calories": 1845,
+      "protein": 169,
+      "carbs": 182,
+      "fat": 42,
+      "waterOz": 72,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Tuna Rice Bowl",
+          "calories": 530,
+          "protein": 47,
+          "carbs": 46,
+          "fat": 13
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        },
+        {
+          "name": "Japanese Chicken Curry with 1 cup Cooked White Rice",
+          "calories": 650,
+          "protein": 35,
+          "carbs": 85,
+          "fat": 15
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 164,
+            "notes": "20 min morning walk"
+          },
+          {
+            "name": "Tonal Strength Training",
+            "caloriesBurned": 136,
+            "notes": "Tonal workout"
+          },
+          {
+            "name": "Rowing",
+            "caloriesBurned": 113,
+            "notes": "20 min rowing"
+          }
+        ],
+        "notes": "Morning 20 min treadmill walk (164 cal) + Tonal workout (136 cal) + 20 min rowing (113 cal). Total: 413 cal burned."
+      },
+      "notes": "Morning weigh-in 165 lbs. Started new workout plan yesterday — legs sore from DOMS. Morning smoothie. Lunch: tuna rice bowl. Dinner: Japanese chicken curry with white rice. Post-workout: Double ISO100 Protein Shake. 20 min treadmill walk (164 cal) + Tonal workout (136 cal) + 20 min rowing (113 cal)."
+    },
+    {
+      "date": "2026-07-29",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 445,
+      "protein": 37,
+      "carbs": 47,
+      "fat": 13,
+      "waterOz": 0,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 110,
+            "notes": "Morning walk"
+          }
+        ],
+        "notes": "Morning treadmill walk: 110 cal burned."
+      },
+      "notes": "Morning weigh-in 166 lbs. Slept poorly, woke up sore, took Advil and went back to sleep. Morning treadmill walk (110 cal). Morning smoothie."
+    },
+    {
+      "date": "2026-08-03",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 1696,
+      "protein": 164,
+      "carbs": 151,
+      "fat": 44,
+      "waterOz": 0,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Tuna Rice Bowl",
+          "calories": 530,
+          "protein": 47,
+          "carbs": 46,
+          "fat": 13
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        },
+        {
+          "name": "Turkey Burgers with Homemade Air Fryer French Fries",
+          "calories": 501,
+          "protein": 30,
+          "carbs": 54,
+          "fat": 17
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 90,
+            "notes": "10 min warm-up walk"
+          },
+          {
+            "name": "Tonal HIIT",
+            "caloriesBurned": 442,
+            "notes": "45 min HIIT workout"
+          },
+          {
+            "name": "Rowing",
+            "caloriesBurned": 98,
+            "notes": "20 min rowing"
+          },
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 88,
+            "notes": "10 min cool-down walk"
+          }
+        ],
+        "notes": "10 min warm-up walk (90 cal) + 45 min Tonal HIIT (442 cal) + 20 min rowing (98 cal) + 10 min cool-down walk (88 cal). Total: 718 cal burned."
+      },
+      "notes": "Morning weigh-in 166 lbs. Morning smoothie. Lunch: tuna rice bowl. Afternoon workout: 10 min warm-up walk (90 cal) + 45 min Tonal HIIT (442 cal) + 20 min rowing (98 cal) + 10 min cool-down walk (88 cal). Total: 718 cal burned. Post-workout: Double ISO100 Protein Shake. Dinner: turkey burgers with homemade air fryer french fries."
+    },
+    {
+      "date": "2026-08-04",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 1488,
+      "protein": 133,
+      "carbs": 132,
+      "fat": 49,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Turkey Burgers with Homemade Air Fryer French Fries",
+          "calories": 501,
+          "protein": 30,
+          "carbs": 54,
+          "fat": 17
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        },
+        {
+          "name": "Sausages and Veggies",
+          "calories": 182,
+          "protein": 12,
+          "carbs": 2,
+          "fat": 16
+        },
+        {
+          "name": "85C Hokkaido Milk Bread",
+          "calories": 140,
+          "protein": 4,
+          "carbs": 25,
+          "fat": 2
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 64,
+            "notes": "Warmup walk"
+          },
+          {
+            "name": "Tonal HIIT",
+            "caloriesBurned": 311,
+            "notes": "Four Weeks to Fat Loss HIIT workout"
+          },
+          {
+            "name": "Rowing",
+            "caloriesBurned": 102,
+            "notes": "20 minute rowing machine"
+          },
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 84,
+            "notes": "Cooldown walk"
+          }
+        ],
+        "notes": "Warmup walk (64 cal) + Tonal Four Weeks to Fat Loss HIIT (311 cal) + 20 min rowing (102 cal) + Cooldown walk (84 cal). Total: 561 cal burned."
+      },
+      "notes": "Morning weigh-in 166 lbs. Morning smoothie. Early workout: 5am warmup walk (64 cal) + Tonal Four Weeks to Fat Loss HIIT (311 cal) + 20 min rowing (102 cal) + cooldown walk (84 cal). Total: 561 cal burned. Lunch: turkey burger with homemade air fryer french fries (same as previous night). Post-nap: Double ISO100 Protein Shake. Dinner: sausages and veggies. Dessert: 85C Hokkaido Milk Bread."
+    },
+    {
+      "date": "2026-08-05",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 1615,
+      "protein": 127,
+      "carbs": 110,
+      "fat": 78.5,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Cooked White Rice (1 cup)",
+          "calories": 205,
+          "protein": 4,
+          "carbs": 45,
+          "fat": 0.5
+        },
+        {
+          "name": "Lil Beef Smokies (2 servings)",
+          "calories": 360,
+          "protein": 12,
+          "carbs": 12,
+          "fat": 30
+        },
+        {
+          "name": "Sausage Links (1.5)",
+          "calories": 385,
+          "protein": 24,
+          "carbs": 2,
+          "fat": 34
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        }
+      ],
+      "notes": "Morning weigh-in 166 lbs. Rest day — sore from rowing, foam rolled. Used compact charger and universal adapter in mental repack. Business class Air China upgrade confirmed. Afternoon: Double ISO100 Protein Shake."
+    },
+    {
+      "date": "2026-08-06",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 1895,
+      "protein": 172,
+      "carbs": 156,
+      "fat": 63,
+      "waterOz": 0,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Tuna Rice Bowl",
+          "calories": 530,
+          "protein": 47,
+          "carbs": 46,
+          "fat": 13
+        },
+        {
+          "name": "Lil Smokies Sausages (1 serving)",
+          "calories": 180,
+          "protein": 6,
+          "carbs": 6,
+          "fat": 15
+        },
+        {
+          "name": "Simply Fuel Protein Balls (1 serving)",
+          "calories": 190,
+          "protein": 8,
+          "carbs": 24,
+          "fat": 9
+        },
+        {
+          "name": "General Tso's Chicken - Air Fried (1/6 recipe)",
+          "calories": 330,
+          "protein": 24,
+          "carbs": 29,
+          "fat": 12
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 63,
+            "notes": "10 min warm-up walk"
+          },
+          {
+            "name": "Tonal HIIT",
+            "caloriesBurned": 314,
+            "notes": "Four Weeks to Fat Loss HIIT workout"
+          },
+          {
+            "name": "Rowing",
+            "caloriesBurned": 170,
+            "notes": "30 min rowing session"
+          },
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 91,
+            "notes": "10 min cool-down walk"
+          }
+        ],
+        "notes": "10 min warm-up walk (63 cal) + Tonal Four Weeks to Fat Loss HIIT (314 cal) + 30 min rowing (170 cal) + 10 min cool-down walk (91 cal). Total: 638 cal burned."
+      },
+      "notes": "Morning weigh-in 166 lbs. Morning smoothie. Lunch/snacks: tuna rice bowl, lil smokies sausages, simply fuel protein balls. Dinner: General Tso's Chicken - air fried (1/6 recipe, ~330 cal). Post-dinner: Double ISO100 Protein Shake. 5am workout: 10 min warm-up treadmill walk (63 cal) + Tonal Four Weeks to Fat Loss HIIT (314 cal) + 30 min rowing (170 cal) + 10 min cool-down treadmill walk (91 cal). Total: 638 cal burned."
+    },
+    {
+      "date": "2026-08-10",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 2075,
+      "protein": 164,
+      "carbs": 249,
+      "fat": 59,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Tuna Rice Bowl",
+          "calories": 530,
+          "protein": 47,
+          "carbs": 46,
+          "fat": 13
+        },
+        {
+          "name": "85C Hokkaido Custard Bread",
+          "calories": 280,
+          "protein": 5,
+          "carbs": 32,
+          "fat": 14
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        },
+        {
+          "name": "Sushi Dinner",
+          "calories": 600,
+          "protein": 25,
+          "carbs": 120,
+          "fat": 18
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 57,
+            "notes": "10 min warm-up walk"
+          },
+          {
+            "name": "Tonal HIIT",
+            "caloriesBurned": 344,
+            "notes": "Four Weeks to Fat Loss HIIT workout"
+          },
+          {
+            "name": "Rowing",
+            "caloriesBurned": 102,
+            "notes": "20 min rowing session"
+          },
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 67,
+            "notes": "10 min cool-down walk"
+          }
+        ],
+        "notes": "10 min warm-up treadmill walk (57 cal) + Tonal Four Weeks to Fat Loss HIIT (344 cal) + 20 min rowing (102 cal) + 10 min cool-down treadmill walk (67 cal). Total: 570 cal burned."
+      },
+      "notes": "Morning smoothie, tuna rice bowl lunch, 85C Hokkaido bread, double ISO100 shake, and sushi dinner. 570 cal burned in workout."
+    },
+    {
+      "date": "2026-08-12",
+      "bfPercent": 29,
+      "calories": 1810,
+      "protein": 192,
+      "carbs": 140,
+      "fat": 53.5,
+      "waterOz": null,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Leftover Beef Pad Thai",
+          "calories": 315,
+          "protein": 16,
+          "carbs": 29,
+          "fat": 15
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        },
+        {
+          "name": "Turkey Burgers with Homemade Air Fryer French Fries",
+          "calories": 501,
+          "protein": 30,
+          "carbs": 54,
+          "fat": 17
+        },
+        {
+          "name": "Single Protein Shake (ISO100)",
+          "calories": 110,
+          "protein": 25,
+          "carbs": 2,
+          "fat": 0.5
+        },
+        {
+          "name": "Egg White Omelette with Mozzarella",
+          "calories": 219,
+          "protein": 34,
+          "carbs": 4,
+          "fat": 7
+        }
+      ],
+      "notes": "Morning weigh-in 166 lbs. Rest day. Morning smoothie, leftover beef pad thai, double protein shake, turkey burgers with air fryer fries for dinner, single protein shake, and egg white omelette with 46g reduced fat mozzarella. Rest day targets: ~1900 cal, 160P / 140C / 70F."
+    },
+    {
+      "date": "2026-08-13",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 2076,
+      "protein": 180,
+      "carbs": 199,
+      "fat": 62,
+      "waterOz": null,
+      "meals": [],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Workout",
+            "caloriesBurned": 522,
+            "notes": "522 cal burned"
+          }
+        ],
+        "notes": "522 cal burned."
+      },
+      "notes": "Morning weigh-in 166 lbs. Calories: 2,076 / 2,130. Protein: 180g / 160g (+20). Carbs: 199g / 180g (+19). Fat: 62g / 70g."
+    },
+    {
+      "date": "2026-08-14",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 1265,
+      "protein": 117,
+      "carbs": 111,
+      "fat": 44,
+      "waterOz": null,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        },
+        {
+          "name": "Gyro Entree with Fries",
+          "calories": 600,
+          "protein": 30,
+          "carbs": 60,
+          "fat": 30
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Treadmill Walking",
+            "caloriesBurned": 35,
+            "notes": "10 min warm-up walk"
+          },
+          {
+            "name": "Tonal HIIT",
+            "caloriesBurned": 313,
+            "notes": "Four Weeks to Fat Loss HIIT workout"
+          }
+        ],
+        "notes": "10 min warm-up treadmill walk (35 cal) + Tonal Four Weeks to Fat Loss HIIT (313 cal). Total: 348 cal burned."
+      },
+      "notes": "Morning weigh-in 166 lbs. Morning smoothie. 10 min warm-up treadmill walk (35 cal) + Tonal Four Weeks to Fat Loss HIIT (313 cal). Total: 348 cal burned. Post-workout: Double ISO100 Protein Shake. Dinner: Gyro entree with fries."
+    },
+    {
+      "date": "2026-08-15",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 1730,
+      "protein": 135,
+      "carbs": 142,
+      "fat": 76.5,
+      "waterOz": null,
+      "meals": [
+        {
+          "name": "Metamucil Fiber Thins",
+          "calories": 200,
+          "protein": 2,
+          "carbs": 30,
+          "fat": 7
+        },
+        {
+          "name": "Costco Ribs (3)",
+          "calories": 310,
+          "protein": 21,
+          "carbs": 5,
+          "fat": 26
+        },
+        {
+          "name": "Plantain Chips",
+          "calories": 130,
+          "protein": 1,
+          "carbs": 17,
+          "fat": 8
+        },
+        {
+          "name": "Starbucks Iced Caramel Protein Matcha",
+          "calories": 270,
+          "protein": 31,
+          "carbs": 26,
+          "fat": 4.5
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        },
+        {
+          "name": "Gyro Entree with Fries",
+          "calories": 600,
+          "protein": 30,
+          "carbs": 60,
+          "fat": 30
+        }
+      ],
+      "notes": "Fiber focus day. Metamucil Fiber Thins for fiber intake. Lunch: 3 Costco ribs + plantain chips. Afternoon: Starbucks Iced Caramel Protein Matcha. Late night: Double ISO100 Protein Shake + Gyro entree with fries (same as 8/14)."
+    },
+    {
+      "date": "2026-08-16",
+      "weight": 166,
+      "bfPercent": 29,
+      "calories": 1929,
+      "protein": 68,
+      "carbs": 177,
+      "fat": 98,
+      "waterOz": null,
+      "meals": [
+        {
+          "name": "Curry Bread (2)",
+          "calories": 584,
+          "protein": 14,
+          "carbs": 68,
+          "fat": 22
+        },
+        {
+          "name": "Johnsonville Jalapeno Cheddar Smoked Sausages (3) + 1 cup Rice",
+          "calories": 845,
+          "protein": 31,
+          "carbs": 52,
+          "fat": 58
+        },
+        {
+          "name": "85C Hokkaido Custard Bread",
+          "calories": 280,
+          "protein": 5,
+          "carbs": 32,
+          "fat": 13
+        },
+        {
+          "name": "Oikos Mixed Berry Triple Zero Yogurt with Ancient Grain Granola",
+          "calories": 220,
+          "protein": 18,
+          "carbs": 25,
+          "fat": 5
+        }
+      ],
+      "notes": "Rest day. Breakfast: 2 curry breads. Lunch: 3 Johnsonville Jalapeno Cheddar smoked sausages with 1 cup rice. Dessert: 85C Hokkaido Custard Bread. Snack: Oikos Mixed Berry yogurt with ancient grain granola."
+    },
+    {
+      "date": "2026-08-17",
+      "weight": 167,
+      "calories": 1345,
+      "protein": 118,
+      "carbs": 136,
+      "fat": 40,
+      "bfPercent": 29,
+      "meals": [
+        {
+          "name": "Morning Smoothie",
+          "calories": 445,
+          "protein": 37,
+          "carbs": 47,
+          "fat": 13
+        },
+        {
+          "name": "Double Protein Shake (ISO100)",
+          "calories": 220,
+          "protein": 50,
+          "carbs": 4,
+          "fat": 1
+        },
+        {
+          "name": "Ground Pork and Cabbage with White Rice",
+          "calories": 680,
+          "protein": 31,
+          "carbs": 85,
+          "fat": 26
+        }
+      ],
+      "workout": {
+        "type": "workout",
+        "activities": [
+          {
+            "name": "Treadmill Warmup",
+            "caloriesBurned": 53,
+            "notes": "10 min warmup walk"
+          },
+          {
+            "name": "Tonal 4 Weeks to Fat Loss - Day 9 HIIT",
+            "caloriesBurned": 376,
+            "notes": "HIIT workout"
+          },
+          {
+            "name": "Rowing Machine",
+            "caloriesBurned": 99,
+            "notes": "20 min rowing session"
+          },
+          {
+            "name": "Treadmill Cooldown",
+            "caloriesBurned": 77,
+            "notes": "10 min cooldown walk"
+          }
+        ],
+        "notes": "Treadmill Warmup (53 cal) + Tonal HIIT (376 cal) + Rowing (99 cal) + Treadmill Cooldown (77 cal). Total: 605 cal burned."
+      },
+      "notes": "Morning weigh-in: 167 lbs. 5 AM workout session. Total workout calories burned: 605. Morning smoothie before workout, double protein shake after. Lunch: ground pork and cabbage with 210g white rice."
+    }
+  ],
+  "tdeeHistory": [
+    {
+      "date": "2026-06-11",
+      "tdee": 2342,
+      "weight": 164,
+      "bfPercent": 29,
+      "activityMultiplier": 1.55,
+      "bmr": 1511,
+      "targetCalories": 1842
+    },
+    {
+      "date": "2026-08-10",
+      "tdee": 2630,
+      "weight": 166,
+      "bfPercent": 29,
+      "activityMultiplier": 1.725,
+      "bmr": 1525,
+      "targetCalories": 2130
+    }
+  ]
+
+};
+let data = [];
+let userProfile = {};
+let settings = {};
+let tdeeHistory = [];
+
+function loadData() {
+  // Try to fetch fresh data from fitness-data.json first
+  fetch('fitness-data.json?t=' + Date.now(), { cache: 'no-store' })
+    .then(response => {
+      if (!response.ok) throw new Error('Network response was not ok');
+      return response.json();
+    })
+    .then(freshData => {
+      data = freshData.entries || [];
+      userProfile = freshData.userProfile || {};
+      settings = freshData.settings || {};
+      tdeeHistory = freshData.tdeeHistory || [];
+      render();
+    })
+    .catch(error => {
+      console.warn('Could not fetch fitness-data.json, falling back to embedded data:', error);
+      // Use embedded fitness data as fallback
+      try {
+        data = fitnessData.entries || [];
+        userProfile = fitnessData.userProfile || {};
+        settings = fitnessData.settings || {};
+        tdeeHistory = fitnessData.tdeeHistory || [];
+        render();
+      } catch (fallbackError) {
+        console.error('Error loading embedded data:', fallbackError);
+        document.getElementById('latest-stats').innerHTML = '<div class="empty">Error loading data.</div>';
+      }
+    });
+}
+
+function calculateTDEE(weight, bfPercent, activityLevel) {
+  // Katch-McArdle formula
+  const weightKg = weight * 0.453592;
+  const leanMassKg = weightKg * (1 - bfPercent / 100);
+  const bmr = 370 + (21.6 * leanMassKg);
+
+  const multipliers = {
+    'sedentary': 1.2,
+    'light': 1.375,
+    'moderate': 1.55,
+    'active': 1.725,
+    'very active': 1.9
+  };
+
+  const multiplier = multipliers[activityLevel] || 1.55;
+  const tdee = Math.round(bmr * multiplier);
+
+  return {
+    bmr: Math.round(bmr),
+    tdee: tdee,
+    leanMassKg: Math.round(leanMassKg * 10) / 10,
+    multiplier: multiplier
+  };
+}
+
+function calculateMacros(calories, weight, bfPercent) {
+  // Higher protein for cutting, especially at higher body fat
+  const leanMass = weight * (1 - bfPercent / 100);
+  const protein = Math.round(leanMass * 1.1); // 1.1g per lb of lean mass
+  const fat = Math.round(calories * 0.30 / 9); // 30% of calories from fat
+  const carbs = Math.round((calories - (protein * 4) - (fat * 9)) / 4);
+
+  return { protein, carbs, fat };
+}
+
+function render() {
+  if (!data || data.length === 0) {
+    return;
+  }
+
+  // Sort by date ascending so latest is always correct
+  data.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  const latest = data[data.length - 1];
+  const weight = latest.weight || userProfile.currentWeight || 164;
+  const bfPercent = latest.bfPercent || userProfile.bodyFatPercent || 29;
+  const activityLevel = userProfile.activityLevel || 'moderate';
+
+  // Calculate TDEE
+  const tdeeData = calculateTDEE(weight, bfPercent, activityLevel);
+  const deficit = 500; // Moderate deficit
+  const targetCalories = tdeeData.tdee - deficit;
+
+  // Calculate macros
+  const macros = calculateMacros(targetCalories, weight, bfPercent);
+
+  // Calculate workout calories and net calories for Latest Stats
+  const workoutCaloriesBurned = latest.workout && latest.workout.type === 'workout' && Array.isArray(latest.workout.activities)
+    ? latest.workout.activities.reduce((sum, a) => sum + (a.caloriesBurned || 0), 0)
+    : null;
+  const calorieValue = Number(latest.calories);
+  const hasCalories = latest.calories !== undefined && latest.calories !== null && latest.calories !== '' && Number.isFinite(calorieValue);
+  const netCalories = hasCalories && workoutCaloriesBurned !== null ? calorieValue - workoutCaloriesBurned : null;
+  const netCaloriesDisplay = netCalories !== null ? netCalories : '--';
+  const netCaloriesStyle = typeof netCalories === 'number' && netCalories < 1500 ? ' style="color: #ef4444;"' : '';
+
+  // Latest stats
+  document.getElementById('latest-stats').innerHTML = `
+    <div class="stat-row">
+      <span class="stat-label">Weight</span>
+      <span class="stat-value">${latest.weight || '--'} lbs</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Calories</span>
+      <span class="stat-value">${latest.calories || '--'} kcal</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Calories Burned</span>
+      <span class="stat-value" style="color: #fb923c;">${workoutCaloriesBurned !== null ? workoutCaloriesBurned : '--'} kcal</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Net Calories</span>
+      <span class="stat-value"${netCaloriesStyle}>${netCaloriesDisplay} kcal</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Protein</span>
+      <span class="stat-value highlight">${latest.protein || '--'}g</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Carbs</span>
+      <span class="stat-value">${latest.carbs || '--'}g</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Water</span>
+      <span class="stat-value">${latest.waterOz || 0} / ${settings.waterTarget || 83.9} oz</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Fat</span>
+      <span class="stat-value">${latest.fat || '--'}g</span>
+    </div>
+  `;
+
+  // Goals & Progress
+  const goalWeight = userProfile.goalWeight || 150;
+  const goalBF = userProfile.goalBodyFatPercent || 10;
+  const currentWeight = latest.weight || userProfile.currentWeight || 164;
+  const currentBF = latest.bfPercent || userProfile.bodyFatPercent || 29;
+  const poundsToLose = currentWeight - goalWeight;
+  const weeksToGoal = Math.round(poundsToLose / 1); // ~1 lb/week at 500 cal deficit
+
+  document.getElementById('goal-weight').textContent = goalWeight + ' lbs';
+  document.getElementById('current-weight').textContent = currentWeight + ' lbs';
+  document.getElementById('pounds-to-lose').textContent = poundsToLose + ' lbs';
+  document.getElementById('goal-bf').textContent = goalBF + '%';
+  document.getElementById('current-bf').textContent = currentBF + '%';
+  document.getElementById('water-target').textContent = (settings.waterTarget || 83.9) + ' oz';
+  document.getElementById('water-today').textContent = (latest.waterOz || 0) + ' oz';
+  document.getElementById('weeks-to-goal').textContent = weeksToGoal + ' weeks';
+
+  // TDEE Stats
+  document.getElementById('tdee-weight').textContent = weight + ' lbs';
+  document.getElementById('tdee-bf').textContent = bfPercent + '%';
+  document.getElementById('tdee-lbm').textContent = tdeeData.leanMassKg + ' kg';
+  document.getElementById('tdee-bmr').textContent = tdeeData.bmr + ' kcal';
+  document.getElementById('tdee-multiplier').textContent = tdeeData.multiplier + 'x (' + activityLevel + ')';
+  document.getElementById('tdee-tdee').textContent = tdeeData.tdee + ' kcal';
+  document.getElementById('tdee-deficit').textContent = '-' + deficit + ' kcal';
+  document.getElementById('tdee-target').textContent = targetCalories + ' kcal';
+  document.getElementById('macro-protein').textContent = macros.protein + 'g';
+  document.getElementById('macro-carbs').textContent = macros.carbs + 'g';
+  document.getElementById('macro-fat').textContent = macros.fat + 'g';
+
+  // Today's macro pie chart
+  const macroCanvas = document.createElement('canvas');
+  macroCanvas.width = 560;
+  macroCanvas.height = 280;
+  document.getElementById('macro-pie-chart').innerHTML = '';
+  document.getElementById('macro-pie-chart').appendChild(macroCanvas);
+  drawPieChart(macroCanvas, latest.protein, latest.carbs, latest.fat);
+
+  // Workout bar chart (last 7 days)
+  const barCanvas = document.createElement('canvas');
+  barCanvas.width = 600;
+  barCanvas.height = 200;
+  document.getElementById('workout-bar-chart').innerHTML = '';
+  document.getElementById('workout-bar-chart').appendChild(barCanvas);
+  drawBarChart(barCanvas, data);
+
+  // Daily log table
+  const rows = data.slice(-14).reverse().map(entry => `
+    <tr>
+      <td>${entry.date}</td>
+      <td>${entry.weight || '--'}</td>
+      <td class="macro">${entry.calories || '--'}</td>
+      <td class="macro">${entry.protein || '--'}</td>
+      <td class="macro">${entry.carbs || '--'}</td>
+      <td class="macro">${entry.fat || '--'}</td>
+      <td class="macro">${entry.waterOz || 0}oz</td>
+    </tr>
+  `).join('');
+
+  document.getElementById('daily-log').innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Weight</th>
+          <th>Calories</th>
+          <th>Protein</th>
+          <th>Carbs</th>
+          <th>Fat</th>
+          <th>Water</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+
+  // Workout log table
+  const workoutRows = data.slice(-14).reverse().map(entry => {
+    const workout = entry.workout;
+
+    if (!workout) {
+      return `
+        <tr>
+          <td>${entry.date}</td>
+          <td>--</td>
+          <td>--</td>
+          <td class="macro">--</td>
+          <td class="macro">--</td>
+          <td>--</td>
+        </tr>
+      `;
+    }
+
+    const isRestDay = workout.type === 'rest';
+    const activities = workout.activities || [];
+    const activityNames = activities.length
+      ? activities.map(activity => activity.name).join('<br>')
+      : (isRestDay ? '--' : '--');
+    const durations = activities
+      .map(activity => activity.duration)
+      .filter(Boolean)
+      .join('<br>') || '--';
+    const caloriesBurned = activities
+      .map(activity => activity.caloriesBurned)
+      .filter(calories => calories !== undefined && calories !== null)
+      .join('<br>') || '--';
+    const activityNotes = activities
+      .map(activity => activity.notes)
+      .filter(Boolean);
+    const notes = [...new Set([workout.notes, ...activityNotes].filter(Boolean))]
+      .join('<br>') || '--';
+
+    return `
+      <tr>
+        <td>${entry.date}</td>
+        <td>${isRestDay ? 'Rest Day' : 'Workout'}</td>
+        <td>${activityNames}</td>
+        <td class="macro">${durations}</td>
+        <td class="macro">${caloriesBurned}</td>
+        <td>${notes}</td>
+      </tr>
+    `;
+  }).join('');
+
+  document.getElementById('workout-log').innerHTML = workoutRows ? `
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Activities</th>
+          <th>Duration</th>
+          <th>Calories</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>${workoutRows}</tbody>
+    </table>
+  ` : '<div class="empty">No workout data yet</div>';
+}
+
+function drawChart(canvas, data, key, color) {
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width;
+  const h = canvas.height;
+  const padding = 30;
+
+  ctx.clearRect(0, 0, w, h);
+
+  if (data.length < 2) return;
+
+  const values = data.map(d => d[key]).filter(v => v !== undefined && v !== null);
+  if (values.length < 2) return;
+
+  const min = Math.min(...values) * 0.98;
+  const max = Math.max(...values) * 1.02;
+  const range = max - min || 1;
+
+  // Draw grid
+  ctx.strokeStyle = '#334155';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const y = padding + (h - 2 * padding) * i / 4;
+    ctx.beginPath();
+    ctx.moveTo(padding, y);
+    ctx.lineTo(w - padding, y);
+    ctx.stroke();
+  }
+
+  // Draw line
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+
+  values.forEach((val, i) => {
+    const x = padding + (w - 2 * padding) * i / (values.length - 1);
+    const y = h - padding - (h - 2 * padding) * (val - min) / range;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+
+  // Draw points
+  ctx.fillStyle = color;
+  values.forEach((val, i) => {
+    const x = padding + (w - 2 * padding) * i / (values.length - 1);
+    const y = h - padding - (h - 2 * padding) * (val - min) / range;
+    ctx.beginPath();
+    ctx.arc(x, y, 3, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+function drawBarChart(canvas, data) {
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width;
+  const h = canvas.height;
+  const padding = 40;
+  const chartW = w - padding * 2;
+  const chartH = h - padding * 2;
+
+  // Get last 7 days of workout data
+  const last7 = data.slice(-7);
+  const labels = last7.map(d => d.date.slice(5)); // MM-DD format
+  const values = last7.map(d => {
+    if (d.workout && d.workout.type === 'workout' && Array.isArray(d.workout.activities)) {
+      return d.workout.activities.reduce((sum, a) => sum + (a.caloriesBurned || 0), 0);
+    }
+    return 0; // rest day or no data = 0
+  });
+
+  const maxVal = Math.max(...values, 1);
+  const barWidth = chartW / values.length * 0.6;
+  const barSpacing = chartW / values.length;
+
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = '#0f172a';
+  ctx.fillRect(0, 0, w, h);
+
+  // Draw grid line
+  ctx.strokeStyle = '#334155';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(padding, padding);
+  ctx.lineTo(w - padding, padding);
+  ctx.stroke();
+
+  // Draw bars
+  values.forEach((val, i) => {
+    const x = padding + i * barSpacing + (barSpacing - barWidth) / 2;
+    const barH = (val / maxVal) * chartH;
+    const visibleBarH = val > 0 ? barH : 4;
+    const y = h - padding - visibleBarH;
+
+    // Bar color: orange if workout, gray if rest
+    ctx.fillStyle = val > 0 ? '#fb923c' : '#334155';
+    ctx.fillRect(x, y, barWidth, visibleBarH);
+
+    // Value label on top
+    ctx.fillStyle = '#e2e8f0';
+    ctx.font = '12px -apple-system, BlinkMacSystemFont, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(val, x + barWidth / 2, y - 5);
+
+    // Date label below
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '10px -apple-system, BlinkMacSystemFont, sans-serif';
+    ctx.fillText(labels[i], x + barWidth / 2, h - padding + 15);
+  });
+}
+
+function drawPieChart(canvas, protein, carbs, fat) {
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width;
+  const h = canvas.height;
+  const centerX = 155;
+  const centerY = 145;
+  const radius = 98;
+  const macros = [
+    { label: 'Protein', value: Number(protein) || 0, color: '#4ade80' },
+    { label: 'Carbs', value: Number(carbs) || 0, color: '#fbbf24' },
+    { label: 'Fat', value: Number(fat) || 0, color: '#fb923c' }
+  ];
+  const total = macros.reduce((sum, macro) => sum + macro.value, 0);
+
+  ctx.clearRect(0, 0, w, h);
+  ctx.font = '600 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  if (total <= 0) {
+    ctx.fillStyle = '#94a3b8';
+    ctx.fillText('No macro data', w / 2, h / 2);
+    return;
+  }
+
+  let startAngle = -Math.PI / 2;
+  macros.forEach(macro => {
+    const sliceAngle = (macro.value / total) * Math.PI * 2;
+    const endAngle = startAngle + sliceAngle;
+
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY);
+    ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+    ctx.closePath();
+    ctx.fillStyle = macro.color;
+    ctx.fill();
+    ctx.strokeStyle = '#1e293b';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    if (macro.value > 0 && sliceAngle > 0.35) {
+      const labelAngle = startAngle + sliceAngle / 2;
+      const labelX = centerX + Math.cos(labelAngle) * (radius * 0.58);
+      const labelY = centerY + Math.sin(labelAngle) * (radius * 0.58);
+      ctx.fillStyle = '#0f172a';
+      ctx.font = '700 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      ctx.fillText(`${Math.round((macro.value / total) * 100)}%`, labelX, labelY);
+    }
+
+    startAngle = endAngle;
+  });
+
+  // Center total
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, 42, 0, Math.PI * 2);
+  ctx.fillStyle = '#0f172a';
+  ctx.fill();
+  ctx.strokeStyle = '#334155';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+  ctx.fillStyle = '#e2e8f0';
+  ctx.font = '700 18px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  ctx.fillText(`${total}g`, centerX, centerY - 5);
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '600 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  ctx.fillText('total', centerX, centerY + 13);
+
+  // Legend with grams and percentages
+  const legendX = 330;
+  const legendStartY = 91;
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  macros.forEach((macro, i) => {
+    const y = legendStartY + i * 54;
+    const percent = Math.round((macro.value / total) * 100);
+
+    ctx.fillStyle = macro.color;
+    ctx.fillRect(legendX, y - 9, 18, 18);
+
+    ctx.fillStyle = '#e2e8f0';
+    ctx.font = '700 15px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    ctx.fillText(macro.label, legendX + 28, y - 5);
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    ctx.fillText(`${macro.value}g • ${percent}%`, legendX + 28, y + 13);
+  });
+}
+
+// Load on start
+loadData();
+
+// Tab switching
+function showTab(tabName) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabName + '-tab').classList.add('active');
+  document.getElementById('tab-' + tabName).classList.add('active');
+  if (tabName === 'recipes') loadRecipes();
+}
+
+// Recipe data (embedded for easy access)
+const recipes = [
+  {
+    name: 'Hayashi Rice',
+    calories: 560,
+    protein: 19,
+    carbs: 77,
+    fat: 19,
+    ingredients: 'Beef (thinly sliced), onions, mushrooms, demi-glace sauce, red wine, butter, flour, ketchup, Worcestershire sauce, cooked white rice',
+    notes: 'Japanese beef stew over rice - savory, rich, comforting. Homemade version.'
+  },
+  {
+    name: 'Crab Rangoon Wraps',
+    calories: 280,
+    protein: 12,
+    carbs: 28,
+    fat: 12,
+    ingredients: 'Crab, cream cheese, wonton wrappers, green onions, garlic',
+    notes: 'Lunch - one serving. Homemade, baked not fried.'
+  },
+  {
+    name: 'Esquites',
+    calories: 250,
+    protein: 5,
+    carbs: 22,
+    fat: 9,
+    ingredients: 'Corn, mayo, cotija cheese, chili powder, lime, cilantro',
+    notes: 'Side dish - Mexican street corn in a cup.'
+  },
+  {
+    name: 'Atlantic Salmon Filet with Rice',
+    calories: 525,
+    protein: 42,
+    carbs: 44,
+    fat: 21,
+    ingredients: 'Atlantic salmon filet, 1 cup cooked white rice',
+    notes: 'Dinner - high protein, omega-3 rich. Grill or pan-sear salmon, serve with 1 cup white rice. Combined macros.'
+  },
+  {
+    name: 'Cooked White Rice (1 cup)',
+    calories: 205,
+    protein: 5,
+    carbs: 44,
+    fat: 1,
+    ingredients: '1 cup cooked white rice',
+    notes: 'Side dish - standard accompaniment to salmon, stir fry, or tuna bowl.'
+  },
+  {
+    name: 'Morning Smoothie',
+    calories: 445,
+    protein: 37,
+    carbs: 47,
+    fat: 13,
+    ingredients: '1 cup fairlife fat free milk, 1 cup frozen blueberries, 1 scoop ISO100 hydrolyzed vanilla whey protein, 1 packet bloom energy powder, 1 scoop Klean creatine, 1 tbs hemp seed, 1 tbs organic banana powder, 1 tbs chia seed, 1/2 tbs flax seed',
+    notes: 'Post-workout breakfast - loaded with protein, creatine, seeds, and energy powder (2026-06-17).'
+  },
+  {
+    name: 'Lunch - White Rice + Karaage',
+    calories: 625,
+    protein: 31,
+    carbs: 72,
+    fat: 18.5,
+    ingredients: '210g cooked white rice, 3 pieces Japanese karaage (fried chicken)',
+    notes: 'Lunch - white rice with Japanese fried chicken. Estimated macros.'
+  },
+  {
+    name: 'Chipotle Chicken Rice Bowl',
+    calories: 894,
+    protein: 72,
+    carbs: 113,
+    fat: 14,
+    ingredients: '210g cooked white rice, 150g chipotle adobo sauce, 1/2 lb cooked chicken breast, 1/2 red onion, 1/2 bell pepper, 40g reduced fat mozzarella, 139g cooked sweet corn',
+    notes: 'Homemade Chipotle copycat - high protein lunch bowl.'
+  },
+  {
+    name: 'Butter Chicken',
+    calories: 450,
+    protein: 45,
+    carbs: 15,
+    fat: 25,
+    ingredients: 'Butter chicken (prepared)',
+    notes: 'Dinner - typically served with basmati rice.'
+  },
+  {
+    name: 'Tuna Rice Bowl',
+    calories: 430,
+    protein: 25,
+    carbs: 45,
+    fat: 15,
+    ingredients: '1 can Safe Catch ahi yellowfin tuna, 1 cup white rice, 1 tbsp Kewpie mayo, 1 tbsp sriracha',
+    notes: 'Quick lunch option.'
+  },
+  {
+    name: 'Japanese Omirice',
+    calories: 607,
+    protein: 28,
+    carbs: 39,
+    fat: 37,
+    ingredients: 'Japanese omirice (prepared)',
+    notes: 'Leftover dinner option.'
+  },
+  {
+    name: 'Chicken Stir Fry',
+    calories: 343,
+    protein: 26,
+    carbs: 29,
+    fat: 13,
+    ingredients: 'Chicken breast, mixed vegetables (bell peppers, broccoli, snap peas, carrots), stir fry sauce (soy, garlic, ginger, sesame oil), cooking oil',
+    notes: 'Dinner - done in under 30 minutes. Macros without rice - add separately if used.'
+  },
+  {
+    name: 'Shrimp Stir Fry',
+    calories: 400,
+    protein: 33,
+    carbs: 60,
+    fat: 2,
+    ingredients: '1 lb shrimp, onion, bell pepper, oyster sauce, soy sauce, sesame oil + 1 cup white rice',
+    notes: 'Quick dinner - 1 serving stir fry + 1 cup rice. Kane\'s portion.'
+  },
+  {
+    name: 'Simply Fuel Chocolate Coconut Protein Balls',
+    calories: 190,
+    protein: 8,
+    carbs: 24,
+    fat: 9,
+    ingredients: 'Simply Fuel chocolate coconut protein balls',
+    notes: '2 balls per serving. Quick snack option.'
+  },
+  {
+    name: 'Pad See Ew (Homemade)',
+    calories: 800,
+    protein: 30,
+    carbs: 75,
+    fat: 39,
+    ingredients: 'Wide rice noodles, chicken, broccoli, eggs, soy sauce, dark soy sauce, oyster sauce, garlic, sugar',
+    notes: 'Kane\'s homemade version. High calorie - good for refuel days.'
+  },
+  {
+    name: 'Okonomiyaki',
+    calories: 600,
+    protein: 45,
+    carbs: 50,
+    fat: 10,
+    ingredients: 'Cabbage, eggs, flour, dashi, green onions, protein (pork belly/shrimp/squid), okonomiyaki sauce, Kewpie mayo, bonito flakes, aonori',
+    notes: 'Dinner staple - Japanese savory pancake. Cabbage-heavy, filling, customizable protein.'
+  },
+  {
+    name: 'Slow Cook Chicken Alfredo Pasta',
+    calories: 560,
+    protein: 65,
+    carbs: 52,
+    fat: 9,
+    ingredients: 'Chicken, Alfredo sauce, pasta',
+    notes: 'Slow cooked dinner - high protein, moderate carbs. Great for dinner.'
+  },
+  {
+    name: 'Double Protein Shake (ISO100)',
+    calories: 220,
+    protein: 50,
+    carbs: 4,
+    fat: 1,
+    ingredients: '2 scoops Dymatize ISO100 hydrolyzed protein powder, water',
+    notes: 'Post-workout or afternoon protein boost. 2 scoops = 50g protein.'
+  },
+  {
+    name: 'Turkey Burgers with Homemade Air Fryer French Fries',
+    calories: 501,
+    protein: 30,
+    carbs: 54,
+    fat: 17,
+    ingredients: 'Ground turkey burger patties, burger buns, air fryer french fries, seasoning',
+    notes: 'Dinner - turkey burger with homemade air fryer fries. Comfort meal, macro-friendly.'
+  }
+];
+
+function loadRecipes() {
+  const container = document.getElementById('recipes-list');
+  const html = recipes.map(r => `
+    <div class="recipe-card" onclick='alert("Log ${r.name}: ${r.calories} cal, ${r.protein}g protein, ${r.carbs}g carbs, ${r.fat}g fat - tell Aria to add this to your daily log!")'>
+      <div class="recipe-name">${r.name}</div>
+      <div class="recipe-macros">
+        ${r.calories} cal · ${r.protein}g protein · ${r.carbs}g carbs · ${r.fat}g fat
+      </div>
+      <div style="color: #64748b; font-size: 0.75rem; margin-top: 4px;">
+        <strong>Ingredients:</strong> ${r.ingredients || ''}
+      </div>
+      <div style="color: #64748b; font-size: 0.75rem; margin-top: 2px;">
+        ${r.notes || ''}
+      </div>
+    </div>
+  `).join('');
+  container.innerHTML = html;
+}
+
+// Auto-load data when page loads
+window.addEventListener('DOMContentLoaded', function() {
+  loadData();
+  loadRecipes();
+});
+</script>
+</body>
+</html>
