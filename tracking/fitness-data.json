@@ -1367,6 +1367,33 @@
         "notes": "Treadmill Warmup (53 cal) + Tonal HIIT (376 cal) + Rowing (99 cal) + Treadmill Cooldown (77 cal). Total: 605 cal burned."
       },
       "notes": "Morning weigh-in: 167 lbs. 5 AM workout session. Total workout calories burned: 605. Morning smoothie before workout, double protein shake after. Lunch: ground pork and cabbage with 210g white rice. Dinner: Costco ahi tuna spicy poke with 1 cup white rice."
+    },
+    {
+      "date": "2026-08-20",
+      "weight": 167,
+      "bfPercent": 29,
+      "calories": 780,
+      "protein": 78,
+      "carbs": 36,
+      "fat": 39,
+      "waterOz": null,
+      "meals": [
+        {
+          "name": "Popeyes Blackened Chicken Tenders (6)",
+          "calories": 660,
+          "protein": 78,
+          "carbs": 18,
+          "fat": 33
+        },
+        {
+          "name": "Popeyes Regular Coleslaw",
+          "calories": 120,
+          "protein": 0,
+          "carbs": 18,
+          "fat": 6
+        }
+      ],
+      "notes": "Lazy day lunch. Popeyes blackened chicken tenders (6) + regular coleslaw."
     }
   ],
   "tdeeHistory": [

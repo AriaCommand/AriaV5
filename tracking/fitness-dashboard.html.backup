@@ -1573,10 +1573,10 @@ const fitnessData = {
     {
       "date": "2026-08-17",
       "weight": 167,
-      "calories": 1345,
-      "protein": 118,
-      "carbs": 136,
-      "fat": 40,
+      "calories": 1845,
+      "protein": 168,
+      "carbs": 192,
+      "fat": 44,
       "bfPercent": 29,
       "meals": [
         {
@@ -1599,6 +1599,13 @@ const fitnessData = {
           "protein": 31,
           "carbs": 85,
           "fat": 26
+        },
+        {
+          "name": "Costco Ahi Tuna Spicy Poke with White Rice",
+          "calories": 500,
+          "protein": 50,
+          "carbs": 56,
+          "fat": 4
         }
       ],
       "workout": {
@@ -1627,7 +1634,7 @@ const fitnessData = {
         ],
         "notes": "Treadmill Warmup (53 cal) + Tonal HIIT (376 cal) + Rowing (99 cal) + Treadmill Cooldown (77 cal). Total: 605 cal burned."
       },
-      "notes": "Morning weigh-in: 167 lbs. 5 AM workout session. Total workout calories burned: 605. Morning smoothie before workout, double protein shake after. Lunch: ground pork and cabbage with 210g white rice."
+      "notes": "Morning weigh-in: 167 lbs. 5 AM workout session. Total workout calories burned: 605. Morning smoothie before workout, double protein shake after. Lunch: ground pork and cabbage with 210g white rice. Dinner: Costco ahi tuna spicy poke with 1 cup white rice."
     }
   ],
   "tdeeHistory": [
