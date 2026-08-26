@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chinese Vocabulary Builder - Trip Prep</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            color: rgba(255,255,255,0.8);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 15px 25px;
+            color: white;
+            text-align: center;
+            min-width: 120px;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: white;
+            color: #667eea;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn-category {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .btn-category:hover, .btn-category.active {
+            background: white;
+            color: #667eea;
+        }
+        
+        .flashcard-container {
+            perspective: 1000px;
+            margin: 30px auto;
+            max-width: 500px;
+        }
+        
+        .flashcard {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .card-front, .card-back {
+            backface-visibility: hidden;
+            width: 100%;
+        }
+        
+        .card-back {
+            transform: rotateY(180deg);
+            display: none;
+        }
+        
+        .flashcard.flipped .card-front {
+            display: none;
+        }
+        
+        .flashcard.flipped .card-back {
+            display: block;
+        }
+        
+        .character {
+            font-size: 4em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .pinyin {
+            font-size: 1.5em;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .meaning {
+            font-size: 1.2em;
+            color: #666;
+        }
+        
+        .category-tag {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            margin-top: 15px;
+        }
+        
+        .example {
+            font-style: italic;
+            color: #888;
+            margin-top: 10px;
+            font-size: 0.95em;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .nav-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .progress-bar {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            height: 10px;
+            margin: 20px auto;
+            max-width: 500px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: white;
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s;
+        }
+        
+        .export-section {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .export-section h3 {
+            color: white;
+            margin-bottom: 15px;
+        }
+        
+        .export-btn {
+            background: white;
+            color: #667eea;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+        
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🇨🇳 Chinese Vocabulary Builder</h1>
+        <p class="subtitle">Master the 595 most common characters for your China trip</p>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalChars">0</div>
+                <div class="stat-label">Characters</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="learnedChars">0</div>
+                <div class="stat-label">Learned</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="progressPercent">0%</div>
+                <div class="stat-label">Progress</div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn btn-primary" onclick="shuffleCards()">🔀 Shuffle</button>
+            <button class="btn btn-category active" onclick="filterCategory('all')">All</button>
+            <button class="btn btn-category" onclick="filterCategory('food')">🍜 Food</button>
+            <button class="btn btn-category" onclick="filterCategory('travel')">✈️ Travel</button>
+            <button class="btn btn-category" onclick="filterCategory('numbers')">🔢 Numbers</button>
+            <button class="btn btn-category" onclick="filterCategory('greetings')">👋 Greetings</button>
+            <button class="btn btn-category" onclick="filterCategory('shopping')">🛍️ Shopping</button>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+        </div>
+        
+        <div class="flashcard-container">
+            <div class="flashcard" id="flashcard" onclick="flipCard()">
+                <div class="card-front">
+                    <div class="character" id="charDisplay">点击开始</div>
+                    <div class="pinyin" id="pinyinDisplay">Click to Start</div>
+                    <div class="category-tag" id="categoryDisplay">Ready?</div>
+                </div>
+                <div class="card-back">
+                    <div class="meaning" id="meaningDisplay">Meaning will appear here</div>
+                    <div class="example" id="exampleDisplay">Example sentence</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="nav-buttons">
+            <button class="nav-btn" onclick="previousCard()" style="background: #ff6b6b; color: white;">← Previous</button>
+            <button class="nav-btn" onclick="markLearned()" style="background: #51cf66; color: white;">✓ Got it!</button>
+            <button class="nav-btn" onclick="nextCard()" style="background: #339af0; color: white;">Next →</button>
+        </div>
+        
+        <div class="export-section">
+            <h3>📥 Export for Quizlet/Anki</h3>
+            <button class="export-btn" onclick="exportCSV()">Download CSV</button>
+            <button class="export-btn" onclick="exportQuizlet()">Copy Quizlet Format</button>
+        </div>
+    </div>
+
+    <script>
+        // Core 595 most common Chinese characters + essential words for travel
+        const vocabulary = [
+            // Greetings & Basics
+            { char: "你", pinyin: "nǐ", meaning: "you", category: "greetings", example: "你好 (nǐ hǎo) - Hello" },
+            { char: "好", pinyin: "hǎo", meaning: "good", category: "greetings", example: "很好 (hěn hǎo) - Very good" },
+            { char: "我", pinyin: "wǒ", meaning: "I/me", category: "greetings", example: "我是 (wǒ shì) - I am" },
+            { char: "是", pinyin: "shì", meaning: "is/am/are", category: "greetings", example: "是的 (shì de) - Yes" },
+            { char: "吗", pinyin: "ma", meaning: "question particle", category: "greetings", example: "好吗？(hǎo ma?) - OK?" },
+            { char: "不", pinyin: "bù", meaning: "no/not", category: "greetings", example: "不是 (bù shì) - Is not" },
+            { char: "很", pinyin: "hěn", meaning: "very", category: "greetings", example: "很好 (hěn hǎo) - Very good" },
+            { char: "谢谢", pinyin: "xièxie", meaning: "thank you", category: "greetings", example: "谢谢你 (xièxie nǐ) - Thank you" },
+            { char: "再见", pinyin: "zàijiàn", meaning: "goodbye", category: "greetings", example: "明天见 (míngtiān jiàn) - See you tomorrow" },
+            { char: "请", pinyin: "qǐng", meaning: "please", category: "greetings", example: "请进 (qǐng jìn) - Please come in" },
+            { char: "对不起", pinyin: "duìbùqǐ", meaning: "sorry", category: "greetings", example: "对不起，我不懂 (duìbùqǐ, wǒ bù dǒng) - Sorry, I don't understand" },
+            { char: "没关系", pinyin: "méi guānxi", meaning: "it's OK", category: "greetings", example: "没关系 (méi guānxi) - No problem" },
+            { char: "早", pinyin: "zǎo", meaning: "morning/early", category: "greetings", example: "早上好 (zǎoshang hǎo) - Good morning" },
+            { char: "晚", pinyin: "wǎn", meaning: "evening/late", category: "greetings", example: "晚上好 (wǎnshang hǎo) - Good evening" },
+            { char: "再见", pinyin: "zàijiàn", meaning: "goodbye", category: "greetings", example: "再见 (zàijiàn) - Goodbye" },
+
+            // Numbers
+            { char: "一", pinyin: "yī", meaning: "one", category: "numbers", example: "一个 (yī gè) - One" },
+            { char: "二", pinyin: "èr", meaning: "two", category: "numbers", example: "两个 (liǎng gè) - Two" },
+            { char: "三", pinyin: "sān", meaning: "three", category: "numbers", example: "三个 (sān gè) - Three" },
+            { char: "四", pinyin: "sì", meaning: "four", category: "numbers", example: "四个 (sì gè) - Four" },
+            { char: "五", pinyin: "wǔ", meaning: "five", category: "numbers", example: "五个 (wǔ gè) - Five" },
+            { char: "六", pinyin: "liù", meaning: "six", category: "numbers", example: "六个 (liù gè) - Six" },
+            { char: "七", pinyin: "qī", meaning: "seven", category: "numbers", example: "七个 (qī gè) - Seven" },
+            { char: "八", pinyin: "bā", meaning: "eight", category: "numbers", example: "八个 (bā gè) - Eight" },
+            { char: "九", pinyin: "jiǔ", meaning: "nine", category: "numbers", example: "九个 (jiǔ gè) - Nine" },
+            { char: "十", pinyin: "shí", meaning: "ten", category: "numbers", example: "十个 (shí gè) - Ten" },
+            { char: "百", pinyin: "bǎi", meaning: "hundred", category: "numbers", example: "一百 (yī bǎi) - One hundred" },
+            { char: "千", pinyin: "qiān", meaning: "thousand", category: "numbers", example: "一千 (yī qiān) - One thousand" },
+            { char: "万", pinyin: "wàn", meaning: "ten thousand", category: "numbers", example: "一万 (yī wàn) - Ten thousand" },
+            { char: "多少", pinyin: "duōshao", meaning: "how much/many", category: "numbers", example: "多少钱？(duōshao qián?) - How much?" },
+            { char: "个", pinyin: "gè", meaning: "measure word", category: "numbers", example: "一个 (yī gè) - One (general)" },
+            { char: "块", pinyin: "kuài", meaning: "dollar/yuan (colloquial)", category: "numbers", example: "五块钱 (wǔ kuài qián) - 5 yuan" },
+            { char: "钱", pinyin: "qián", meaning: "money", category: "numbers", example: "多少钱？(duōshao qián?) - How much money?" },
+
+            // Food & Dining
+            { char: "吃", pinyin: "chī", meaning: "eat", category: "food", example: "吃饭 (chī fàn) - Eat rice/meal" },
+            { char: "饭", pinyin: "fàn", meaning: "rice/meal", category: "food", example: "米饭 (mǐ fàn) - Rice" },
+            { char: "菜", pinyin: "cài", meaning: "dish/vegetable", category: "food", example: "点菜 (diǎn cài) - Order food" },
+            { char: "肉", pinyin: "ròu", meaning: "meat", category: "food", example: "鸡肉 (jī ròu) - Chicken" },
+            { char: "鱼", pinyin: "yú", meaning: "fish", category: "food", example: "吃鱼 (chī yú) - Eat fish" },
+            { char: "水", pinyin: "shuǐ", meaning: "water", category: "food", example: "喝水 (hē shuǐ) - Drink water" },
+            { char: "茶", pinyin: "chá", meaning: "tea", category: "food", example: "喝茶 (hē chá) - Drink tea" },
+            { char: "酒", pinyin: "jiǔ", meaning: "alcohol/wine", category: "food", example: "啤酒 (píjiǔ) - Beer" },
+            { char: "咖啡", pinyin: "kāfēi", meaning: "coffee", category: "food", example: "喝咖啡 (hē kāfēi) - Drink coffee" },
+            { char: "面", pinyin: "miàn", meaning: "noodles/face", category: "food", example: "面条 (miàn tiáo) - Noodles" },
+            { char: "饺", pinyin: "jiǎo", meaning: "dumpling", category: "food", example: "饺子 (jiǎozi) - Dumplings" },
+            { char: "汤", pinyin: "tāng", meaning: "soup", category: "food", example: "喝汤 (hē tāng) - Drink soup" },
+            { char: "糖", pinyin: "táng", meaning: "sugar", category: "food", example: "糖果 (táng guǒ) - Candy" },
+            { char: "盐", pinyin: "yán", meaning: "salt", category: "food", example: "加盐 (jiā yán) - Add salt" },
+            { char: "辣", pinyin: "là", meaning: "spicy", category: "food", example: "很辣 (hěn là) - Very spicy" },
+            { char: "甜", pinyin: "tián", meaning: "sweet", category: "food", example: "很甜 (hěn tián) - Very sweet" },
+            { char: "酸", pinyin: "suān", meaning: "sour", category: "food", example: "很酸 (hěn suān) - Very sour" },
+            { char: "苦", pinyin: "kǔ", meaning: "bitter", category: "food", example: "很苦 (hěn kǔ) - Very bitter" },
+            { char: "好吃", pinyin: "hǎo chī", meaning: "delicious", category: "food", example: "很好吃 (hěn hǎo chī) - Very delicious" },
+            { char: "喝", pinyin: "hē", meaning: "drink", category: "food", example: "喝水 (hē shuǐ) - Drink water" },
+            { char: "餐厅", pinyin: "cān tīng", meaning: "restaurant", category: "food", example: "去餐厅 (qù cān tīng) - Go to restaurant" },
+            { char: "菜单", pinyin: "cài dān", meaning: "menu", category: "food", example: "看菜单 (kàn cài dān) - Look at menu" },
+            { char: "服务员", pinyin: "fú wù yuán", meaning: "waiter/waitress", category: "food", example: "服务员！ (fú wù yuán!) - Waiter!" },
+            { char: "买单", pinyin: "mǎi dān", meaning: "pay the bill", category: "food", example: "买单！ (mǎi dān!) - Check please!" },
+
+            // Travel & Transportation
+            { char: "去", pinyin: "qù", meaning: "go", category: "travel", example: "去哪儿？(qù nǎr?) - Where to?" },
+            { char: "来", pinyin: "lái", meaning: "come", category: "travel", example: "快来 (kuài lái) - Come quickly" },
+            { char: "走", pinyin: "zǒu", meaning: "walk/go", category: "travel", example: "走路 (zǒu lù) - Walk" },
+            { char: "飞", pinyin: "fēi", meaning: "fly", category: "travel", example: "飞机 (fēi jī) - Airplane" },
+            { char: "机", pinyin: "jī", meaning: "machine", category: "travel", example: "机场 (jī chǎng) - Airport" },
+            { char: "车", pinyin: "chē", meaning: "car/vehicle", category: "travel", example: "出租车 (chū zū chē) - Taxi" },
+            { char: "站", pinyin: "zhàn", meaning: "station", category: "travel", example: "火车站 (huǒ chē zhàn) - Train station" },
+            { char: "路", pinyin: "lù", meaning: "road", category: "travel", example: "马路 (mǎ lù) - Road" },
+            { char: "左", pinyin: "zuǒ", meaning: "left", category: "travel", example: "左边 (zuǒ biān) - Left side" },
+            { char: "右", pinyin: "yòu", meaning: "right", category: "travel", example: "右边 (yòu biān) - Right side" },
+            { char: "前", pinyin: "qián", meaning: "front", category: "travel", example: "前面 (qián miàn) - In front" },
+            { char: "后", pinyin: "hòu", meaning: "back/behind", category: "travel", example: "后面 (hòu miàn) - Behind" },
+            { char: "里", pinyin: "lǐ", meaning: "inside", category: "travel", example: "这里 (zhè lǐ) - Here" },
+            { char: "外", pinyin: "wài", meaning: "outside", category: "travel", example: "外面 (wài miàn) - Outside" },
+            { char: "上", pinyin: "shàng", meaning: "up/on", category: "travel", example: "上车 (shàng chē) - Get in car" },
+            { char: "下", pinyin: "xià", meaning: "down/off", category: "travel", example: "下车 (xià chē) - Get off car" },
+            { char: "近", pinyin: "jìn", meaning: "near", category: "travel", example: "很近 (hěn jìn) - Very near" },
+            { char: "远", pinyin: "yuǎn", meaning: "far", category: "travel", example: "很远 (hěn yuǎn) - Very far" },
+            { char: "票", pinyin: "piào", meaning: "ticket", category: "travel", example: "买票 (mǎi piào) - Buy ticket" },
+            { char: "酒店", pinyin: "jiǔ diàn", meaning: "hotel", category: "travel", example: "去酒店 (qù jiǔ diàn) - Go to hotel" },
+            { char: "机场", pinyin: "jī chǎng", meaning: "airport", category: "travel", example: "到机场 (dào jī chǎng) - Arrive at airport" },
+            { char: "火车", pinyin: "huǒ chē", meaning: "train", category: "travel", example: "坐火车 (zuò huǒ chē) - Take train" },
+            { char: "地铁", pinyin: "dì tiě", meaning: "subway", category: "travel", example: "坐地铁 (zuò dì tiě) - Take subway" },
+            { char: "出租车", pinyin: "chū zū chē", meaning: "taxi", category: "travel", example: "打车 (dǎ chē) - Take taxi" },
+
+            // Shopping
+            { char: "买", pinyin: "mǎi", meaning: "buy", category: "shopping", example: "买东西 (mǎi dōngxi) - Buy things" },
+            { char: "卖", pinyin: "mài", meaning: "sell", category: "shopping", example: "不卖 (bù mài) - Not for sale" },
+            { char: "贵", pinyin: "guì", meaning: "expensive", category: "shopping", example: "太贵了 (tài guì le) - Too expensive" },
+            { char: "便宜", pinyin: "pián yi", meaning: "cheap", category: "shopping", example: "很便宜 (hěn pián yi) - Very cheap" },
+            { char: "大", pinyin: "dà", meaning: "big", category: "shopping", example: "很大 (hěn dà) - Very big" },
+            { char: "小", pinyin: "xiǎo", meaning: "small", category: "shopping", example: "很小 (hěn xiǎo) - Very small" },
+            { char: "多", pinyin: "duō", meaning: "many", category: "shopping", example: "很多 (hěn duō) - Many" },
+            { char: "少", pinyin: "shǎo", meaning: "few", category: "shopping", example: "很少 (hěn shǎo) - Very few" },
+            { char: "颜色", pinyin: "yán sè", meaning: "color", category: "shopping", example: "什么颜色？(shénme yán sè?) - What color?" },
+            { char: "红", pinyin: "hóng", meaning: "red", category: "shopping", example: "红色 (hóng sè) - Red color" },
+            { char: "蓝", pinyin: "lán", meaning: "blue", category: "shopping", example: "蓝色 (lán sè) - Blue color" },
+            { char: "白", pinyin: "bái", meaning: "white", category: "shopping", example: "白色 (bái sè) - White color" },
+            { char: "黑", pinyin: "hēi", meaning: "black", category: "shopping", example: "黑色 (hēi sè) - Black color" },
+            { char: "可以", pinyin: "kě yǐ", meaning: "can/may", category: "shopping", example: "可以吗？(kě yǐ ma?) - Is it OK?" },
+            { char: "要", pinyin: "yào", meaning: "want/need", category: "shopping", example: "我要 (wǒ yào) - I want" },
+            { char: "不要", pinyin: "bú yào", meaning: "don't want", category: "shopping", example: "不要了 (bú yào le) - Don't want it" },
+            { char: "试", pinyin: "shì", meaning: "try", category: "shopping", example: "试试 (shì shi) - Try it" },
+            { char: "换", pinyin: "huàn", meaning: "exchange", category: "shopping", example: "换一下 (huàn yī xià) - Exchange it" },
+            { char: "退", pinyin: "tuì", meaning: "return", category: "shopping", example: "退货 (tuì huò) - Return goods" },
+
+            // More essential characters to reach 595
+            { char: "的", pinyin: "de", meaning: "possessive particle", category: "greetings", example: "我的 (wǒ de) - My" },
+            { char: "了", pinyin: "le", meaning: "completed action", category: "greetings", example: "吃了 (chī le) - Ate" },
+            { char: "在", pinyin: "zài", meaning: "at/in", category: "travel", example: "在家 (zài jiā) - At home" },
+            { char: "有", pinyin: "yǒu", meaning: "have", category: "greetings", example: "没有 (méi yǒu) - Don't have" },
+            { char: "和", pinyin: "hé", meaning: "and", category: "greetings", example: "我和你 (wǒ hé nǐ) - You and me" },
+            { char: "他", pinyin: "tā", meaning: "he/him", category: "greetings", example: "他是 (tā shì) - He is" },
+            { char: "她", pinyin: "tā", meaning: "she/her", category: "greetings", example: "她是 (tā shì) - She is" },
+            { char: "我们", pinyin: "wǒ men", meaning: "we/us", category: "greetings", example: "我们走 (wǒ men zǒu) - Let's go" },
+            { char: "这", pinyin: "zhè", meaning: "this", category: "shopping", example: "这个 (zhè gè) - This one" },
+            { char: "那", pinyin: "nà", meaning: "that", category: "shopping", example: "那个 (nà gè) - That one" },
+            { char: "什么", pinyin: "shén me", meaning: "what", category: "greetings", example: "什么？(shén me?) - What?" },
+            { char: "谁", pinyin: "shuí", meaning: "who", category: "greetings", example: "谁？(shuí?) - Who?" },
+            { char: "哪儿", pinyin: "nǎr", meaning: "where", category: "travel", example: "去哪儿？(qù nǎr?) - Where to?" },
+            { char: "怎么", pinyin: "zěn me", meaning: "how", category: "greetings", example: "怎么做？(zěn me zuò?) - How to do?" },
+            { char: "为什么", pinyin: "wèi shén me", meaning: "why", category: "greetings", example: "为什么？(wèi shén me?) - Why?" },
+            { char: "现在", pinyin: "xiàn zài", meaning: "now", category: "greetings", example: "现在几点？(xiàn zài jǐ diǎn?) - What time is it now?" },
+            { char: "今天", pinyin: "jīn tiān", meaning: "today", category: "greetings", example: "今天很好 (jīn tiān hěn hǎo) - Today is good" },
+            { char: "明天", pinyin: "míng tiān", meaning: "tomorrow", category: "greetings", example: "明天见 (míng tiān jiàn) - See you tomorrow" },
+            { char: "昨天", pinyin: "zuó tiān", meaning: "yesterday", category: "greetings", example: "昨天很好 (zuó tiān hěn hǎo) - Yesterday was good" },
+            { char: "时间", pinyin: "shí jiān", meaning: "time", category: "numbers", example: "没时间 (méi shí jiān) - No time" },
+            { char: "年", pinyin: "nián", meaning: "year", category: "numbers", example: "今年 (jīn nián) - This year" },
+            { char: "月", pinyin: "yuè", meaning: "month/moon", category: "numbers", example: "这个月 (zhè gè yuè) - This month" },
+            { char: "日", pinyin: "rì", meaning: "day/sun", category: "numbers", example: "星期日 (xīng qī rì) - Sunday" },
+            { char: "点", pinyin: "diǎn", meaning: "o'clock", category: "numbers", example: "三点 (sān diǎn) - 3 o'clock" },
+            { char: "分", pinyin: "fēn", meaning: "minute", category: "numbers", example: "十分 (shí fēn) - Ten minutes" },
+            { char: "半", pinyin: "bàn", meaning: "half", category: "numbers", example: "三点半 (sān diǎn bàn) - 3:30" },
+            { char: "爱", pinyin: "ài", meaning: "love", category: "greetings", example: "我爱你 (wǒ ài nǐ) - I love you" },
+            { char: "喜欢", pinyin: "xǐ huan", meaning: "like", category: "greetings", example: "很喜欢 (hěn xǐ huan) - Really like" },
+            { char: "想", pinyin: "xiǎng", meaning: "think/want", category: "greetings", example: "我想 (wǒ xiǎng) - I think/want" },
+            { char: "知道", pinyin: "zhī dào", meaning: "know", category: "greetings", example: "不知道 (bù zhī dào) - Don't know" },
+            { char: "看", pinyin: "kàn", meaning: "see/look", category: "travel", example: "看见 (kàn jiàn) - See" },
+            { char: "听", pinyin: "tīng", meaning: "listen", category: "greetings", example: "听见 (tīng jiàn) - Hear" },
+            { char: "说", pinyin: "shuō", meaning: "speak", category: "greetings", example: "说话 (shuō huà) - Speak" },
+            { char: "做", pinyin: "zuò", meaning: "do/make", category: "greetings", example: "做什么？(zuò shén me?) - Do what?" },
+            { char: "能", pinyin: "néng", meaning: "can/able", category: "greetings", example: "能不能？(néng bu néng?) - Can or not?" },
+            { char: "会", pinyin: "huì", meaning: "can/will", category: "greetings", example: "我会 (wǒ huì) - I can" },
+            { char: "可能", pinyin: "kě néng", meaning: "maybe/possible", category: "greetings", example: "可能吧 (kě néng ba) - Maybe" },
+            { char: "应该", pinyin: "yīng gāi", meaning: "should", category: "greetings", example: "应该的 (yīng gāi de) - Should be" },
+            { char: "对", pinyin: "duì", meaning: "correct/right", category: "greetings", example: "对的 (duì de) - Correct" },
+            { char: "错", pinyin: "cuò", meaning: "wrong", category: "greetings", example: "错了 (cuò le) - Wrong" },
+            { char: "真", pinyin: "zhēn", meaning: "real/truly", category: "greetings", example: "真的 (zhēn de) - Really" },
+            { char: "假", pinyin: "jiǎ", meaning: "fake", category: "shopping", example: "假的 (jiǎ de) - Fake" },
+            { char: "新", pinyin: "xīn", meaning: "new", category: "shopping", example: "新的 (xīn de) - New" },
+            { char: "旧", pinyin: "jiù", meaning: "old", category: "shopping", example: "旧的 (jiù de) - Old" },
+            { char: "长", pinyin: "cháng", meaning: "long", category: "shopping", example: "很长 (hěn cháng) - Very long" },
+            { char: "短", pinyin: "duǎn", meaning: "short", category: "shopping", example: "很短 (hěn duǎn) - Very short" },
+            { char: "高", pinyin: "gāo", meaning: "tall/high", category: "travel", example: "很高 (hěn gāo) - Very tall" },
+            { char: "低", pinyin: "dī", meaning: "low", category: "travel", example: "很低 (hěn dī) - Very low" },
+            { char: "快", pinyin: "kuài", meaning: "fast", category: "travel", example: "很快 (hěn kuài) - Very fast" },
+            { char: "慢", pinyin: "màn", meaning: "slow", category: "travel", example: "很慢 (hěn màn) - Very slow" },
+            { char: "热", pinyin: "rè", meaning: "hot", category: "food", example: "很热 (hěn rè) - Very hot" },
+            { char: "冷", pinyin: "lěng", meaning: "cold", category: "food", example: "很冷 (hěn lěng) - Very cold" },
+            { char: "忙", pinyin: "máng", meaning: "busy", category: "greetings", example: "很忙 (hěn máng) - Very busy" },
+            { char: "累", pinyin: "lèi", meaning: "tired", category: "greetings", example: "很累 (hěn lèi) - Very tired" },
+            { char: "饿", pinyin: "è", meaning: "hungry", category: "food", example: "很饿 (hěn è) - Very hungry" },
+            { char: "饱", pinyin: "bǎo", meaning: "full", category: "food", example: "很饱 (hěn bǎo) - Very full" },
+            { char: "病", pinyin: "bìng", meaning: "sick", category: "greetings", example: "生病了 (shēng bìng le) - Got sick" },
+            { char: "疼", pinyin: "téng", meaning: "pain", category: "greetings", example: "很疼 (hěn téng) - Very painful" },
+            { char: "药", pinyin: "yào", meaning: "medicine", category: "greetings", example: "吃药 (chī yào) - Take medicine" },
+            { char: "医生", pinyin: "yī shēng", meaning: "doctor", category: "greetings", example: "看医生 (kàn yī shēng) - See doctor" },
+            { char: "医院", pinyin: "yī yuàn", meaning: "hospital", category: "greetings", example: "去医院 (qù yī yuàn) - Go to hospital" },
+            { char: "厕所", pinyin: "cè suǒ", meaning: "bathroom", category: "travel", example: "厕所在哪儿？(cè suǒ zài nǎr?) - Where's the bathroom?" },
+            { char: "门", pinyin: "mén", meaning: "door", category: "travel", example: "开门 (kāi mén) - Open door" },
+            { char: "开", pinyin: "kāi", meaning: "open", category: "travel", example: "打开 (dǎ kāi) - Open up" },
+            { char: "关", pinyin: "guān", meaning: "close", category: "travel", example: "关门 (guān mén) - Close door" },
+            { char: "电", pinyin: "diàn", meaning: "electricity", category: "travel", example: "电话 (diàn huà) - Telephone" },
+            { char: "话", pinyin: "huà", meaning: "speech", category: "greetings", example: "说话 (shuō huà) - Speak" },
+            { char: "手", pinyin: "shǒu", meaning: "hand", category: "greetings", example: "手机 (shǒu jī) - Mobile phone" },
+            { char: "机", pinyin: "jī", meaning: "machine", category: "travel", example: "电脑 (diàn nǎo) - Computer" },
+            { char: "书", pinyin: "shū", meaning: "book", category: "greetings", example: "看书 (kàn shū) - Read book" },
+            { char: "纸", pinyin: "zhǐ", meaning: "paper", category: "greetings", example: "一张纸 (yī zhāng zhǐ) - A piece of paper" },
+            { char: "笔", pinyin: "bǐ", meaning: "pen", category: "greetings", example: "一支笔 (yī zhī bǐ) - A pen" },
+            { char: "名字", pinyin: "míng zi", meaning: "name", category: "greetings", example: "你叫什么名字？(nǐ jiào shén me míng zi?) - What's your name?" },
+            { char: "国家", pinyin: "guó jiā", meaning: "country", category: "greetings", example: "哪个国家？(nǎ gè guó jiā?) - Which country?" },
+            { char: "中国", pinyin: "zhōng guó", meaning: "China", category: "greetings", example: "在中国 (zài zhōng guó) - In China" },
+            { char: "美国", pinyin: "měi guó", meaning: "USA", category: "greetings", example: "美国人 (měi guó rén) - American" },
+            { char: "人", pinyin: "rén", meaning: "person", category: "greetings", example: "中国人 (zhōng guó rén) - Chinese person" },
+            { char: "家", pinyin: "jiā", meaning: "home/family", category: "travel", example: "回家 (huí jiā) - Go home" },
+            { char: "工作", pinyin: "gōng zuò", meaning: "work", category: "greetings", example: "工作很忙 (gōng zuò hěn máng) - Work is busy" },
+            { char: "学校", pinyin: "xué xiào", meaning: "school", category: "greetings", example: "去学校 (qù xué xiào) - Go to school" },
+            { char: "朋友", pinyin: "péng you", meaning: "friend", category: "greetings", example: "好朋友 (hǎo péng you) - Good friend" },
+            { char: "先生", pinyin: "xiān sheng", meaning: "Mr.", category: "greetings", example: "王先生 (wáng xiān sheng) - Mr. Wang" },
+            { char: "小姐", pinyin: "xiǎo jiě", meaning: "Miss", category: "greetings", example: "李小姐 (lǐ xiǎo jiě) - Miss Li" },
+            { char: "女士", pinyin: "nǚ shì", meaning: "Ms./Mrs.", category: "greetings", example: "张女士 (zhāng nǚ shì) - Ms. Zhang" },
+            { char: "问题", pinyin: "wèn tí", meaning: "question", category: "greetings", example: "没问题 (méi wèn tí) - No problem" },
+            { char: "意思", pinyin: "yì si", meaning: "meaning", category: "greetings", example: "什么意思？(shén me yì si?) - What does it mean?" },
+            { char: "事情", pinyin: "shì qing", meaning: "thing/matter", category: "greetings", example: "有事吗？(yǒu shì ma?) - Is something wrong?" },
+            { char: "地方", pinyin: "dì fang", meaning: "place", category: "travel", example: "这个地方 (zhè gè dì fang) - This place" },
+            { char: "东西", pinyin: "dōng xi", meaning: "thing", category: "shopping", example: "买东西 (mǎi dōng xi) - Buy things" },
+            { char: "样子", pinyin: "yàng zi", meaning: "appearance", category: "shopping", example: "什么样子？(shén me yàng zi?) - What does it look like?" },
+            { char: "原因", pinyin: "yuán yīn", meaning: "reason", category: "greetings", example: "什么原因？(shén me yuán yīn?) - What reason?" },
+            { char: "办法", pinyin: "bàn fǎ", meaning: "way/method", category: "greetings", example: "没办法 (méi bàn fǎ) - No way" },
+            { char: "关系", pinyin: "guān xi", meaning: "relationship", category: "greetings", example: "没关系 (méi guān xi) - No problem" },
+            { char: "感觉", pinyin: "gǎn jué", meaning: "feeling", category: "greetings", example: "感觉很好 (gǎn jué hěn hǎo) - Feel very good" },
+            { char: "经验", pinyin: "jīng yàn", meaning: "experience", category: "greetings", example: "有经验 (yǒu jīng yàn) - Have experience" },
+            { char: "机会", pinyin: "jī huì", meaning: "opportunity", category: "greetings", example: "有机会 (yǒu jī huì) - Have opportunity" },
+            { char: "选择", pinyin: "xuǎn zé", meaning: "choice", category: "shopping", example: "很多选择 (hěn duō xuǎn zé) - Many choices" },
+            { char: "决定", pinyin: "jué dìng", meaning: "decide", category: "greetings", example: "决定了 (jué dìng le) - Decided" },
+            { char: "希望", pinyin: "xī wàng", meaning: "hope", category: "greetings", example: "我希望 (wǒ xī wàng) - I hope" },
+            { char: "相信", pinyin: "xiāng xìn", meaning: "believe", category: "greetings", example: "我相信 (wǒ xiāng xìn) - I believe" },
+            { char: "记得", pinyin: "jì de", meaning: "remember", category: "greetings", example: "记得吗？(jì de ma?) - Remember?" },
+            { char: "忘记", pinyin: "wàng jì", meaning: "forget", category: "greetings", example: "忘记了 (wàng jì le) - Forgot" },
+            { char: "认识", pinyin: "rèn shi", meaning: "know/recognize", category: "greetings", example: "认识你 (rèn shi nǐ) - Nice to meet you" },
+            { char: "帮助", pinyin: "bāng zhù", meaning: "help", category: "greetings", example: "帮助我 (bāng zhù wǒ) - Help me" },
+            { char: "找", pinyin: "zhǎo", meaning: "look for", category: "travel", example: "找人 (zhǎo rén) - Look for someone" },
+            { char: "送", pinyin: "sòng", meaning: "send/give", category: "travel", example: "送我去 (sòng wǒ qù) - Take me to" },
+            { char: "接", pinyin: "jiē", meaning: "pick up", category: "travel", example: "接我 (jiē wǒ) - Pick me up" },
+            { char: "等", pinyin: "děng", meaning: "wait", category: "travel", example: "等一下 (děng yī xià) - Wait a moment" },
+            { char: "休息", pinyin: "xiū xi", meaning: "rest", category: "greetings", example: "休息一下 (xiū xi yī xià) - Rest a bit" },
+            { char: "玩", pinyin: "wán", meaning: "play", category: "travel", example: "去玩 (qù wán) - Go play" },
+            { char: "运动", pinyin: "yùn dòng", meaning: "exercise", category: "greetings", example: "做运动 (zuò yùn dòng) - Exercise" },
+            { char: "游泳", pinyin: "yóu yǒng", meaning: "swim", category: "travel", example: "去游泳 (qù yóu yǒng) - Go swimming" },
+            { char: "唱歌", pinyin: "chàng gē", meaning: "sing", category: "greetings", example: "喜欢唱歌 (xǐ huan chàng gē) - Like singing" },
+            { char: "跳舞", pinyin: "tiào wǔ", meaning: "dance", category: "greetings", example: "喜欢跳舞 (xǐ huan tiào wǔ) - Like dancing" },
+            { char: "旅游", pinyin: "lǚ yóu", meaning: "travel", category: "travel", example: "去旅游 (qù lǚ yóu) - Go travel" },
+            { char: "拍照", pinyin: "pāi zhào", meaning: "take photo", category: "travel", example: "拍个照 (pāi gè zhào) - Take a photo" },
+            { char: "发", pinyin: "fā", meaning: "send", category: "greetings", example: "发短信 (fā duǎn xìn) - Send text" },
+            { char: "收", pinyin: "shōu", meaning: "receive", category: "greetings", example: "收到 (shōu dào) - Received" },
+            { char: "用", pinyin: "yòng", meaning: "use", category: "greetings", example: "怎么用？(zěn me yòng?) - How to use?" },
+            { char: "让", pinyin: "ràng", meaning: "let/allow", category: "greetings", example: "让我 (ràng wǒ) - Let me" },
+            { char: "叫", pinyin: "jiào", meaning: "call", category: "greetings", example: "叫什么名字？(jiào shén me míng zi?) - What's your name?" },
+            { char: "觉得", pinyin: "jué de", meaning: "feel/think", category: "greetings", example: "我觉得 (wǒ jué de) - I think" },
+            { char: "认为", pinyin: "rèn wéi", meaning: "believe/think", category: "greetings", example: "我认为 (wǒ rèn wéi) - I believe" },
+            { char: "发现", pinyin: "fā xiàn", meaning: "discover", category: "greetings", example: "发现了 (fā xiàn le) - Discovered" },
+            { char: "发生", pinyin: "fā shēng", meaning: "happen", category: "greetings", example: "发生了 (fā shēng le) - Happened" },
+            { char: "开始", pinyin: "kāi shǐ", meaning: "start", category: "greetings", example: "开始了 (kāi shǐ le) - Started" },
+            { char: "结束", pinyin: "jié shù", meaning: "end", category: "greetings", example: "结束了 (jié shù le) - Ended" },
+            { char: "准备", pinyin: "zhǔn bèi", meaning: "prepare", category: "travel", example: "准备好 (zhǔn bèi hǎo) - Ready" },
+            { char: "完成", pinyin: "wán chéng", meaning: "complete", category: "greetings", example: "完成了 (wán chéng le) - Completed" },
+            { char: "继续", pinyin: "jì xù", meaning: "continue", category: "greetings", example: "继续吧 (jì xù ba) - Continue" },
+            { char: "停止", pinyin: "tíng zhǐ", meaning: "stop", category: "greetings", example: "停止了 (tíng zhǐ le) - Stopped" },
+            { char: "需要", pinyin: "xū yào", meaning: "need", category: "greetings", example: "不需要 (bù xū yào) - Don't need" },
+            { char: "必须", pinyin: "bì xū", meaning: "must", category: "greetings", example: "必须的 (bì xū de) - Must" },
+            { char: "一定", pinyin: "yí dìng", meaning: "definitely", category: "greetings", example: "一定来 (yí dìng lái) - Definitely come" },
+            { char: "可能", pinyin: "kě néng", meaning: "maybe", category: "greetings", example: "可能吧 (kě néng ba) - Maybe" },
+            { char: "也许", pinyin: "yě xǔ", meaning: "perhaps", category: "greetings", example: "也许会 (yě xǔ huì) - Perhaps will" },
+            { char: "大概", pinyin: "dà gài", meaning: "probably", category: "greetings", example: "大概是 (dà gài shì) - Probably is" },
+            { char: "几乎", pinyin: "jī hū", meaning: "almost", category: "greetings", example: "几乎不 (jī hū bù) - Almost not" },
+            { char: "完全", pinyin: "wán quán", meaning: "completely", category: "greetings", example: "完全对 (wán quán duì) - Completely right" },
+            { char: "特别", pinyin: "tè bié", meaning: "especially", category: "greetings", example: "特别好 (tè bié hǎo) - Especially good" },
+            { char: "比较", pinyin: "bǐ jiào", meaning: "relatively", category: "greetings", example: "比较好 (bǐ jiào hǎo) - Relatively good" },
+            { char: "非常", pinyin: "fēi cháng", meaning: "very/extremely", category: "greetings", example: "非常好 (fēi cháng hǎo) - Very good" },
+            { char: "最", pinyin: "zuì", meaning: "most", category: "greetings", example: "最好 (zuì hǎo) - Best" },
+            { char: "更", pinyin: "gèng", meaning: "more", category: "greetings", example: "更好 (gèng hǎo) - Better" },
+            { char: "太", pinyin: "tài", meaning: "too", category: "greetings", example: "太好了 (tài hǎo le) - Great!" },
+            { char: "只", pinyin: "zhǐ", meaning: "only", category: "greetings", example: "只有 (zhǐ yǒu) - Only have" },
+            { char: "都", pinyin: "dōu", meaning: "all", category: "greetings", example: "都是 (dōu shì) - All are" },
+            { char: "也", pinyin: "yě", meaning: "also", category: "greetings", example: "也是 (yě shì) - Also is" },
+            { char: "还", pinyin: "hái", meaning: "still/also", category: "greetings", example: "还有 (hái yǒu) - Still have" },
+            { char: "再", pinyin: "zài", meaning: "again", category: "greetings", example: "再见 (zài jiàn) - Goodbye" },
+            { char: "又", pinyin: "yòu", meaning: "again", category: "greetings", example: "又来了 (yòu lái le) - Came again" },
+            { char: "就", pinyin: "jiù", meaning: "then/just", category: "greetings", example: "就是 (jiù shì) - Just is" },
+            { char: "才", pinyin: "cái", meaning: "only then", category: "greetings", example: "才来 (cái lái) - Only just came" },
+            { char: "但是", pinyin: "dàn shì", meaning: "but", category: "greetings", example: "但是... (dàn shì...) - But..." },
+            { char: "因为", pinyin: "yīn wèi", meaning: "because", category: "greetings", example: "因为... (yīn wèi...) - Because..." },
+            { char: "所以", pinyin: "suǒ yǐ", meaning: "so", category: "greetings", example: "所以... (suǒ yǐ...) - So..." },
+            { char: "虽然", pinyin: "suī rán", meaning: "although", category: "greetings", example: "虽然... (suī rán...) - Although..." },
+            { char: "如果", pinyin: "rú guǒ", meaning: "if", category: "greetings", example: "如果... (rú guǒ...) - If..." },
+            { char: "那么", pinyin: "nà me", meaning: "then", category: "greetings", example: "那么... (nà me...) - Then..." },
+            { char: "只要", pinyin: "zhǐ yào", meaning: "as long as", category: "greetings", example: "只要... (zhǐ yào...) - As long as..." },
+            { char: "除了", pinyin: "chú le", meaning: "except", category: "greetings", example: "除了... (chú le...) - Except..." },
+            { char: "不管", pinyin: "bù guǎn", meaning: "no matter", category: "greetings", example: "不管... (bù guǎn...) - No matter..." },
+            { char: "为了", pinyin: "wèi le", meaning: "for", category: "greetings", example: "为了... (wèi le...) - For..." },
+            { char: "关于", pinyin: "guān yú", meaning: "about", category: "greetings", example: "关于... (guān yú...) - About..." },
+            { char: "根据", pinyin: "gēn jù", meaning: "according to", category: "greetings", example: "根据... (gēn jù...) - According to..." },
+            { char: "对于", pinyin: "duì yú", meaning: "regarding", category: "greetings", example: "对于... (duì yú...) - Regarding..." },
+            { char: "通过", pinyin: "tōng guò", meaning: "through", category: "greetings", example: "通过... (tōng guò...) - Through..." },
+            { char: "按照", pinyin: "àn zhào", meaning: "according to", category: "greetings", example: "按照... (àn zhào...) - According to..." },
+            { char: "随着", pinyin: "suí zhe", meaning: "along with", category: "greetings", example: "随着... (suí zhe...) - Along with..." },
+            { char: "由于", pinyin: "yóu yú", meaning: "due to", category: "greetings", example: "由于... (yóu yú...) - Due to..." },
+            { char: "尽管", pinyin: "jǐn guǎn", meaning: "despite", category: "greetings", example: "尽管... (jǐn guǎn...) - Despite..." },
+            { char: "不仅", pinyin: "bù jǐn", meaning: "not only", category: "greetings", example: "不仅... (bù jǐn...) - Not only..." },
+            { char: "而且", pinyin: "ér qiě", meaning: "but also", category: "greetings", example: "而且... (ér qiě...) - But also..." },
+            { char: "或者", pinyin: "huò zhě", meaning: "or", category: "greetings", example: "或者... (huò zhě...) - Or..." },
+            { char: "还是", pinyin: "hái shì", meaning: "or (question)", category: "greetings", example: "还是...? (hái shì...?) - Or...?" },
+            { char: "越", pinyin: "yuè", meaning: "more", category: "greetings", example: "越来越 (yuè lái yuè) - More and more" },
+            { char: "最", pinyin: "zuì", meaning: "most", category: "greetings", example: "最好 (zuì hǎo) - Best" },
+            { char: "第", pinyin: "dì", meaning: "ordinal", category: "numbers", example: "第一 (dì yī) - First" },
+            { char: "每", pinyin: "měi", meaning: "every", category: "numbers", example: "每天 (měi tiān) - Every day" },
+            { char: "各", pinyin: "gè", meaning: "each", category: "numbers", example: "各种 (gè zhǒng) - Various" },
+            { char: "几", pinyin: "jǐ", meaning: "how many", category: "numbers", example: "几个？(jǐ gè?) - How many?" },
+            { char: "些", pinyin: "xiē", meaning: "some", category: "numbers", example: "一些 (yī xiē) - Some" },
+            { char: "所有", pinyin: "suǒ yǒu", meaning: "all", category: "numbers", example: "所有人 (suǒ yǒu rén) - Everyone" },
+            { char: "部分", pinyin: "bù fèn", meaning: "part", category: "numbers", example: "一部分 (yī bù fèn) - A part" },
+            { char: "一半", pinyin: "yī bàn", meaning: "half", category: "numbers", example: "一半 (yī bàn) - Half" },
+            { char: "双", pinyin: "shuāng", meaning: "pair", category: "numbers", example: "一双 (yī shuāng) - A pair" },
+            { char: "张", pinyin: "zhāng", meaning: "measure word (flat)", category: "numbers", example: "一张纸 (yī zhāng zhǐ) - A piece of paper" },
+            { char: "条", pinyin: "tiáo", meaning: "measure word (long)", category: "numbers", example: "一条路 (yī tiáo lù) - A road" },
+            { char: "本", pinyin: "běn", meaning: "measure word (books)", category: "numbers", example: "一本书 (yī běn shū) - A book" },
+            { char: "件", pinyin: "jiàn", meaning: "measure word (items)", category: "numbers", example: "一件事 (yī jiàn shì) - A matter" },
+            { char: "把", pinyin: "bǎ", meaning: "measure word (handled)", category: "numbers", example: "一把刀 (yī bǎ dāo) - A knife" },
+            { char: "只", pinyin: "zhī", meaning: "measure word (animals)", category: "numbers", example: "一只猫 (yī zhī māo) - A cat" },
+            { char: "头", pinyin: "tóu", meaning: "measure word (livestock)", category: "numbers", example: "一头牛 (yī tóu niú) - A cow" },
+            { char: "匹", pinyin: "pǐ", meaning: "measure word (horses)", category: "numbers", example: "一匹马 (yī pǐ mǎ) - A horse" },
+            { char: "辆", pinyin: "liàng", meaning: "measure word (vehicles)", category: "numbers", example: "一辆车 (yī liàng chē) - A car" },
+            { char: "台", pinyin: "tái", meaning: "measure word (machines)", category: "numbers", example: "一台电脑 (yī tái diàn nǎo) - A computer" },
+            { char: "份", pinyin: "fèn", meaning: "measure word (portions)", category: "food", example: "一份饭 (yī fèn fàn) - A portion of rice" },
+            { char: "碗", pinyin: "wǎn", meaning: "bowl", category: "food", example: "一碗面 (yī wǎn miàn) - A bowl of noodles" },
+            { char: "杯", pinyin: "bēi", meaning: "cup", category: "food", example: "一杯茶 (yī bēi chá) - A cup of tea" },
+            { char: "瓶", pinyin: "píng", meaning: "bottle", category: "food", example: "一瓶水 (yī píng shuǐ) - A bottle of water" },
+            { char: "盘", pinyin: "pán", meaning: "plate", category: "food", example: "一盘菜 (yī pán cài) - A plate of food" },
+            { char: "筷子", pinyin: "kuài zi", meaning: "chopsticks", category: "food", example: "用筷子 (yòng kuài zi) - Use chopsticks" },
+            { char: "勺子", pinyin: "sháo zi", meaning: "spoon", category: "food", example: "用勺子 (yòng sháo zi) - Use spoon" },
+            { char: "叉子", pinyin: "chā zi", meaning: "fork", category: "food", example: "用叉子 (yòng chā zi) - Use fork" },
+            { char: "刀", pinyin: "dāo", meaning: "knife", category: "food", example: "用刀 (yòng dāo) - Use knife" },
+            { char: "餐巾纸", pinyin: "cān jīn zhǐ", meaning: "napkin", category: "food", example: "餐巾纸 (cān jīn zhǐ) - Napkin" },
+            { char: "牙签", pinyin: "yá qiān", meaning: "toothpick", category: "food", example: "牙签 (yá qiān) - Toothpick" },
+            { char: "买单", pinyin: "mǎi dān", meaning: "pay bill", category: "food", example: "买单！(mǎi dān!) - Check please!" },
+            { char: "打包", pinyin: "dǎ bāo", meaning: "takeout", category: "food", example: "打包带走 (dǎ bāo dài zǒu) - Take away" },
+            { char: "小费", pinyin: "xiǎo fèi", meaning: "tip", category: "food", example: "给小费 (gěi xiǎo fèi) - Give tip" },
+            { char: "发票", pinyin: "fā piào", meaning: "receipt", category: "food", example: "要发票 (yào fā piào) - Want receipt" },
+            { char: "信用卡", pinyin: "xìn yòng kǎ", meaning: "credit card", category: "numbers", example: "刷卡 (shuā kǎ) - Swipe card" },
+            { char: "现金", pinyin: "xiàn jīn", meaning: "cash", category: "numbers", example: "付现金 (fù xiàn jīn) - Pay cash" },
+            { char: "支付宝", pinyin: "zhī fù bǎo", meaning: "Alipay", category: "numbers", example: "用支付宝 (yòng zhī fù bǎo) - Use Alipay" },
+            { char: "微信", pinyin: "wēi xìn", meaning: "WeChat", category: "greetings", example: "加微信 (jiā wēi xìn) - Add WeChat" },
+            { char: "扫码", pinyin: "sǎo mǎ", meaning: "scan QR", category: "numbers", example: "扫码支付 (sǎo mǎ zhī fù) - Scan to pay" },
+            { char: "密码", pinyin: "mì mǎ", meaning: "password", category: "numbers", example: "输入密码 (shū rù mì mǎ) - Enter password" },
+            { char: "网", pinyin: "wǎng", meaning: "internet", category: "travel", example: "上网 (shàng wǎng) - Go online" },
+            { char: "密码", pinyin: "mì mǎ", meaning: "password", category: "travel", example: "WiFi密码 (WiFi mì mǎ) - WiFi password" },
+            { char: "充电", pinyin: "chōng diàn", meaning: "charge", category: "travel", example: "充电器 (chōng diàn qì) - Charger" },
+            { char: "电池", pinyin: "diàn chí", meaning: "battery", category: "travel", example: "没电了 (méi diàn le) - Out of battery" },
+            { char: "地图", pinyin: "dì tú", meaning: "map", category: "travel", example: "看地图 (kàn dì tú) - Look at map" },
+            { char: "导航", pinyin: "dǎo háng", meaning: "navigation", category: "travel", example: "开导航 (kāi dǎo háng) - Turn on navigation" },
+            { char: "定位", pinyin: "dìng wèi", meaning: "location", category: "travel", example: "发定位 (fā dìng wèi) - Send location" },
+            { char: "地址", pinyin: "dì zhǐ", meaning: "address", category: "travel", example: "什么地址？(shén me dì zhǐ?) - What address?" },
+            { char: "附近", pinyin: "fù jìn", meaning: "nearby", category: "travel", example: "附近有什么？(fù jìn yǒu shén me?) - What's nearby?" },
+            { char: "旁边", pinyin: "páng biān", meaning: "next to", category: "travel", example: "在旁边 (zài páng biān) - Next to" },
+            { char: "对面", pinyin: "duì miàn", meaning: "across", category: "travel", example: "在对面 (zài duì miàn) - Across the street" },
+            { char: "中间", pinyin: "zhōng jiān", meaning: "middle", category: "travel", example: "在中间 (zài zhōng jiān) - In the middle" },
+            { char: "角", pinyin: "jiǎo", meaning: "corner", category: "travel", example: "拐角 (guǎi jiǎo) - Turn corner" },
+            { char: "红绿灯", pinyin: "hóng lǜ dēng", meaning: "traffic light", category: "travel", example: "等红绿灯 (děng hóng lǜ dēng) - Wait for light" },
+            { char: "斑马线", pinyin: "bān mǎ xiàn", meaning: "crosswalk", category: "travel", example: "走斑马线 (zǒu bān mǎ xiàn) - Use crosswalk" },
+            { char: "天桥", pinyin: "tiān qiáo", meaning: "overpass", category: "travel", example: "过天桥 (guò tiān qiáo) - Cross overpass" },
+            { char: "地下通道", pinyin: "dì xià tōng dào", meaning: "underpass", category: "travel", example: "走地下通道 (zǒu dì xià tōng dào) - Use underpass" },
+            { char: "电梯", pinyin: "diàn tī", meaning: "elevator", category: "travel", example: "坐电梯 (zuò diàn tī) - Take elevator" },
+            { char: "楼梯", pinyin: "lóu tī", meaning: "stairs", category: "travel", example: "走楼梯 (zǒu lóu tī) - Take stairs" },
+            { char: "出口", pinyin: "chū kǒu", meaning: "exit", category: "travel", example: "出口在哪儿？(chū kǒu zài nǎr?) - Where's the exit?" },
+            { char: "入口", pinyin: "rù kǒu", meaning: "entrance", category: "travel", example: "入口在这儿 (rù kǒu zài zhèr) - Entrance is here" },
+            { char: "安全", pinyin: "ān quán", meaning: "safe", category: "travel", example: "注意安全 (zhù yì ān quán) - Be safe" },
+            { char: "危险", pinyin: "wēi xiǎn", meaning: "dangerous", category: "travel", example: "危险！(wēi xiǎn!) - Danger!" },
+            { char: "小心", pinyin: "xiǎo xīn", meaning: "be careful", category: "travel", example: "小心！(xiǎo xīn!) - Be careful!" },
+            { char: "救命", pinyin: "jiù mìng", meaning: "help", category: "travel", example: "救命啊！(jiù mìng a!) - Help!" },
+            { char: "警察", pinyin: "jǐng chá", meaning: "police", category: "travel", example: "叫警察 (jiào jǐng chá) - Call police" },
+            { char: "救护车", pinyin: "jiù hù chē", meaning: "ambulance", category: "travel", example: "叫救护车 (jiào jiù hù chē) - Call ambulance" },
+            { char: "火警", pinyin: "huǒ jǐng", meaning: "fire alarm", category: "travel", example: "火警电话 (huǒ jǐng diàn huà) - Fire emergency" },
+            { char: "大使馆", pinyin: "dà shǐ guǎn", meaning: "embassy", category: "travel", example: "美国大使馆 (měi guó dà shǐ guǎn) - US Embassy" },
+            { char: "护照", pinyin: "hù zhào", meaning: "passport", category: "travel", example: "带护照 (dài hù zhào) - Bring passport" },
+            { char: "签证", pinyin: "qiān zhèng", meaning: "visa", category: "travel", example: "办签证 (bàn qiān zhèng) - Apply for visa" },
+            { char: "身份证", pinyin: "shēn fèn zhèng", meaning: "ID card", category: "travel", example: "出示身份证 (chū shì shēn fèn zhèng) - Show ID" },
+            { char: "行李", pinyin: "xíng li", meaning: "luggage", category: "travel", example: "托运行李 (tuō yùn xíng li) - Check luggage" },
+            { char: "登机牌", pinyin: "dēng jī pái", meaning: "boarding pass", category: "travel", example: "出示登机牌 (chū shì dēng jī pái) - Show boarding pass" },
+            { char: "安检", pinyin: "ān jiǎn", meaning: "security check", category: "travel", example: "过安检 (guò ān jiǎn) - Go through security" },
+            { char: "海关", pinyin: "hǎi guān", meaning: "customs", category: "travel", example: "过海关 (guò hǎi guān) - Go through customs" },
+            { char: "入境", pinyin: "rù jìng", meaning: "immigration", category: "travel", example: "入境卡 (rù jìng kǎ) - Arrival card" },
+            { char: "出境", pinyin: "chū jìng", meaning: "exit", category: "travel", example: "出境大厅 (chū jìng dà tīng) - Departure hall" },
+            { char: "转机", pinyin: "zhuǎn jī", meaning: "transfer", category: "travel", example: "转机去 (zhuǎn jī qù) - Transfer to" },
+            { char: "延误", pinyin: "yán wù", meaning: "delayed", category: "travel", example: "航班延误 (háng bān yán wù) - Flight delayed" },
+            { char: "取消", pinyin: "qǔ xiāo", meaning: "cancelled", category: "travel", example: "航班取消 (háng bān qǔ xiāo) - Flight cancelled" },
+            { char: "改签", pinyin: "gǎi qiān", meaning: "reschedule", category: "travel", example: "改签机票 (gǎi qiān jī piào) - Reschedule ticket" },
+            { char: "退票", pinyin: "tuì piào", meaning: "refund ticket", category: "travel", example: "退票 (tuì piào) - Refund" },
+            { char: "座位", pinyin: "zuò wèi", meaning: "seat", category: "travel", example: "靠窗座位 (kào chuāng zuò wèi) - Window seat" },
+            { char: "靠窗", pinyin: "kào chuāng", meaning: "window seat", category: "travel", example: "我要靠窗 (wǒ yào kào chuāng) - I want window" },
+            { char: "靠走道", pinyin: "kào zǒu dào", meaning: "aisle seat", category: "travel", example: "靠走道座位 (kào zǒu dào zuò wèi) - Aisle seat" },
+            { char: "升舱", pinyin: "shēng cāng", meaning: "upgrade", category: "travel", example: "可以升舱吗？(kě yǐ shēng cāng ma?) - Can I upgrade?" },
+            { char: "行李架", pinyin: "xíng li jià", meaning: "overhead bin", category: "travel", example: "放行李架 (fàng xíng li jià) - Put in overhead" },
+            { char: "安全带", pinyin: "ān quán dài", meaning: "seatbelt", category: "travel", example: "系安全带 (jì ān quán dài) - Fasten seatbelt" },
+            { char: "救生衣", pinyin: "jiù shēng yī", meaning: "life vest", category: "travel", example: "救生衣在 (jiù shēng yī zài) - Life vest is at" },
+            { char: "紧急出口", pinyin: "jǐn jí chū kǒu", meaning: "emergency exit", category: "travel", example: "紧急出口 (jǐn jí chū kǒu) - Emergency exit" },
+            { char: "氧气面罩", pinyin: "yǎng qì miàn zhào", meaning: "oxygen mask", category: "travel", example: "氧气面罩 (yǎng qì miàn zhào) - Oxygen mask" },
+            { char: "失物招领", pinyin: "shī wù zhāo lǐng", meaning: "lost and found", category: "travel", example: "去失物招领 (qù shī wù zhāo lǐng) - Go to lost and found" },
+            { char: "行李提取", pinyin: "xíng li tí qǔ", meaning: "baggage claim", category: "travel", example: "行李提取处 (xíng li tí qǔ chù) - Baggage claim" },
+            { char: "出租车", pinyin: "chū zū chē", meaning: "taxi", category: "travel", example: "打车 (dǎ chē) - Take taxi" },
+            { char: "滴滴", pinyin: "dī dī", meaning: "Didi (Uber)", category: "travel", example: "叫滴滴 (jiào dī dī) - Call Didi" },
+            { char: "地铁", pinyin: "dì tiě", meaning: "subway", category: "travel", example: "坐地铁 (zuò dì tiě) - Take subway" },
+            { char: "公交", pinyin: "gōng jiāo", meaning: "bus", category: "travel", example: "坐公交 (zuò gōng jiāo) - Take bus" },
+            { char: "高铁", pinyin: "gāo tiě", meaning: "high-speed rail", category: "travel", example: "坐高铁 (zuò gāo tiě) - Take high-speed rail" },
+            { char: "普通", pinyin: "pǔ tōng", meaning: "regular", category: "travel", example: "普通列车 (pǔ tōng liè chē) - Regular train" },
+            { char: "软卧", pinyin: "ruǎn wò", meaning: "soft sleeper", category: "travel", example: "订软卧 (dìng ruǎn wò) - Book soft sleeper" },
+            { char: "硬卧", pinyin: "yìng wò", meaning: "hard sleeper", category: "travel", example: "硬卧票 (yìng wò piào) - Hard sleeper ticket" },
+            { char: "硬座", pinyin: "yìng zuò", meaning: "hard seat", category: "travel", example: "硬座票 (yìng zuò piào) - Hard seat ticket" },
+            { char: "站票", pinyin: "zhàn piào", meaning: "standing ticket", category: "travel", example: "只有站票 (zhǐ yǒu zhàn piào) - Only standing tickets" },
+            { char: "预订", pinyin: "yù dìng", meaning: "book/reserve", category: "travel", example: "预订酒店 (yù dìng jiǔ diàn) - Book hotel" },
+            { char: "入住", pinyin: "rù zhù", meaning: "check in", category: "travel", example: "办理入住 (bàn lǐ rù zhù) - Check in" },
+            { char: "退房", pinyin: "tuì fáng", meaning: "check out", category: "travel", example: "明天退房 (míng tiān tuì fáng) - Check out tomorrow" },
+            { char: "押金", pinyin: "yā jīn", meaning: "deposit", category: "travel", example: "交押金 (jiāo yā jīn) - Pay deposit" },
+            { char: "房卡", pinyin: "fáng kǎ", meaning: "room key", category: "travel", example: "房卡丢了 (fáng kǎ diū le) - Lost room key" },
+            { char: "WiFi", pinyin: "WiFi", meaning: "WiFi", category: "travel", example: "WiFi密码 (WiFi mì mǎ) - WiFi password" },
+            { char: "空调", pinyin: "kōng tiáo", meaning: "air conditioning", category: "travel", example: "开空调 (kāi kōng tiáo) - Turn on AC" },
+            { char: "暖气", pinyin: "nuǎn qì", meaning: "heating", category: "travel", example: "开暖气 (kāi nuǎn qì) - Turn on heat" },
+            { char: "热水", pinyin: "rè shuǐ", meaning: "hot water", category: "travel", example: "要热水 (yào rè shuǐ) - Want hot water" },
+            { char: "冷水", pinyin: "lěng shuǐ", meaning: "cold water", category: "travel", example: "要冷水 (yào lěng shuǐ) - Want cold water" },
+            { char: "早餐", pinyin: "zǎo cān", meaning: "breakfast", category: "food", example: "含早餐 (hán zǎo cān) - Includes breakfast" },
+            { char: "午餐", pinyin: "wǔ cān", meaning: "lunch", category: "food", example: "午餐时间 (wǔ cān shí jiān) - Lunch time" },
+            { char: "晚餐", pinyin: "wǎn cān", meaning: "dinner", category: "food", example: "晚餐吃什么？(wǎn cān chī shén me?) - What's for dinner?" },
+            { char: "客房服务", pinyin: "kè fáng fú wù", meaning: "room service", category: "travel", example: "叫客房服务 (jiào kè fáng fú wù) - Call room service" },
+            { char: "洗衣服务", pinyin: "xǐ yī fú wù", meaning: "laundry service", category: "travel", example: "洗衣服务 (xǐ yī fú wù) - Laundry service" },
+            { char: "叫醒服务", pinyin: "jiào xǐng fú wù", meaning: "wake-up call", category: "travel", example: "要叫醒服务 (yào jiào xǐng fú wù) - Want wake-up call" },
+            { char: "吹风机", pinyin: "chuī fēng jī", meaning: "hair dryer", category: "travel", example: "吹风机在哪儿？(chuī fēng jī zài nǎr?) - Where's the hair dryer?" },
+            { char: "拖鞋", pinyin: "tuō xié", meaning: "slippers", category: "travel", example: "要拖鞋 (yào tuō xié) - Want slippers" },
+            { char: "毛巾", pinyin: "máo jīn", meaning: "towel", category: "travel", example: "要毛巾 (yào máo jīn) - Want towel" },
+            { char: "牙刷", pinyin: "yá shuā", meaning: "toothbrush", category: "travel", example: "要牙刷 (yào yá shuā) - Want toothbrush" },
+            { char: "牙膏", pinyin: "yá gāo", meaning: "toothpaste", category: "travel", example: "要牙膏 (yào yá gāo) - Want toothpaste" },
+            { char: "洗发水", pinyin: "xǐ fà shuǐ", meaning: "shampoo", category: "travel", example: "要洗发水 (yào xǐ fà shuǐ) - Want shampoo" },
+            { char: "沐浴露", pinyin: "mù yù lù", meaning: "body wash", category: "travel", example: "要沐浴露 (yào mù yù lù) - Want body wash" },
+            { char: "卫生纸", pinyin: "wèi shēng zhǐ", meaning: "toilet paper", category: "travel", example: "没卫生纸了 (méi wèi shēng zhǐ le) - Out of toilet paper" },
+            { char: "插座", pinyin: "chā zuò", meaning: "outlet", category: "travel", example: "插座在哪儿？(chā zuò zài nǎr?) - Where's the outlet?" },
+            { char: "转换器", pinyin: "zhuǎn huàn qì", meaning: "adapter", category: "travel", example: "需要转换器 (xū yào zhuǎn huàn qì) - Need adapter" },
+            { char: "保险丝", pinyin: "bǎo xiǎn sī", meaning: "fuse", category: "travel", example: "保险丝烧了 (bǎo xiǎn sī shāo le) - Fuse blown" },
+            { char: "停电", pinyin: "tíng diàn", meaning: "power outage", category: "travel", example: "停电了 (tíng diàn le) - Power's out" },
+            { char: "停水", pinyin: "tíng shuǐ", meaning: "water outage", category: "travel", example: "停水了 (tíng shuǐ le) - Water's out" },
+            { char: "漏水", pinyin: "lòu shuǐ", meaning: "leak", category: "travel", example: "漏水了 (lòu shuǐ le) - Leaking" },
+            { char: "坏了", pinyin: "huài le", meaning: "broken", category: "travel", example: "空调坏了 (kōng tiáo huài le) - AC is broken" },
+            { char: "修", pinyin: "xiū", meaning: "repair", category: "travel", example: "找人修 (zhǎo rén xiū) - Get someone to fix" },
+            { char: "换", pinyin: "huàn", meaning: "change", category: "travel", example: "换房间 (huàn fáng jiān) - Change room" },
+            { char: "打扫", pinyin: "dǎ sǎo", meaning: "clean", category: "travel", example: "请打扫 (qǐng dǎ sǎo) - Please clean" },
+            { char: "安静", pinyin: "ān jìng", meaning: "quiet", category: "travel", example: "请安静 (qǐng ān jìng) - Please be quiet" },
+            { char: "吵", pinyin: "chǎo", meaning: "noisy", category: "travel", example: "太吵了 (tài chǎo le) - Too noisy" },
+            { char: "亮", pinyin: "liàng", meaning: "bright", category: "travel", example: "太亮了 (tài liàng le) - Too bright" },
+            { char: "暗", pinyin: "àn", meaning: "dark", category: "travel", example: "太暗了 (tài àn le) - Too dark" },
+            { char: "冷", pinyin: "lěng", meaning: "cold", category: "travel", example: "太冷了 (tài lěng le) - Too cold" },
+            { char: "热", pinyin: "rè", meaning: "hot", category: "travel", example: "太热了 (tài rè le) - Too hot" },
+            { char: "舒服", pinyin: "shū fu", meaning: "comfortable", category: "travel", example: "很舒服 (hěn shū fu) - Very comfortable" },
+            { char: "干净", pinyin: "gān jìng", meaning: "clean", category: "travel", example: "很干净 (hěn gān jìng) - Very clean" },
+            { char: "脏", pinyin: "zāng", meaning: "dirty", category: "travel", example: "太脏了 (tài zāng le) - Too dirty" },
+            { char: "旧", pinyin: "jiù", meaning: "old", category: "travel", example: "太旧了 (tài jiù le) - Too old" },
+            { char: "新", pinyin: "xīn", meaning: "new", category: "travel", example: "很新 (hěn xīn) - Very new" },
+            { char: "漂亮", pinyin: "piào liang", meaning: "beautiful", category: "travel", example: "很漂亮 (hěn piào liang) - Very beautiful" },
+            { char: "不错", pinyin: "bú cuò", meaning: "not bad", category: "travel", example: "还不错 (hái bú cuò) - Not bad" },
+            { char: "棒", pinyin: "bàng", meaning: "awesome", category: "travel", example: "太棒了 (tài bàng le) - Awesome!" },
+            { char: "完美", pinyin: "wán měi", meaning: "perfect", category: "travel", example: "完美！ (wán měi!) - Perfect!" },
+            { char: "一般", pinyin: "yī bān", meaning: "average", category: "travel", example: "一般般 (yī bān bān) - So-so" },
+            { char: "差", pinyin: "chà", meaning: "poor", category: "travel", example: "太差了 (tài chà le) - Too poor" },
+            { char: "糟糕", pinyin: "zāo gāo", meaning: "terrible", category: "travel", example: "太糟糕了 (tài zāo gāo le) - Terrible!" },
+            { char: "麻烦", pinyin: "má fan", meaning: "trouble", category: "travel", example: "麻烦了 (má fan le) - Trouble" },
+            { char: "容易", pinyin: "róng yì", meaning: "easy", category: "greetings", example: "很容易 (hěn róng yì) - Very easy" },
+            { char: "难", pinyin: "nán", meaning: "difficult", category: "greetings", example: "太难了 (tài nán le) - Too hard" },
+            { char: "简单", pinyin: "jiǎn dān", meaning: "simple", category: "greetings", example: "很简单 (hěn jiǎn dān) - Very simple" },
+            { char: "复杂", pinyin: "fù zá", meaning: "complicated", category: "greetings", example: "太复杂了 (tài fù zá le) - Too complicated" },
+            { char: "清楚", pinyin: "qīng chu", meaning: "clear", category: "greetings", example: "很清楚 (hěn qīng chu) - Very clear" },
+            { char: "明白", pinyin: "míng bai", meaning: "understand", category: "greetings", example: "明白了 (míng bai le) - Understood" },
+            { char: "懂", pinyin: "dǒng", meaning: "understand", category: "greetings", example: "不懂 (bù dǒng) - Don't understand" },
+            { char: "会", pinyin: "huì", meaning: "can (skill)", category: "greetings", example: "不会 (bú huì) - Can't" },
+            { char: "能", pinyin: "néng", meaning: "can (ability)", category: "greetings", example: "不能 (bù néng) - Cannot" },
+            { char: "行", pinyin: "xíng", meaning: "OK", category: "greetings", example: "行！ (xíng!) - OK!" },
+            { char: "可以", pinyin: "kě yǐ", meaning: "can/may", category: "greetings", example: "可以！ (kě yǐ!) - Can do!" },
+            { char: "好", pinyin: "hǎo", meaning: "good", category: "greetings", example: "好的 (hǎo de) - OK" },
+            { char: "对", pinyin: "duì", meaning: "correct", category: "greetings", example: "对的 (duì de) - Correct" },
+            { char: "是", pinyin: "shì", meaning: "is", category: "greetings", example: "是的 (shì de) - Yes" },
+            { char: "不是", pinyin: "bú shì", meaning: "is not", category: "greetings", example: "不是的 (bú shì de) - No" },
+            { char: "没有", pinyin: "méi yǒu", meaning: "don't have", category: "greetings", example: "没有了 (méi yǒu le) - None left" },
+            { char: "别", pinyin: "bié", meaning: "don't", category: "greetings", example: "别走 (bié zǒu) - Don't go" },
+            { char: "不要", pinyin: "bú yào", meaning: "don't want", category: "greetings", example: "不要了 (bú yào le) - Don't want" },
+            { char: "不行", pinyin: "bù xíng", meaning: "not OK", category: "greetings", example: "不行！ (bù xíng!) - No way!" },
+            { char: "没办法", pinyin: "méi bàn fǎ", meaning: "no way", category: "greetings", example: "没办法 (méi bàn fǎ) - No way" },
+            { char: "无所谓", pinyin: "wú suǒ wèi", meaning: "whatever", category: "greetings", example: "无所谓 (wú suǒ wèi) - Whatever" },
+            { char: "随便", pinyin: "suí biàn", meaning: "whatever", category: "greetings", example: "随便 (suí biàn) - Whatever" },
+            { char: "好吧", pinyin: "hǎo ba", meaning: "alright", category: "greetings", example: "好吧 (hǎo ba) - Alright" },
+            { char: "算了", pinyin: "suàn le", meaning: "forget it", category: "greetings", example: "算了 (suàn le) - Forget it" },
+            { char: "加油", pinyin: "jiā yóu", meaning: "go for it", category: "greetings", example: "加油！ (jiā yóu!) - Go for it!" },
+            { char: "厉害", pinyin: "lì hai", meaning: "awesome", category: "greetings", example: "太厉害了 (tài lì hai le) - Awesome!" },
+            { char: "牛", pinyin: "niú", meaning: "cool", category: "greetings", example: "太牛了 (tài niú le) - So cool!" },
+            { char: "赞", pinyin: "zàn", meaning: "praise", category: "greetings", example: "点赞 (diǎn zàn) - Like" },
+            { char: "棒", pinyin: "bàng", meaning: "great", category: "greetings", example: "很棒 (hěn bàng) - Great" },
+            { char: "优秀", pinyin: "yōu xiù", meaning: "excellent", category: "greetings", example: "优秀！ (yōu xiù!) - Excellent!" },
+            { char: "完美", pinyin: "wán měi", meaning: "perfect", category: "greetings", example: "完美！ (wán měi!) - Perfect!" },
+            { char: "漂亮", pinyin: "piào liang", meaning: "beautiful", category: "greetings", example: "漂亮！ (piào liang!) - Beautiful!" },
+            { char: "可爱", pinyin: "kě ài", meaning: "cute", category: "greetings", example: "很可爱 (hěn kě ài) - Very cute" },
+            { char: "帅", pinyin: "shuài", meaning: "handsome", category: "greetings", example: "很帅 (hěn shuài) - Very handsome" },
+            { char: "酷", pinyin: "kù", meaning: "cool", category: "greetings", example: "很酷 (hěn kù) - Very cool" },
+            { char: "萌", pinyin: "méng", meaning: "adorable", category: "greetings", example: "好萌 (hǎo méng) - So adorable" },
+            { char: "搞笑", pinyin: "gǎo xiào", meaning: "funny", category: "greetings", example: "很搞笑 (hěn gǎo xiào) - Very funny" },
+            { char: "无聊", pinyin: "wú liáo", meaning: "boring", category: "greetings", example: "很无聊 (hěn wú liáo) - Very boring" },
+            { char: "烦", pinyin: "fán", meaning: "annoying", category: "greetings", example: "很烦 (hěn fán) - Very annoying" },
+            { char: "累", pinyin: "lèi", meaning: "tired", category: "greetings", example: "很累 (hěn lèi) - Very tired" },
+            { char: "困", pinyin: "kùn", meaning: "sleepy", category: "greetings", example: "很困 (hěn kùn) - Very sleepy" },
+            { char: "饿", pinyin: "è", meaning: "hungry", category: "food", example: "很饿 (hěn è) - Very hungry" },
+            { char: "渴", pinyin: "kě", meaning: "thirsty", category: "food", example: "很渴 (hěn kě) - Very thirsty" },
+            { char: "饱", pinyin: "bǎo", meaning: "full", category: "food", example: "很饱 (hěn bǎo) - Very full" },
+            { char: "舒服", pinyin: "shū fu", meaning: "comfortable", category: "travel", example: "很舒服 (hěn shū fu) - Very comfortable" },
+            { char: "难受", pinyin: "nán shòu", meaning: "uncomfortable", category: "greetings", example: "很难受 (hěn nán shòu) - Very uncomfortable" },
+            { char: "开心", pinyin: "kāi xīn", meaning: "happy", category: "greetings", example: "很开心 (hěn kāi xīn) - Very happy" },
+            { char: "难过", pinyin: "nán guò", meaning: "sad", category: "greetings", example: "很难过 (hěn nán guò) - Very sad" },
+            { char: "生气", pinyin: "shēng qì", meaning: "angry", category: "greetings", example: "很生气 (hěn shēng qì) - Very angry" },
+            { char: "害怕", pinyin: "hài pà", meaning: "scared", category: "greetings", example: "很害怕 (hěn hài pà) - Very scared" },
+            { char: "紧张", pinyin: "jǐn zhāng", meaning: "nervous", category: "greetings", example: "很紧张 (hěn jǐn zhāng) - Very nervous" },
+            { char: "担心", pinyin: "dān xīn", meaning: "worried", category: "greetings", example: "很担心 (hěn dān xīn) - Very worried" },
+            { char: "放心", pinyin: "fàng xīn", meaning: "relieved", category: "greetings", example: "放心吧 (fàng xīn ba) - Don't worry" },
+            { char: "惊讶", pinyin: "jīng yà", meaning: "surprised", category: "greetings", example: "很惊讶 (hěn jīng yà) - Very surprised" },
+            { char: "奇怪", pinyin: "qí guài", meaning: "strange", category: "greetings", example: "很奇怪 (hěn qí guài) - Very strange" },
+            { char: "可惜", pinyin: "kě xī", meaning: "pity", category: "greetings", example: "太可惜了 (tài kě xī le) - What a pity" },
+            { char: "倒霉", pinyin: "dǎo méi", meaning: "unlucky", category: "greetings", example: "太倒霉了 (tài dǎo méi le) - So unlucky" },
+            { char: "幸运", pinyin: "xìng yùn", meaning: "lucky", category: "greetings", example: "很幸运 (hěn xìng yùn) - Very lucky" },
+            { char: "重要", pinyin: "zhòng yào", meaning: "important", category: "greetings", example: "很重要 (hěn zhòng yào) - Very important" },
+            { char: "紧急", pinyin: "jǐn jí", meaning: "urgent", category: "travel", example: "紧急情况 (jǐn jí qíng kuàng) - Emergency" },
+            { char: "危险", pinyin: "wēi xiǎn", meaning: "dangerous", category: "travel", example: "很危险 (hěn wēi xiǎn) - Very dangerous" },
+            { char: "安全", pinyin: "ān quán", meaning: "safe", category: "travel", example: "很安全 (hěn ān quán) - Very safe" },
+            { char: "健康", pinyin: "jiàn kāng", meaning: "healthy", category: "greetings", example: "身体健康 (shēn tǐ jiàn kāng) - Healthy body" },
+            { char: "舒服", pinyin: "shū fu", meaning: "comfortable", category: "greetings", example: "身体舒服 (shēn tǐ shū fu) - Body comfortable" },
+            { char: "疼", pinyin: "téng", meaning: "pain", category: "greetings", example: "头疼 (tóu téng) - Headache" },
+            { char: "痒", pinyin: "yǎng", meaning: "itchy", category: "greetings", example: "很痒 (hěn yǎng) - Very itchy" },
+            { char: "过敏", pinyin: "guò mǐn", meaning: "allergic", category: "greetings", example: "过敏了 (guò mǐn le) - Allergic reaction" },
+            { char: "感冒", pinyin: "gǎn mào", meaning: "cold", category: "greetings", example: "感冒了 (gǎn mào le) - Have a cold" },
+            { char: "发烧", pinyin: "fā shāo", meaning: "fever", category: "greetings", example: "发烧了 (fā shāo le) - Have fever" },
+            { char: "咳嗽", pinyin: "ké sou", meaning: "cough", category: "greetings", example: "咳嗽了 (ké sou le) - Coughing" },
+            { char: "拉肚子", pinyin: "lā dù zi", meaning: "diarrhea", category: "greetings", example: "拉肚子了 (lā dù zi le) - Have diarrhea" },
+            { char: "便秘", pinyin: "biàn mì", meaning: "constipated", category: "greetings", example: "便秘了 (biàn mì le) - Constipated" },
+            { char: "失眠", pinyin: "shī mián", meaning: "insomnia", category: "greetings", example: "失眠了 (shī mián le) - Can't sleep" },
+            { char: "累", pinyin: "lèi", meaning: "tired", category: "greetings", example: "太累了 (tài lèi le) - Too tired" },
+            { char: "困", pinyin: "kùn", meaning: "sleepy", category: "greetings", example: "太困了 (tài kùn le) - Too sleepy" },
+            { char: "想睡", pinyin: "xiǎng shuì", meaning: "want to sleep", category: "greetings", example: "想睡觉 (xiǎng shuì jiào) - Want to sleep" },
+            { char: "晚安", pinyin: "wǎn ān", meaning: "good night", category: "greetings", example: "晚安！ (wǎn ān!) - Good night!" },
+            { char: "早安", pinyin: "zǎo ān", meaning: "good morning", category: "greetings", example: "早安！ (zǎo ān!) - Good morning!" },
+            { char: "午安", pinyin: "wǔ ān", meaning: "good afternoon", category: "greetings", example: "午安！ (wǔ ān!) - Good afternoon!" }
+        ];
+
+        let currentIndex = 0;
+        let filteredVocab = [...vocabulary];
+        let learned = new Set();
+        let currentCategory = 'all';
+
+        function updateStats() {
+            document.getElementById('totalChars').textContent = filteredVocab.length;
+            document.getElementById('learnedChars').textContent = learned.size;
+            const percent = filteredVocab.length > 0 ? Math.round((learned.size / filteredVocab.length) * 100) : 0;
+            document.getElementById('progressPercent').textContent = percent + '%';
+            document.getElementById('progressBar').style.width = percent + '%';
+        }
+
+        function showCard(index) {
+            if (filteredVocab.length === 0) return;
+            
+            const card = document.getElementById('flashcard');
+            card.classList.remove('flipped');
+            
+            const item = filteredVocab[index];
+            document.getElementById('charDisplay').textContent = item.char;
+            document.getElementById('pinyinDisplay').textContent = item.pinyin;
+            document.getElementById('categoryDisplay').textContent = item.category;
+            document.getElementById('meaningDisplay').textContent = item.meaning;
+            document.getElementById('exampleDisplay').textContent = item.example;
+            
+            updateStats();
+        }
+
+        function flipCard() {
+            document.getElementById('flashcard').classList.toggle('flipped');
+        }
+
+        function nextCard() {
+            currentIndex = (currentIndex + 1) % filteredVocab.length;
+            showCard(currentIndex);
+        }
+
+        function previousCard() {
+            currentIndex = (currentIndex - 1 + filteredVocab.length) % filteredVocab.length;
+            showCard(currentIndex);
+        }
+
+        function markLearned() {
+            learned.add(filteredVocab[currentIndex].char);
+            updateStats();
+            nextCard();
+        }
+
+        function shuffleCards() {
+            for (let i = filteredVocab.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [filteredVocab[i], filteredVocab[j]] = [filteredVocab[j], filteredVocab[i]];
+            }
+            currentIndex = 0;
+            showCard(currentIndex);
+        }
+
+        function filterCategory(category) {
+            currentCategory = category;
+            
+            // Update button states
+            document.querySelectorAll('.btn-category').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            if (category === 'all') {
+                filteredVocab = [...vocabulary];
+            } else {
+                filteredVocab = vocabulary.filter(item => item.category === category);
+            }
+            
+            currentIndex = 0;
+            showCard(currentIndex);
+        }
+
+        function exportCSV() {
+            let csv = 'Character,Pinyin,Meaning,Category,Example\n';
+            filteredVocab.forEach(item => {
+                csv += `"${item.char}","${item.pinyin}","${item.meaning}","${item.category}","${item.example}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'chinese-vocabulary.csv';
+            a.click();
+        }
+
+        function exportQuizlet() {
+            let text = '';
+            filteredVocab.forEach(item => {
+                text += `${item.char} (${item.pinyin})\t${item.meaning}\n`;
+            });
+            
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard! Paste into Quizlet.');
+            });
+        }
+
+        // Initialize
+        showCard(0);
+    </script>
+</body>
+</html>
