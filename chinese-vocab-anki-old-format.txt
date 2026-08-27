@@ -1,0 +1,483 @@
+#separator:tab
+#html:true
+#tags column:5
+#deck:Chinese Trip Vocabulary
+#notetype:Basic (and reversed card)
+#columns:Front	Back	Tags
+你好 (nǐ hǎo)	Hello	greetings
+谢谢 (xièxie)	Thank you	greetings
+再见 (zàijiàn)	Goodbye	greetings
+请 (qǐng)	Please	greetings
+对不起 (duìbùqǐ)	Sorry	greetings
+没关系 (méi guānxi)	It's OK	greetings
+早上好 (zǎoshang hǎo)	Good morning	greetings
+晚上好 (wǎnshang hǎo)	Good evening	greetings
+你 (nǐ)	You	greetings
+我 (wǒ)	I/me	greetings
+他 (tā)	He/him	greetings
+她 (tā)	She/her	greetings
+我们 (wǒ men)	We/us	greetings
+是 (shì)	Is/am/are	greetings
+的 (de)	Possessive particle	greetings
+了 (le)	Completed action	greetings
+吗 (ma)	Question particle	greetings
+不 (bù)	No/not	greetings
+很 (hěn)	Very	greetings
+也 (yě)	Also	greetings
+都 (dōu)	All	greetings
+和 (hé)	And	greetings
+在 (zài)	At/in	greetings
+有 (yǒu)	Have	greetings
+没 (méi)	Not have	greetings
+这 (zhè)	This	greetings
+那 (nà)	That	greetings
+什么 (shén me)	What	greetings
+谁 (shuí)	Who	greetings
+哪儿 (nǎr)	Where	greetings
+怎么 (zěn me)	How	greetings
+为什么 (wèi shén me)	Why	greetings
+现在 (xiàn zài)	Now	greetings
+今天 (jīn tiān)	Today	greetings
+明天 (míng tiān)	Tomorrow	greetings
+昨天 (zuó tiān)	Yesterday	greetings
+时间 (shí jiān)	Time	greetings
+年 (nián)	Year	numbers
+月 (yuè)	Month/moon	numbers
+日 (rì)	Day/sun	numbers
+点 (diǎn)	O'clock	numbers
+分 (fēn)	Minute	numbers
+半 (bàn)	Half	numbers
+一 (yī)	One	numbers
+二 (èr)	Two	numbers
+三 (sān)	Three	numbers
+四 (sì)	Four	numbers
+五 (wǔ)	Five	numbers
+六 (liù)	Six	numbers
+七 (qī)	Seven	numbers
+八 (bā)	Eight	numbers
+九 (jiǔ)	Nine	numbers
+十 (shí)	Ten	numbers
+百 (bǎi)	Hundred	numbers
+千 (qiān)	Thousand	numbers
+万 (wàn)	Ten thousand	numbers
+多少 (duōshao)	How much/many	numbers
+个 (gè)	Measure word	numbers
+块 (kuài)	Dollar/yuan	numbers
+钱 (qián)	Money	numbers
+吃 (chī)	Eat	food
+饭 (fàn)	Rice/meal	food
+菜 (cài)	Dish/vegetable	food
+肉 (ròu)	Meat	food
+鱼 (yú)	Fish	food
+水 (shuǐ)	Water	food
+茶 (chá)	Tea	food
+酒 (jiǔ)	Alcohol/wine	food
+咖啡 (kāfēi)	Coffee	food
+面 (miàn)	Noodles	food
+饺子 (jiǎozi)	Dumplings	food
+汤 (tāng)	Soup	food
+糖 (táng)	Sugar	food
+盐 (yán)	Salt	food
+辣 (là)	Spicy	food
+甜 (tián)	Sweet	food
+酸 (suān)	Sour	food
+苦 (kǔ)	Bitter	food
+好吃 (hǎo chī)	Delicious	food
+喝 (hē)	Drink	food
+餐厅 (cān tīng)	Restaurant	food
+菜单 (cài dān)	Menu	food
+服务员 (fú wù yuán)	Waiter/waitress	food
+买单 (mǎi dān)	Pay the bill	food
+打包 (dǎ bāo)	Takeout	food
+去 (qù)	Go	travel
+来 (lái)	Come	travel
+走 (zǒu)	Walk/go	travel
+飞 (fēi)	Fly	travel
+飞机 (fēi jī)	Airplane	travel
+车 (chē)	Car/vehicle	travel
+站 (zhàn)	Station	travel
+路 (lù)	Road	travel
+左 (zuǒ)	Left	travel
+右 (yòu)	Right	travel
+前 (qián)	Front	travel
+后 (hòu)	Back/behind	travel
+里 (lǐ)	Inside	travel
+外 (wài)	Outside	travel
+上 (shàng)	Up/on	travel
+下 (xià)	Down/off	travel
+近 (jìn)	Near	travel
+远 (yuǎn)	Far	travel
+票 (piào)	Ticket	travel
+酒店 (jiǔ diàn)	Hotel	travel
+机场 (jī chǎng)	Airport	travel
+火车 (huǒ chē)	Train	travel
+地铁 (dì tiě)	Subway	travel
+出租车 (chū zū chē)	Taxi	travel
+买 (mǎi)	Buy	shopping
+卖 (mài)	Sell	shopping
+贵 (guì)	Expensive	shopping
+便宜 (pián yi)	Cheap	shopping
+大 (dà)	Big	shopping
+小 (xiǎo)	Small	shopping
+多 (duō)	Many	shopping
+少 (shǎo)	Few	shopping
+颜色 (yán sè)	Color	shopping
+红 (hóng)	Red	shopping
+蓝 (lán)	Blue	shopping
+白 (bái)	White	shopping
+黑 (hēi)	Black	shopping
+可以 (kě yǐ)	Can/may	shopping
+要 (yào)	Want/need	shopping
+不要 (bú yào)	Don't want	shopping
+试 (shì)	Try	shopping
+换 (huàn)	Exchange	shopping
+退 (tuì)	Return	shopping
+爱 (ài)	Love	greetings
+喜欢 (xǐ huan)	Like	greetings
+想 (xiǎng)	Think/want	greetings
+知道 (zhī dào)	Know	greetings
+看 (kàn)	See/look	greetings
+听 (tīng)	Listen	greetings
+说 (shuō)	Speak	greetings
+做 (zuò)	Do/make	greetings
+能 (néng)	Can/able	greetings
+会 (huì)	Can/will	greetings
+可能 (kě néng)	Maybe/possible	greetings
+应该 (yīng gāi)	Should	greetings
+对 (duì)	Correct/right	greetings
+错 (cuò)	Wrong	greetings
+真 (zhēn)	Real/truly	greetings
+新 (xīn)	New	shopping
+旧 (jiù)	Old	shopping
+长 (cháng)	Long	shopping
+短 (duǎn)	Short	shopping
+高 (gāo)	Tall/high	travel
+低 (dī)	Low	travel
+快 (kuài)	Fast	travel
+慢 (màn)	Slow	travel
+热 (rè)	Hot	food
+冷 (lěng)	Cold	food
+忙 (máng)	Busy	greetings
+累 (lèi)	Tired	greetings
+饿 (è)	Hungry	food
+饱 (bǎo)	Full	food
+病 (bìng)	Sick	greetings
+疼 (téng)	Pain	greetings
+药 (yào)	Medicine	greetings
+医生 (yī shēng)	Doctor	greetings
+医院 (yī yuàn)	Hospital	greetings
+厕所 (cè suǒ)	Bathroom	travel
+门 (mén)	Door	travel
+开 (kāi)	Open	travel
+关 (guān)	Close	travel
+电 (diàn)	Electricity	travel
+话 (huà)	Speech	greetings
+手 (shǒu)	Hand	greetings
+书 (shū)	Book	greetings
+纸 (zhǐ)	Paper	greetings
+笔 (bǐ)	Pen	greetings
+名字 (míng zi)	Name	greetings
+国家 (guó jiā)	Country	greetings
+中国 (zhōng guó)	China	greetings
+美国 (měi guó)	USA	greetings
+人 (rén)	Person	greetings
+家 (jiā)	Home/family	travel
+工作 (gōng zuò)	Work	greetings
+学校 (xué xiào)	School	greetings
+朋友 (péng you)	Friend	greetings
+先生 (xiān sheng)	Mr.	greetings
+小姐 (xiǎo jiě)	Miss	greetings
+女士 (nǚ shì)	Ms./Mrs.	greetings
+问题 (wèn tí)	Question	greetings
+意思 (yì si)	Meaning	greetings
+事情 (shì qing)	Thing/matter	greetings
+地方 (dì fang)	Place	travel
+东西 (dōng xi)	Thing	shopping
+样子 (yàng zi)	Appearance	shopping
+原因 (yuán yīn)	Reason	greetings
+办法 (bàn fǎ)	Way/method	greetings
+关系 (guān xi)	Relationship	greetings
+感觉 (gǎn jué)	Feeling	greetings
+经验 (jīng yàn)	Experience	greetings
+机会 (jī huì)	Opportunity	greetings
+选择 (xuǎn zé)	Choice	shopping
+决定 (jué dìng)	Decide	greetings
+希望 (xī wàng)	Hope	greetings
+相信 (xiāng xìn)	Believe	greetings
+记得 (jì de)	Remember	greetings
+忘记 (wàng jì)	Forget	greetings
+认识 (rèn shi)	Know/recognize	greetings
+帮助 (bāng zhù)	Help	greetings
+找 (zhǎo)	Look for	travel
+送 (sòng)	Send/give	travel
+接 (jiē)	Pick up	travel
+等 (děng)	Wait	travel
+休息 (xiū xi)	Rest	greetings
+玩 (wán)	Play	travel
+运动 (yùn dòng)	Exercise	greetings
+游泳 (yóu yǒng)	Swim	travel
+唱歌 (chàng gē)	Sing	greetings
+跳舞 (tiào wǔ)	Dance	greetings
+旅游 (lǚ yóu)	Travel	travel
+拍照 (pāi zhào)	Take photo	travel
+发 (fā)	Send	greetings
+收 (shōu)	Receive	greetings
+用 (yòng)	Use	greetings
+让 (ràng)	Let/allow	greetings
+叫 (jiào)	Call	greetings
+觉得 (jué de)	Feel/think	greetings
+认为 (rèn wéi)	Believe/think	greetings
+发现 (fā xiàn)	Discover	greetings
+发生 (fā shēng)	Happen	greetings
+开始 (kāi shǐ)	Start	greetings
+结束 (jié shù)	End	greetings
+准备 (zhǔn bèi)	Prepare	travel
+完成 (wán chéng)	Complete	greetings
+继续 (jì xù)	Continue	greetings
+停止 (tíng zhǐ)	Stop	greetings
+需要 (xū yào)	Need	greetings
+必须 (bì xū)	Must	greetings
+一定 (yí dìng)	Definitely	greetings
+也许 (yě xǔ)	Perhaps	greetings
+大概 (dà gài)	Probably	greetings
+几乎 (jī hū)	Almost	greetings
+完全 (wán quán)	Completely	greetings
+特别 (tè bié)	Especially	greetings
+比较 (bǐ jiào)	Relatively	greetings
+非常 (fēi cháng)	Very/extremely	greetings
+最 (zuì)	Most	greetings
+更 (gèng)	More	greetings
+太 (tài)	Too	greetings
+只 (zhǐ)	Only	greetings
+还 (hái)	Still/also	greetings
+再 (zài)	Again	greetings
+又 (yòu)	Again	greetings
+就 (jiù)	Then/just	greetings
+才 (cái)	Only then	greetings
+但是 (dàn shì)	But	greetings
+因为 (yīn wèi)	Because	greetings
+所以 (suǒ yǐ)	So	greetings
+虽然 (suī rán)	Although	greetings
+如果 (rú guǒ)	If	greetings
+那么 (nà me)	Then	greetings
+只要 (zhǐ yào)	As long as	greetings
+除了 (chú le)	Except	greetings
+不管 (bù guǎn)	No matter	greetings
+为了 (wèi le)	For	greetings
+关于 (guān yú)	About	greetings
+根据 (gēn jù)	According to	greetings
+对于 (duì yú)	Regarding	greetings
+通过 (tōng guò)	Through	greetings
+按照 (àn zhào)	According to	greetings
+随着 (suí zhe)	Along with	greetings
+由于 (yóu yú)	Due to	greetings
+尽管 (jǐn guǎn)	Despite	greetings
+不仅 (bù jǐn)	Not only	greetings
+而且 (ér qiě)	But also	greetings
+或者 (huò zhě)	Or	greetings
+还是 (hái shì)	Or (question)	greetings
+越 (yuè)	More	greetings
+第 (dì)	Ordinal	numbers
+每 (měi)	Every	numbers
+各 (gè)	Each	numbers
+几 (jǐ)	How many	numbers
+些 (xiē)	Some	numbers
+所有 (suǒ yǒu)	All	numbers
+部分 (bù fèn)	Part	numbers
+一半 (yī bàn)	Half	numbers
+双 (shuāng)	Pair	numbers
+张 (zhāng)	Measure word (flat)	numbers
+条 (tiáo)	Measure word (long)	numbers
+本 (běn)	Measure word (books)	numbers
+件 (jiàn)	Measure word (items)	numbers
+把 (bǎ)	Measure word (handled)	numbers
+只 (zhī)	Measure word (animals)	numbers
+头 (tóu)	Measure word (livestock)	numbers
+匹 (pǐ)	Measure word (horses)	numbers
+辆 (liàng)	Measure word (vehicles)	numbers
+台 (tái)	Measure word (machines)	numbers
+份 (fèn)	Measure word (portions)	food
+碗 (wǎn)	Bowl	food
+杯 (bēi)	Cup	food
+瓶 (píng)	Bottle	food
+盘 (pán)	Plate	food
+筷子 (kuài zi)	Chopsticks	food
+勺子 (sháo zi)	Spoon	food
+叉子 (chā zi)	Fork	food
+刀 (dāo)	Knife	food
+餐巾纸 (cān jīn zhǐ)	Napkin	food
+牙签 (yá qiān)	Toothpick	food
+小费 (xiǎo fèi)	Tip	food
+发票 (fā piào)	Receipt	food
+信用卡 (xìn yòng kǎ)	Credit card	numbers
+现金 (xiàn jīn)	Cash	numbers
+支付宝 (zhī fù bǎo)	Alipay	numbers
+微信 (wēi xìn)	WeChat	greetings
+扫码 (sǎo mǎ)	Scan QR	numbers
+密码 (mì mǎ)	Password	numbers
+网 (wǎng)	Internet	travel
+充电 (chōng diàn)	Charge	travel
+电池 (diàn chí)	Battery	travel
+地图 (dì tú)	Map	travel
+导航 (dǎo háng)	Navigation	travel
+定位 (dìng wèi)	Location	travel
+地址 (dì zhǐ)	Address	travel
+附近 (fù jìn)	Nearby	travel
+旁边 (páng biān)	Next to	travel
+对面 (duì miàn)	Across	travel
+中间 (zhōng jiān)	Middle	travel
+角 (jiǎo)	Corner	travel
+红绿灯 (hóng lǜ dēng)	Traffic light	travel
+斑马线 (bān mǎ xiàn)	Crosswalk	travel
+天桥 (tiān qiáo)	Overpass	travel
+地下通道 (dì xià tōng dào)	Underpass	travel
+电梯 (diàn tī)	Elevator	travel
+楼梯 (lóu tī)	Stairs	travel
+出口 (chū kǒu)	Exit	travel
+入口 (rù kǒu)	Entrance	travel
+安全 (ān quán)	Safe	travel
+危险 (wēi xiǎn)	Dangerous	travel
+小心 (xiǎo xīn)	Be careful	travel
+救命 (jiù mìng)	Help	travel
+警察 (jǐng chá)	Police	travel
+救护车 (jiù hù chē)	Ambulance	travel
+火警 (huǒ jǐng)	Fire alarm	travel
+大使馆 (dà shǐ guǎn)	Embassy	travel
+护照 (hù zhào)	Passport	travel
+签证 (qiān zhèng)	Visa	travel
+身份证 (shēn fèn zhèng)	ID card	travel
+行李 (xíng li)	Luggage	travel
+登机牌 (dēng jī pái)	Boarding pass	travel
+安检 (ān jiǎn)	Security check	travel
+海关 (hǎi guān)	Customs	travel
+入境 (rù jìng)	Immigration	travel
+出境 (chū jìng)	Exit	travel
+转机 (zhuǎn jī)	Transfer	travel
+延误 (yán wù)	Delayed	travel
+取消 (qǔ xiāo)	Cancelled	travel
+改签 (gǎi qiān)	Reschedule	travel
+退票 (tuì piào)	Refund ticket	travel
+座位 (zuò wèi)	Seat	travel
+靠窗 (kào chuāng)	Window seat	travel
+靠走道 (kào zǒu dào)	Aisle seat	travel
+升舱 (shēng cāng)	Upgrade	travel
+行李架 (xíng li jià)	Overhead bin	travel
+安全带 (ān quán dài)	Seatbelt	travel
+救生衣 (jiù shēng yī)	Life vest	travel
+紧急出口 (jǐn jí chū kǒu)	Emergency exit	travel
+氧气面罩 (yǎng qì miàn zhào)	Oxygen mask	travel
+失物招领 (shī wù zhāo lǐng)	Lost and found	travel
+行李提取 (xíng li tí qǔ)	Baggage claim	travel
+滴滴 (dī dī)	Didi (Uber)	travel
+高铁 (gāo tiě)	High-speed rail	travel
+普通 (pǔ tōng)	Regular	travel
+软卧 (ruǎn wò)	Soft sleeper	travel
+硬卧 (yìng wò)	Hard sleeper	travel
+硬座 (yìng zuò)	Hard seat	travel
+站票 (zhàn piào)	Standing ticket	travel
+预订 (yù dìng)	Book/reserve	travel
+入住 (rù zhù)	Check in	travel
+退房 (tuì fáng)	Check out	travel
+押金 (yā jīn)	Deposit	travel
+房卡 (fáng kǎ)	Room key	travel
+空调 (kōng tiáo)	Air conditioning	travel
+暖气 (nuǎn qì)	Heating	travel
+热水 (rè shuǐ)	Hot water	travel
+冷水 (lěng shuǐ)	Cold water	travel
+早餐 (zǎo cān)	Breakfast	food
+午餐 (wǔ cān)	Lunch	food
+晚餐 (wǎn cān)	Dinner	food
+客房服务 (kè fáng fú wù)	Room service	travel
+洗衣服务 (xǐ yī fú wù)	Laundry service	travel
+叫醒服务 (jiào xǐng fú wù)	Wake-up call	travel
+吹风机 (chuī fēng jī)	Hair dryer	travel
+拖鞋 (tuō xié)	Slippers	travel
+毛巾 (máo jīn)	Towel	travel
+牙刷 (yá shuā)	Toothbrush	travel
+牙膏 (yá gāo)	Toothpaste	travel
+洗发水 (xǐ fà shuǐ)	Shampoo	travel
+沐浴露 (mù yù lù)	Body wash	travel
+卫生纸 (wèi shēng zhǐ)	Toilet paper	travel
+插座 (chā zuò)	Outlet	travel
+转换器 (zhuǎn huàn qì)	Adapter	travel
+保险丝 (bǎo xiǎn sī)	Fuse	travel
+停电 (tíng diàn)	Power outage	travel
+停水 (tíng shuǐ)	Water outage	travel
+漏水 (lòu shuǐ)	Leak	travel
+坏了 (huài le)	Broken	travel
+修 (xiū)	Repair	travel
+换 (huàn)	Change	travel
+打扫 (dǎ sǎo)	Clean	travel
+安静 (ān jìng)	Quiet	travel
+吵 (chǎo)	Noisy	travel
+亮 (liàng)	Bright	travel
+暗 (àn)	Dark	travel
+舒服 (shū fu)	Comfortable	travel
+干净 (gān jìng)	Clean	travel
+脏 (zāng)	Dirty	travel
+漂亮 (piào liang)	Beautiful	travel
+不错 (bú cuò)	Not bad	travel
+棒 (bàng)	Awesome	travel
+完美 (wán měi)	Perfect	travel
+一般 (yī bān)	Average	travel
+差 (chà)	Poor	travel
+糟糕 (zāo gāo)	Terrible	travel
+麻烦 (má fan)	Trouble	travel
+容易 (róng yì)	Easy	greetings
+难 (nán)	Difficult	greetings
+简单 (jiǎn dān)	Simple	greetings
+复杂 (fù zá)	Complicated	greetings
+清楚 (qīng chu)	Clear	greetings
+明白 (míng bai)	Understand	greetings
+懂 (dǒng)	Understand	greetings
+行 (xíng)	OK	greetings
+好 (hǎo)	Good	greetings
+别 (bié)	Don't	greetings
+不行 (bù xíng)	Not OK	greetings
+没办法 (méi bàn fǎ)	No way	greetings
+无所谓 (wú suǒ wèi)	Whatever	greetings
+随便 (suí biàn)	Whatever	greetings
+好吧 (hǎo ba)	Alright	greetings
+算了 (suàn le)	Forget it	greetings
+加油 (jiā yóu)	Go for it	greetings
+厉害 (lì hai)	Awesome	greetings
+牛 (niú)	Cool	greetings
+赞 (zàn)	Praise	greetings
+优秀 (yōu xiù)	Excellent	greetings
+可爱 (kě ài)	Cute	greetings
+帅 (shuài)	Handsome	greetings
+酷 (kù)	Cool	greetings
+萌 (méng)	Adorable	greetings
+搞笑 (gǎo xiào)	Funny	greetings
+无聊 (wú liáo)	Boring	greetings
+烦 (fán)	Annoying	greetings
+困 (kùn)	Sleepy	greetings
+渴 (kě)	Thirsty	food
+难受 (nán shòu)	Uncomfortable	greetings
+开心 (kāi xīn)	Happy	greetings
+难过 (nán guò)	Sad	greetings
+生气 (shēng qì)	Angry	greetings
+害怕 (hài pà)	Scared	greetings
+紧张 (jǐn zhāng)	Nervous	greetings
+担心 (dān xīn)	Worried	greetings
+放心 (fàng xīn)	Relieved	greetings
+惊讶 (jīng yà)	Surprised	greetings
+奇怪 (qí guài)	Strange	greetings
+可惜 (kě xī)	Pity	greetings
+倒霉 (dǎo méi)	Unlucky	greetings
+幸运 (xìng yùn)	Lucky	greetings
+重要 (zhòng yào)	Important	greetings
+紧急 (jǐn jí)	Urgent	travel
+健康 (jiàn kāng)	Healthy	greetings
+痒 (yǎng)	Itchy	greetings
+过敏 (guò mǐn)	Allergic	greetings
+感冒 (gǎn mào)	Cold	greetings
+发烧 (fā shāo)	Fever	greetings
+咳嗽 (ké sou)	Cough	greetings
+拉肚子 (lā dù zi)	Diarrhea	greetings
+便秘 (biàn mì)	Constipated	greetings
+失眠 (shī mián)	Insomnia	greetings
+想睡 (xiǎng shuì)	Want to sleep	greetings
+晚安 (wǎn ān)	Good night	greetings
+早安 (zǎo ān)	Good morning	greetings
+午安 (wǔ ān)	Good afternoon	greetings

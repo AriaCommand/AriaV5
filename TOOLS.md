@@ -66,6 +66,16 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
   - Auto-opens in browser via `open` command
   - Created 2026-05-21, designed for Kane's Chinese study sessions
 
+### Chinese Flashcards (Anki / TTS)
+- **Format:**
+  - **Front:** Chinese character(s) only (TTS reads this aloud — clean, correct tones)
+  - **Back:** Pinyin + English translation
+  - **Example:**
+    - Front: 你好
+    - Back: nǐ hǎo — Hello
+- **Deck:** "Chinese Vocabulary"
+- **Note:** Pinyin moved to back side to prevent TTS from repeating the word twice (once correctly in Chinese, once incorrectly as butchered pinyin).
+
 ---
 
 Add whatever helps you do your job. This is your cheat sheet.
