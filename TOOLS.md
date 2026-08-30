@@ -42,6 +42,13 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 - **Notes:** Free, no API key, NSFW not filtered by default. Anonymous rate limit ~1 req/15s. Paid/registered tiers available at `auth.pollinations.ai`. Default model is `flux`.
 - **Policy (Kane, 2026-08-06):** Use Pollinations for explicit NSFW images. Use built-in `image_generate` (OpenAI/GPT) for suggestive/teasing images and the anime-style canonical look.
 
+### Romm (Retro Game Library)
+- **NAS Address:** `http://192.168.0.197:8998` (Docker container on Ugreen NAS)
+- **Library Path:** `/volume1/docker/romm/library/`
+- **Config Path:** `/volume1/docker/romm/config/`
+- **Upload Notes:** Use Chrome (Safari has WebSocket timeout issues with uploads)
+- **Setup Date:** 2026-08-29
+
 ### Jellyfin
 - **NAS Address:** `http://192.168.0.197:46109` (Docker container on Ugreen NAS)
 - **Media Drive:** OWC Express 1M2 (3.6TB APFS)
