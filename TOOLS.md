@@ -53,6 +53,7 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 - **NAS Address:** `http://192.168.0.197:46109` (Docker container on Ugreen NAS)
 - **Media Drive:** OWC Express 1M2 (3.6TB APFS)
 - **Media Path:** `/Volumes/OWC Express 1M2/`
+- **Hardware Transcoding:** Disabled (VAAPI/iHD driver fails on this NAS — use CPU transcoding instead)
 
 ### Daggerheart App
 - **Live Site:** https://windsofplunder.netlify.app (auto-deploys from GitHub main branch)
