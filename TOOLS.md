@@ -55,6 +55,13 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 - **Media Path:** `/Volumes/OWC Express 1M2/`
 - **Hardware Transcoding:** Disabled (VAAPI/iHD driver fails on this NAS — use CPU transcoding instead)
 
+### Ebook Library
+- **Location:** Kane's personal folder area on NAS (not in /docker/)
+- **Access:** SMB share → drag-and-drop epubs
+- **No Calibre/Web UI:** Just plain files, manual transfer to devices
+- **Devices:** Xteink X4 Pro pulls from here
+- **Setup Date:** 2026-09-08
+
 ### Daggerheart App
 - **Live Site:** https://windsofplunder.netlify.app (auto-deploys from GitHub main branch)
 - **Repo:** `AriaCommand/Tidebound-Winds-of-Plunder.git`
